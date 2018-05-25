@@ -29,9 +29,14 @@ is_nm_reserved_label <- function(x) {
 #' parse_nm_input_record(xpdb)
 #' }
 #' @export
+#' @importFrom stats setNames
 parse_nm_input_record <- function(code) 
   UseMethod("parse_nm_input_record")
 
+#' @describeIn parse_nm_input_record Parse a data.frame object either with a
+#'   single column that is the selected code or one that has a column named
+#'   "subroutine" with a value of \code{"inp"} for the input record.
+#' @export
 parse_nm_input_record.data.frame <- function(code) {
   if (ncol(code) == 1) {
     parse_nm_input_record(code[[1]])
@@ -43,14 +48,21 @@ parse_nm_input_record.data.frame <- function(code) {
   }
 }
 
+#' @describeIn parse_nm_input_record Parse an xpose_data object extracting the
+#'   code.
+#' @export
 parse_nm_input_record.xpose_data <- function(code) {
   parse_nm_input_record(code$code)
 }
 
+#' @describeIn parse_nm_input_record Parse a factor (converting it to character).
+#' @export
 parse_nm_input_record.factor <- function(code) {
   parse_nm_input_record.character(as.character(code))
 }
-  
+
+#' @describeIn parse_nm_input_record Parse a character object.
+#' @export
 parse_nm_input_record.character <- function(code) {
   all_code <- paste(code, collapse=" ")
   var_blocks <- strsplit(x=all_code, split=" +")[[1]]
@@ -59,7 +71,7 @@ parse_nm_input_record.character <- function(code) {
     name_blocks %>%
     purrr::map(.f=function(x) {
       if (length(x) == 1) {
-        setNames(x, nm=x)
+        stats::setNames(x, nm=x)
       } else if (length(x) == 2) {
         if (is_nm_reserved_label(x[2])) {
           setNames(object=x[1], nm=x[2])
@@ -71,6 +83,10 @@ parse_nm_input_record.character <- function(code) {
       }
     }) %>%
     unlist()
+  # Remove values that aren't mapped to something (i.e. name = value)
+  ret <- ret[!(ret == names(ret))]
+  # TODO: Check for mismatches between mapping (can happen in the case of
+  # multiple $PROBLEM statements with multiple $INPUT calls).
   if (is.null(ret)) {
     # Give back non-null
     character(0)

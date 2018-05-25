@@ -12,6 +12,7 @@
 #' @param simtab If \code{TRUE} only reads in simulation tables, if \code{FALSE} only reads estimation tables. 
 #' Default \code{NULL} reads all tables.
 #' @param ziptab If \code{TRUE} search for the tables that have been compressed and renamed ´<file>.zip'.
+#' @param column_map An optional named character vector used to rename columns in a table file to standard NONMEM names.  This will be needed if the model remaps the "ID" column to a different name.
 #' @param ... Additional arguments to be passed to the \code{\link[readr]{read_table2}} or \code{\link[readr]{read_csv}} functions.
 #' 
 #' @section Table format requirement:
@@ -45,8 +46,12 @@
 #'                             col_type = readr::cols(.default = 'c'), 
 #'                             n_max = 10)
 #' 
+#' # Renaming the ID column from FOO to ID
+#' nm_tables <- read_nm_tables(file = 'sdtab001', dir = 'models',
+#'                             column_map = c(ID="FOO"))
 #' }
 #' @export
+#' @importFrom dplyr rename_
 read_nm_tables <- function(file          = NULL,
                            dir           = NULL,
                            combined      = TRUE,
@@ -58,6 +63,11 @@ read_nm_tables <- function(file          = NULL,
                            ...) {
   # Check inputs
   if (is.null(file)) stop('Argument `file` required.', call. = FALSE)
+  if (length(column_map) &
+      (is.null(names(column_map)) |
+       any(names(column_map) %in% ""))) {
+    stop("column_map must be a named vector")
+  }
   
   if (!is.null(file) && !is.nm.table.list(file)) {
     file <- dplyr::tibble(problem   = 1, 
@@ -121,13 +131,27 @@ read_nm_tables <- function(file          = NULL,
     dplyr::select(dplyr::one_of('problem', 'name', 'simtab', 'firstonly', 'fun', 'params'))
   
   if (nrow(tables) == 0) stop('No table imported while collecting options for table import.', call. = FALSE)
-  
   # Read in data
   tables <- tables %>% 
     dplyr::bind_cols(tables %>% 
                        dplyr::select(dplyr::one_of(c('fun', 'params'))) %>% 
                        {purrr::invoke_map(.f = .$fun, .x = .$params)} %>%
                        dplyr::tibble(data = .))
+  if (length(column_map)) {
+    # Rename columns to standard NONMEM names, if applicable.
+    tables$data <-
+      lapply(FUN=function(x, .dots) {
+        if (any(.dots %in% names(x))) {
+          # Some data sets may not have any or all of the remapped names
+          tmp_dots <- .dots[.dots %in% names(x)]
+          dplyr::rename_(x, .dots=tmp_dots)
+        } else {
+          x
+        }
+      },
+      X=tables$data,
+      .dots=column_map)
+  }
   
   if (!combined) {
     return(purrr::set_names(x = purrr::map(tables$data, ~tidyr::drop_na(., dplyr::one_of('ID'))),
@@ -139,7 +163,7 @@ read_nm_tables <- function(file          = NULL,
     dplyr::mutate(grouping = 1:n()) %>% 
     dplyr::group_by_(.dots = 'grouping') %>% 
     tidyr::nest(.key = 'tmp') %>% 
-    dplyr::mutate(index = purrr::map(.$tmp, index_table, column_map=column_map),
+    dplyr::mutate(index = purrr::map(.$tmp, index_table),
                   nrow =  purrr::map_dbl(.$tmp, ~nrow(.$data[[1]]))) %>% 
     tidyr::unnest_(unnest_cols = 'tmp') %>% 
     dplyr::ungroup()
@@ -343,26 +367,18 @@ merge_firstonly <- function(x, quiet) {
 #'
 #' @param x A list containing the tables (`x$data`) to be combined along with
 #'   their respective names (`x$name`).
-#' @param column_map A named character vector mapping column names either to
-#'   reserved NONMEM keywords or to itself.
 #'
 #' @return A tibble of the index.
 #'
 #' @keywords internal
 #' @seealso \code{\link{parse_nm_input_record}}
 #' @export
-index_table <- function(x, column_map=character(0)) {
+index_table <- function(x) {
   tab_type <- dplyr::case_when(
     stringr::str_detect(x$name, 'patab') ~ 'param',   # model parameters
     stringr::str_detect(x$name, 'catab') ~ 'catcov',  # categorical covariate
     stringr::str_detect(x$name, 'cotab') ~ 'contcov', # continuous covariate
     TRUE ~ 'na')
-  
-  mapped_names <-
-    c("ID", "DV", "TIME", "OCC", "DVID", "AMT", "MDV", "EVID", "IPRED", "PRED") %>%
-    setNames(., .)
-  replace_names <- intersect(names(mapped_names), names(column_map))
-  mapped_names[replace_names] <- column_map[replace_names]
   
   ret <-
     x$data[[1]] %>% 
@@ -373,16 +389,16 @@ index_table <- function(x, column_map=character(0)) {
                   label = NA_character_,     # Feature to be added in future releases
                   units = NA_character_) %>% # Feature to be added in future releases
     dplyr::mutate(type = dplyr::case_when(
-      .$col == mapped_names['ID'] ~ 'id',
-      .$col == mapped_names['DV'] ~ 'dv',
-      .$col == mapped_names['TIME'] ~ 'idv',
-      .$col == mapped_names['OCC'] ~ 'occ',
-      .$col == mapped_names['DVID'] ~ 'dvid',
-      .$col == mapped_names['AMT'] ~ 'amt',
-      .$col == mapped_names['MDV'] ~ 'mdv',
-      .$col == mapped_names['EVID'] ~ 'evid',
-      .$col == mapped_names['IPRED'] ~ 'ipred',
-      .$col == mapped_names['PRED'] ~ 'pred',
+      .$col == 'ID' ~ 'id',
+      .$col == 'DV' ~ 'dv',
+      .$col == 'TIME' ~ 'idv',
+      .$col == 'OCC' ~ 'occ',
+      .$col == 'DVID' ~ 'dvid',
+      .$col == 'AMT' ~ 'amt',
+      .$col == 'MDV' ~ 'mdv',
+      .$col == 'EVID' ~ 'evid',
+      .$col == 'IPRED' ~ 'ipred',
+      .$col == 'PRED' ~ 'pred',
       .$col %in% c('RES', 'WRES', 'CWRES', 'IWRES', 'EWRES', 'NPDE') ~ 'res',
       stringr::str_detect(.$col, 'ETA\\d+|ET\\d+') ~ 'eta',
       stringr::str_detect(.$col, '^A\\d+$') ~ 'a',

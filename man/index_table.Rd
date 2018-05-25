@@ -4,14 +4,11 @@
 \alias{index_table}
 \title{Index table columns}
 \usage{
-index_table(x, column_map = character(0))
+index_table(x)
 }
 \arguments{
 \item{x}{A list containing the tables (`x$data`) to be combined along with
 their respective names (`x$name`).}
-
-\item{column_map}{A named character vector mapping column names either to
-reserved NONMEM keywords or to itself.}
 }
 \value{
 A tibble of the index.

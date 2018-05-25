@@ -2,9 +2,21 @@
 % Please edit documentation in R/parse_nm_input_record.R
 \name{parse_nm_input_record}
 \alias{parse_nm_input_record}
+\alias{parse_nm_input_record.data.frame}
+\alias{parse_nm_input_record.xpose_data}
+\alias{parse_nm_input_record.factor}
+\alias{parse_nm_input_record.character}
 \title{Extract the parameter name mapping from a NONMEM $INPUT block}
 \usage{
 parse_nm_input_record(code)
+
+\method{parse_nm_input_record}{data.frame}(code)
+
+\method{parse_nm_input_record}{xpose_data}(code)
+
+\method{parse_nm_input_record}{factor}(code)
+
+\method{parse_nm_input_record}{character}(code)
 }
 \arguments{
 \item{code}{A source of data for a NONMEM $INPUT block (methods are available
@@ -17,6 +29,20 @@ A named character vector mapping NONMEM reserved labels to input
 \description{
 Extract the parameter name mapping from a NONMEM $INPUT block
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{data.frame}: Parse a data.frame object either with a
+single column that is the selected code or one that has a column named
+"subroutine" with a value of \code{"inp"} for the input record.
+
+\item \code{xpose_data}: Parse an xpose_data object extracting the
+code.
+
+\item \code{factor}: Parse a factor (converting it to character).
+
+\item \code{character}: Parse a character object.
+}}
+
 \examples{
 parse_nm_input_record("FOO=ID")
 parse_nm_input_record("FOO=ID BAR")
