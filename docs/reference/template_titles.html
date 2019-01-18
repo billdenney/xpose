@@ -18,13 +18,78 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="Template titles — template_titles" />
+
+<meta property="og:description" content="Template titles can be used to create highly informative diagnostics plots. 
+They can be applied to any plot title, subtitle, caption and the filename when saving 
+with the xpose_save function.
+Template titles are defined via a single string containing key variables staring 
+with a @ (e.g. @ofv) which will be replaced by their actual value when rendering the plot.
+For example '@run, @nobs observations in @nind subjects' would become 'run001, 
+1022 observations in 74 subjects'
+Many key variables are available:
+ @condnCondition number
+ @covtimeCovariance matrix runtime
+ @dataModel input data used
+ @descrModel description
+ @dirModel directory
+ @epsshkEpsilon shrinkage
+ @errorsRun errors (e.g termination error)
+ @esampleseedESAMPLE seed number (used in NPDE)
+ @etashkEta shrinkage
+ @fileModel file name
+ @labelModel label
+ @methodEstimation method or sim
+ @nesampleNumber of ESAMPLE (used in NPDE)
+ @nindNumber of individuals
+ @nobsNumber of observations
+ @nsigNumber of significant digits
+ @nsimNumber of simulations
+ @ofvObjective function value
+ @page and @lastpageAre respectively the page number and the number 
+ of the last page when faceting on multiple pages
+ @probnProblem number
+ @plotfunName of the plot function
+ @refReference model
+ @runModel run name
+ @runtimeEstimation/Sim runtime
+ @softwareSoftware used (e.g. NONMEM)
+ @simseedSimulation seed
+ @subroutineDifferential equation solver
+ @timestartRun start time
+ @timestopRun stop time
+ @timeplotTime of the plot rendering
+ @termTermination message
+ @versionSoftware version (e.g. 7.3)
+ @vpcciVPC confidence interval
+ @vpcdirVPC data directory
+ @vpclloqVPC lower limit of quantification
+ @vpcnsimNumber of simulations for VPC
+ @vpcpiVPC prediction interval  
+ @vpculoqVPC upper limit of quantification
+ @warningsRun warnings (e.g. boundary)
+ @x @y etc.Name of any ggplot2 variable used for mapping in an aes() type function
+" />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +112,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">xpose</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">xpose</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -119,6 +188,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -126,12 +196,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Template titles</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/xpose/blob/master/R/template_titles.R'><code>R/template_titles.R</code></a></small>
+    <div class="hidden name"><code>template_titles.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Template titles can be used to create highly informative diagnostics plots. 
 They can be applied to any plot title, subtitle, caption and the filename when saving 
@@ -184,11 +257,12 @@ For example '@run, @nobs observations in @nind subjects' would become 'run001,
  <dt>@x @y etc.</dt><dd><p>Name of any ggplot2 variable used for mapping in an <code>aes()</code> type function</p></dd>
 </dl>
     
+    </div>
 
         
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><a href='xpose_save.html'>xpose_save</a></p>
+    <div class='dont-index'><p><a href='xpose_save.html'>xpose_save</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -196,14 +270,14 @@ For example '@run, @nobs observations in @nind subjects' would become 'run001,
 <span class='fu'><a href='dv_vs_pred.html'>dv_vs_ipred</a></span>(<span class='no'>xpdb_ex_pk</span>,
             <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>'@x vs. @y'</span>,
             <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>'@ofv, @nind subjects, @nobs obs.'</span>,
-            <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>'@run, @descr'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='template_titles-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+            <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>'@run, @descr'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='template_titles-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Any label can be modified later on</span>
 <span class='fu'><a href='dv_vs_pred.html'>dv_vs_ipred</a></span>(<span class='no'>xpdb_ex_pk</span>, <span class='fu'>aes</span>(<span class='kw'>point_color</span> <span class='kw'>=</span> <span class='no'>SEX</span>,
                             <span class='kw'>line_color</span> <span class='kw'>=</span> <span class='no'>SEX</span>)) +
  <span class='fu'>labs</span>(<span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>'This runs is: @descr'</span>,
       <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>'Color scale for @run'</span>,
       <span class='kw'>x</span>     <span class='kw'>=</span> <span class='st'>'IPRED for @nind subjects'</span>,
-      <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='template_titles-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+      <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='template_titles-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -220,15 +294,18 @@ For example '@run, @nobs observations in @nind subjects' would become 'run001,
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/OlofssonA'>Anna Olofsson</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://github.com/ronkeizer'>Ron Keizer</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
+  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

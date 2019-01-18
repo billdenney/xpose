@@ -4,7 +4,7 @@ author: "Benjamin Guiastrennec"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Access the xpdb data}
+  %\VignetteIndexEntry{FAQ}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,12 +15,14 @@ options(width = 100)
 
 xpdb <- xpdb_ex_pk
 
-knitr::opts_chunk$set(fig.dpi = 96,
-                      fig.align = 'center', 
+knitr::opts_chunk$set(fig.dpi    = 96,
+                      fig.align  = 'center', 
                       fig.height = 4, 
-                      fig.width = 4,
-                      out.width = '75%',
-                      comment = '')
+                      fig.width  = 4,
+                      dev        = 'png',
+                      dev.args   = list(type = 'cairo'),
+                      out.width  = '75%',
+                      comment    = '')
 ```
 
 ## How do I install xpose?
@@ -41,12 +43,12 @@ Not yet. The new xpose package has been fully redesigned around ggplot2 and the 
 
 ## How do I suggest an idea for a future version of xpose?
 1. Check on [github](https://github.com/UUPharmacometrics/xpose/issues) that this idea has not yet been discussed
-1. Read the [CONTRIBUTING.md](https://github.com/UUPharmacometrics/xpose/blob/master/CONTRIBUTING.md) document
+1. Read the [CONTRIBUTING.md](https://github.com/UUPharmacometrics/xpose/blob/master/.github/CONTRIBUTING.md) document
 1. Open a new issue on [github](https://github.com/UUPharmacometrics/xpose/issues) describing your idea
 
 ## How do I report a bug found in xpose?
 1. Make sure you are running the latest version of xpose
 1. Check on [github](https://github.com/UUPharmacometrics/xpose/issues) that this issue has not yet been reported
-1. Read the [CONTRIBUTING.md](https://github.com/UUPharmacometrics/xpose/blob/master/CONTRIBUTING.md) document
+1. Read the [CONTRIBUTING.md](https://github.com/UUPharmacometrics/xpose/blob/master/.github/CONTRIBUTING.md) document
 1. Open a new issue on [github](https://github.com/UUPharmacometrics/xpose/issues)
 

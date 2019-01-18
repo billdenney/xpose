@@ -9,13 +9,16 @@ library(xpose)
 
 xpdb <- xpdb_ex_pk
 xpdb$options$quiet <- TRUE
+xpdb <- as.xpdb(xpdb)
 
 knitr::opts_chunk$set(fig.path   = 'man/figures/', 
                       fig.dpi    = 96,
                       fig.height = 4, 
                       fig.width  = 4, 
                       out.width  = '50%', 
-                      fig.align  = 'center')
+                      fig.align  = 'center',
+                      dev        = 'png',
+                      dev.args   = list(type = 'cairo'))
 ```
 
 # xpose <a href="https://UUPharmacometrics.github.io/xpose/"><img src="man/figures/logo.png" align="right" /></a>
@@ -24,13 +27,14 @@ knitr::opts_chunk$set(fig.path   = 'man/figures/',
 [![appveyor status](https://ci.appveyor.com/api/projects/status/f6k09rf2cfi3vcs2?svg=true)](https://ci.appveyor.com/project/guiastrennec/xpose)
 [![cran_version](http://www.r-pkg.org/badges/version/xpose)](https://CRAN.R-project.org/package=xpose)
 [![codecov](https://codecov.io/gh/UUPharmacometrics/xpose/branch/master/graph/badge.svg)](https://codecov.io/gh/UUPharmacometrics/xpose)
+[![Lifecycle Status](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/)
 [![downloads](https://cranlogs.r-pkg.org/badges/grand-total/xpose)](https://CRAN.R-project.org/package=xpose)
 
-### Overview
+## Overview
 [xpose](https://UUPharmacometrics.github.io/xpose/) was designed as a [ggplot2](https://github.com/tidyverse/ggplot2)-based alternative to [xpose4](http://xpose.sourceforge.net). xpose aims to reduce the post processing burden and improve diagnostics commonly associated the development of non-linear mixed effect models.
 
 
-### Installation
+## Installation
 ``` r
 # Install the lastest release from the CRAN
 install.packages('xpose')
@@ -41,59 +45,58 @@ devtools::install_github('UUPharmacometrics/xpose')
 ```
 
 
-### Getting started
+## Getting started
 
-#### Load xpose
+### Load xpose
 ``` r
 library(xpose)
 ```
 
-#### Import run output
+### Import run output
 ``` r
 xpdb <- xpose_data(runno = '001')
 ```
 
-#### Glance at the data object
+### Glance at the data object
 ```{r, comment = ''}
 xpdb
 ```
 
-##### Model summary
+#### Model summary
 ```{r, comment = ''}
 summary(xpdb, problem = 1)
 ```
 
-#### Generate diagnostics
-##### Standard goodness-of-fit plots
+### Generate diagnostics
+#### Standard goodness-of-fit plots
 ```{r readme_example_figure_1}
 dv_vs_ipred(xpdb)
 ```
 
-##### Individual plots
+#### Individual plots
 ```{r readme_example_figure_2, fig.width = 6, out.width = '75%'}
 ind_plots(xpdb, page = 1)
 ```
 
-##### Visual predictive checks
+#### Visual predictive checks
 ```{r readme_example_figure_3, fig.width = 6, out.width = '75%', warning = FALSE}
 xpdb %>% 
   vpc_data(stratify = 'SEX', opt = vpc_opt(n_bins = 7, lloq = 0.1)) %>% 
   vpc()
 ```
 
-##### Distribution plots
+#### Distribution plots
 ```{r readme_example_figure_4, fig.width = 6, out.width = '75%'}
 eta_distrib(xpdb, labeller = 'label_value')
 ```
 
-##### Minimization diagnostics
+#### Minimization diagnostics
 ```{r readme_example_figure_5, fig.width = 6, out.width = '75%'}
 prm_vs_iteration(xpdb, labeller = 'label_value')
 ```
 
-##### And many other features!
 
-### Recommended reading
+## Recommended reading
 The [xpose website](https://UUPharmacometrics.github.io/xpose/) contains several useful articles to make full use of xpose
 
 When working with xpose, a working knowledge of ggplot2 is recommended. Help for ggplot2 can be found in:
@@ -101,3 +104,7 @@ When working with xpose, a working knowledge of ggplot2 is recommended. Help for
 - The ggplot2 [documentation](http://docs.ggplot2.org/current/)
 - The ggplot2 [mailing list](https://groups.google.com/forum/?fromgroups#!forum/ggplot2)
 - Internet resources (stack overflow, etc.)
+
+
+## Contribute
+Please note that the xpose project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md) and [contributing guidelines](.github/CONTRIBUTING.md). By contributing to this project, you agree to abide these.

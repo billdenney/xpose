@@ -18,13 +18,29 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="Access model output table data — get_data" />
+
+<meta property="og:description" content="Access model output table data from an xpdb object." />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +63,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">xpose</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">xpose</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -119,6 +139,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -126,19 +147,23 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Access model output table data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/xpose/blob/master/R/xpdb_access.R'><code>R/xpdb_access.R</code></a></small>
+    <div class="hidden name"><code>get_data.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Access model output table data from an xpdb object.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>get_data</span>(<span class='no'>xpdb</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.problem</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>quiet</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -168,7 +193,7 @@ tables/problems or a named list for multiple tables/problems.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='list_xpdb.html'>list_data</a></code>, <code><a href='xpose_data.html'>xpose_data</a></code>, <code><a href='read_nm_tables.html'>read_nm_tables</a></code></p>
+    <div class='dont-index'><p><code><a href='list_xpdb.html'>list_data</a></code>, <code><a href='xpose_data.html'>xpose_data</a></code>, <code><a href='read_nm_tables.html'>read_nm_tables</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -177,16 +202,16 @@ tables/problems or a named list for multiple tables/problems.</p>
 <span class='no'>sdtab</span></div><div class='output co'>#&gt; # A tibble: 550 x 18
 #&gt;    ID     DOSE   AMT    SS    II  TIME   TAD IPRED   CWRES CPRED   IWRES  EVID
 #&gt;    &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-#&gt;  1 110     200   100     0     0 0     0     0      0      0      0       1.00
-#&gt;  2 110     200     0     0     0 1.00  1.00  0.214 -2.83   0.584  2.40    0   
-#&gt;  3 110     200     0     0     0 1.50  1.50  0.296 -1.62   0.737  1.03    0   
-#&gt;  4 110     200     0     0     0 2.00  2.00  0.349  1.10   0.790 -1.71    0   
-#&gt;  5 110     200     0     0     0 4.00  4.00  0.392  0.585  0.588 -0.861   0   
-#&gt;  6 110     200     0     0     0 6.00  6.00  0.329 -0.0262 0.304  0.0457  0   
-#&gt;  7 110     200     0     0     0 8.00  8.00  0.249  0.0940 0.127  0.0132  0   
-#&gt;  8 112     200   100     0     0 0     0     0      0      0      0       1.00
-#&gt;  9 112     200     0     0     0 0.500 0.500 0.556  0.0341 0.627 -0.275   0   
-#&gt; 10 112     200     0     0     0 1.00  1.00  0.712 -0.417  0.788  0.163   0   
+#&gt;  1 110     200   100     0     0   0     0   0      0      0      0          1
+#&gt;  2 110     200     0     0     0   1     1   0.214 -2.83   0.584  2.40       0
+#&gt;  3 110     200     0     0     0   1.5   1.5 0.296 -1.62   0.737  1.03       0
+#&gt;  4 110     200     0     0     0   2     2   0.349  1.10   0.790 -1.71       0
+#&gt;  5 110     200     0     0     0   4     4   0.392  0.585  0.588 -0.861      0
+#&gt;  6 110     200     0     0     0   6     6   0.329 -0.0262 0.304  0.0457     0
+#&gt;  7 110     200     0     0     0   8     8   0.249  0.0940 0.127  0.0132     0
+#&gt;  8 112     200   100     0     0   0     0   0      0      0      0          1
+#&gt;  9 112     200     0     0     0   0.5   0.5 0.556  0.0341 0.627 -0.275      0
+#&gt; 10 112     200     0     0     0   1     1   0.712 -0.417  0.788  0.163      0
 #&gt; # ... with 540 more rows, and 6 more variables: A1 &lt;dbl&gt;, A2 &lt;dbl&gt;, DV &lt;dbl&gt;,
 #&gt; #   PRED &lt;dbl&gt;, RES &lt;dbl&gt;, WRES &lt;dbl&gt;</div><div class='input'>
 <span class='co'># By problem</span>
@@ -194,16 +219,16 @@ tables/problems or a named list for multiple tables/problems.</p>
 <span class='no'>tables</span></div><div class='output co'>#&gt; # A tibble: 550 x 31
 #&gt;    ID    SEX   MED1  MED2   DOSE   AMT    SS    II  TIME   TAD IPRED   CWRES
 #&gt;    &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
-#&gt;  1 110   1     0     1       200   100     0     0 0     0     0      0     
-#&gt;  2 110   1     0     1       200     0     0     0 1.00  1.00  0.214 -2.83  
-#&gt;  3 110   1     0     1       200     0     0     0 1.50  1.50  0.296 -1.62  
-#&gt;  4 110   1     0     1       200     0     0     0 2.00  2.00  0.349  1.10  
-#&gt;  5 110   1     0     1       200     0     0     0 4.00  4.00  0.392  0.585 
-#&gt;  6 110   1     0     1       200     0     0     0 6.00  6.00  0.329 -0.0262
-#&gt;  7 110   1     0     1       200     0     0     0 8.00  8.00  0.249  0.0940
-#&gt;  8 112   1     1     1       200   100     0     0 0     0     0      0     
-#&gt;  9 112   1     1     1       200     0     0     0 0.500 0.500 0.556  0.0341
-#&gt; 10 112   1     1     1       200     0     0     0 1.00  1.00  0.712 -0.417 
+#&gt;  1 110   1     0     1       200   100     0     0   0     0   0      0     
+#&gt;  2 110   1     0     1       200     0     0     0   1     1   0.214 -2.83  
+#&gt;  3 110   1     0     1       200     0     0     0   1.5   1.5 0.296 -1.62  
+#&gt;  4 110   1     0     1       200     0     0     0   2     2   0.349  1.10  
+#&gt;  5 110   1     0     1       200     0     0     0   4     4   0.392  0.585 
+#&gt;  6 110   1     0     1       200     0     0     0   6     6   0.329 -0.0262
+#&gt;  7 110   1     0     1       200     0     0     0   8     8   0.249  0.0940
+#&gt;  8 112   1     1     1       200   100     0     0   0     0   0      0     
+#&gt;  9 112   1     1     1       200     0     0     0   0.5   0.5 0.556  0.0341
+#&gt; 10 112   1     1     1       200     0     0     0   1     1   0.712 -0.417 
 #&gt; # ... with 540 more rows, and 19 more variables: CPRED &lt;dbl&gt;, IWRES &lt;dbl&gt;,
 #&gt; #   EVID &lt;dbl&gt;, A1 &lt;dbl&gt;, A2 &lt;dbl&gt;, DV &lt;dbl&gt;, PRED &lt;dbl&gt;, RES &lt;dbl&gt;,
 #&gt; #   WRES &lt;dbl&gt;, CLCR &lt;dbl&gt;, AGE &lt;dbl&gt;, WT &lt;dbl&gt;, KA &lt;dbl&gt;, CL &lt;dbl&gt;, V &lt;dbl&gt;,
@@ -211,7 +236,7 @@ tables/problems or a named list for multiple tables/problems.</p>
 <span class='co'># Tip to list available tables in the xpdb</span>
 <span class='fu'>print</span>(<span class='no'>xpdb_ex_pk</span>)</div><div class='output co'>#&gt; run001.lst overview: 
 #&gt;  - Software: nonmem 7.3.0 
-#&gt;  - Attached files (memory usage 1.3 Mb): 
+#&gt;  - Attached files (memory usage 1.4 Mb): 
 #&gt;    + obs tabs: $prob no.1: catab001.csv, cotab001, patab001, sdtab001 
 #&gt;    + sim tabs: $prob no.2: simtab001.zip 
 #&gt;    + output files: run001.cor, run001.cov, run001.ext, run001.grd, run001.phi, run001.shk 
@@ -238,15 +263,18 @@ tables/problems or a named list for multiple tables/problems.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/OlofssonA'>Anna Olofsson</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://github.com/ronkeizer'>Ron Keizer</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
+  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

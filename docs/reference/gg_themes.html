@@ -18,13 +18,36 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="An additional set of themes for ggplot2 — gg_themes" />
+
+<meta property="og:description" content="An additional set of complete ggplot2 themes intended to make ggplot2 more readable 
+when used in presentation or publications. These themes also bring the legend_position option
+without having to call the ggplot2 theme() function to modify a complete theme.
+
+theme_bw2: Black and white theme inspired by a theme from Gunnar Yngman.
+theme_readable: Light grey theme, with dimmed background and grid lines 
+intended to bring the focus on the data.
+" />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +70,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">xpose</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">xpose</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -119,6 +146,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -126,28 +154,34 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>An additional set of themes for ggplot2</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/xpose/blob/master/R/themes_gg.R'><code>R/themes_gg.R</code></a></small>
+    <div class="hidden name"><code>gg_themes.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>An additional set of complete ggplot2 themes intended to make ggplot2 more readable 
 when used in presentation or publications. These themes also bring the <code>legend_position</code> option
-without having to call the ggplot2 theme() function to modify a complete theme.</p><ul>
+without having to call the ggplot2 theme() function to modify a complete theme.</p>
+<ul>
 <li><p><code>theme_bw2</code>: Black and white theme inspired by a theme from Gunnar Yngman.</p></li>
 <li><p><code>theme_readable</code>: Light grey theme, with dimmed background and grid lines 
 intended to bring the focus on the data.</p></li>
 </ul>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>theme_bw2</span>(<span class='kw'>base_size</span> <span class='kw'>=</span> <span class='fl'>11</span>, <span class='kw'>base_family</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>legend_position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)
+    <pre class="usage"><span class='fu'>theme_bw2</span>(<span class='kw'>base_size</span> <span class='kw'>=</span> <span class='fl'>11</span>, <span class='kw'>base_family</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>legend_position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)
 
 <span class='fu'>theme_readable</span>(<span class='kw'>base_size</span> <span class='kw'>=</span> <span class='fl'>11</span>, <span class='kw'>base_family</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>legend_position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -168,11 +202,11 @@ intended to bring the focus on the data.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># With the gg_theme theme_readable() (default)</span>
-<span class='fu'><a href='dv_vs_pred.html'>dv_vs_ipred</a></span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='st'>'SEX'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='gg_themes-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'><a href='dv_vs_pred.html'>dv_vs_ipred</a></span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='st'>'SEX'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='gg_themes-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># With the gg_theme theme_bw2()</span>
 <span class='no'>xpdb_ex_pk</span> <span class='kw'>%&gt;%</span>
  <span class='fu'><a href='update_themes.html'>update_themes</a></span>(<span class='kw'>gg_theme</span> <span class='kw'>=</span> <span class='fu'>theme_bw2</span>()) <span class='kw'>%&gt;%</span>
- <span class='fu'><a href='dv_vs_pred.html'>dv_vs_ipred</a></span>(<span class='kw'>facets</span> <span class='kw'>=</span> <span class='st'>'SEX'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='gg_themes-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'> 
+ <span class='fu'><a href='dv_vs_pred.html'>dv_vs_ipred</a></span>(<span class='kw'>facets</span> <span class='kw'>=</span> <span class='st'>'SEX'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='img'><img src='gg_themes-2.png' alt='' width='700' height='433' /></div><div class='input'> 
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -188,15 +222,18 @@ intended to bring the focus on the data.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/OlofssonA'>Anna Olofsson</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://github.com/ronkeizer'>Ron Keizer</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
+  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

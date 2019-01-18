@@ -87,7 +87,7 @@ check_scales <- function(scale, log) {
 #' @param xpdb An xpose database object.
 #' @param string A string to which the suffix will be appended.
 #' @param type A string determining what suffix type should be used 
-#' in the `xp_theme`. Can be one of `title`, `subtitle` or `caption`.
+#' in the `xp_theme`. Can be one of `title`, `subtitle`, `caption` or `tag`.
 #' 
 #' @return The modified `string`.
 #' 
@@ -321,7 +321,7 @@ drop_fixed_cols <- function(xpdb, .problem, cols, quiet) {
   
   # Get the column names to be removed
   cols_rm <- get_data(xpdb, .problem = .problem) %>% 
-    dplyr::select_(.dots = cols) %>%
+    dplyr::select_at(cols) %>%
     dplyr::select_if(.predicate = function(x) length(unique(x)) == 1) %>% 
     colnames()
   if (length(cols_rm) == 0) return(cols)

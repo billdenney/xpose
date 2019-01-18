@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • xpose</title>
+<title>Changelog • xpose</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="Changelog" />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +61,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">xpose</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">xpose</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -119,6 +137,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -126,20 +145,35 @@
       
       </header>
 
-      <div class="row">
-
-  <div class="col-md-9">
+<div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Change log <small>All releases</small></h1>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/UUPharmacometrics/xpose/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="contents">
-    <div id="xpose-0-4-2" class="section level1">
-<h1 class="hasAnchor">
-<a href="#xpose-0-4-2" class="anchor"></a>xpose 0.4.2</h1>
+    <div id="xpose-0-4-3" class="section level1">
+<h1 class="page-header">
+<a href="#xpose-0-4-3" class="anchor"></a>xpose 0.4.3<small> 2018-07-28 </small>
+</h1>
 <div id="general" class="section level3">
 <h3 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h3>
+<ul>
+<li>Fixed bug in <code><a href="../reference/get_prm.html">get_prm()</a></code>/<code><a href="../reference/prm_table.html">prm_table()</a></code> where off diagonal correlations were improperly computed.</li>
+<li>Fixed bug in <code><a href="../reference/print.xpose_data.html">print.xpose_data()</a></code>where a warning from stringi was returned.</li>
+<li>Fixed multiple bugs introduced by the new versions of tidyverse packages</li>
+<li>Added compatibility to ggplot2 v3.0.0</li>
+</ul>
+</div>
+</div>
+    <div id="xpose-0-4-2" class="section level1">
+<h1 class="page-header">
+<a href="#xpose-0-4-2" class="anchor"></a>xpose 0.4.2<small> 2018-01-30 </small>
+</h1>
+<div id="general-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#general-1" class="anchor"></a>General</h3>
 <ul>
 <li>Address CRAN requests</li>
 <li>Improved internal structure of VPC</li>
@@ -148,11 +182,12 @@
 </div>
 </div>
     <div id="xpose-0-4-1" class="section level1">
-<h1 class="hasAnchor">
-<a href="#xpose-0-4-1" class="anchor"></a>xpose 0.4.1</h1>
-<div id="general-1" class="section level3">
+<h1 class="page-header">
+<a href="#xpose-0-4-1" class="anchor"></a>xpose 0.4.1<small> 2018-01-09 </small>
+</h1>
+<div id="general-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h3>
+<a href="#general-2" class="anchor"></a>General</h3>
 <ul>
 <li>Improved integration of the xpose.nlmixr package</li>
 <li>Prevented a problem in the <code>print()</code> function with the upcoming ggplot2 version</li>
@@ -169,11 +204,12 @@
 </div>
 </div>
     <div id="xpose-0-4-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#xpose-0-4-0" class="anchor"></a>xpose 0.4.0</h1>
-<div id="general-2" class="section level3">
+<h1 class="page-header">
+<a href="#xpose-0-4-0" class="anchor"></a>xpose 0.4.0<small> 2017-11-17 </small>
+</h1>
+<div id="general-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#general-2" class="anchor"></a>General</h3>
+<a href="#general-3" class="anchor"></a>General</h3>
 <ul>
 <li>Added xpdb memory usage to <code><a href="../reference/print.xpose_data.html">print.xpose_data()</a></code>
 </li>
@@ -186,7 +222,7 @@
 <h3 class="hasAnchor">
 <a href="#data-importedit" class="anchor"></a>Data import/edit</h3>
 <ul>
-<li>Added compatibility with <code><a href="http://dplyr.tidyverse.org/reference/n.html">dplyr::n()</a></code> when editing xpdb #51</li>
+<li>Added compatibility with <code><a href="http://dplyr.tidyverse.org/reference/n.html">dplyr::n()</a></code> when editing xpdb <a href='https://github.com/UUPharmacometrics/xpose/issues/51'>#51</a></li>
 <li>Added <code><a href="../reference/get_special.html">get_special()</a></code> to access special data</li>
 <li>Improved <code><a href="../reference/get_prm.html">get_prm()</a></code> labeller parsing with OMEGA and SIGMA BLOCKS</li>
 <li>
@@ -216,11 +252,12 @@
 </div>
 </div>
     <div id="xpose-0-3-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#xpose-0-3-0" class="anchor"></a>xpose 0.3.0</h1>
-<div id="general-3" class="section level3">
+<h1 class="page-header">
+<a href="#xpose-0-3-0" class="anchor"></a>xpose 0.3.0<small> Unreleased </small>
+</h1>
+<div id="general-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#general-3" class="anchor"></a>General</h3>
+<a href="#general-4" class="anchor"></a>General</h3>
 <ul>
 <li>Improved documentation and testing</li>
 <li>Improved compatibility with NONMEM 7.4.1</li>
@@ -262,11 +299,12 @@
 </div>
 </div>
     <div id="xpose-0-2-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#xpose-0-2-0" class="anchor"></a>xpose 0.2.0</h1>
-<div id="general-4" class="section level3">
+<h1 class="page-header">
+<a href="#xpose-0-2-0" class="anchor"></a>xpose 0.2.0<small> Unreleased </small>
+</h1>
+<div id="general-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#general-4" class="anchor"></a>General</h3>
+<a href="#general-5" class="anchor"></a>General</h3>
 <ul>
 <li>Renamed package <code>xpose</code>
 </li>
@@ -326,7 +364,7 @@
 <ul>
 <li>Changed <code>cwres_vs_idv</code>, type residual functions to more general <code><a href="../reference/res_vs_idv.html">res_vs_idv(res = 'CWRES')</a></code> functions</li>
 <li>Implemented/improved general plotting functions: <code><a href="../reference/xplot_distrib.html">xplot_distrib()</a></code>, <code><a href="../reference/xplot_qq.html">xplot_qq()</a></code>, <code><a href="../reference/xplot_scatter.html">xplot_scatter()</a></code>, with convenience function to fetch data in xpdb <code>data_opt_set()</code>.</li>
-<li>Implemented: <code><a href="../reference/pred_vs_idv.html">dv_vs_idv()</a></code>, <code><a href="../reference/pred_vs_idv.html">ipred_vs_idv()</a></code>, <code>pred_vs_idv()</code>, <code><a href="../reference/pred_vs_idv.html">dv_preds_vs_idv()</a></code>, <code><a href="../reference/ind_plots.html">ind_plots()</a></code>, <code><a href="../reference/vpc.html">vpc()</a></code>, <code><a href="../reference/distrib_plot.html">prm_distrib()</a></code>, <code><a href="../reference/distrib_plot.html">eta_distrib()</a></code>, <code><a href="../reference/distrib_plot.html">res_distrib()</a></code>, <code><a href="../reference/distrib_plot.html">cov_distrib()</a></code>, <code><a href="../reference/qq_plot.html">prm_qq()</a></code>, <code><a href="../reference/qq_plot.html">eta_qq()</a></code>, <code><a href="../reference/qq_plot.html">res_qq()</a></code>, <code><a href="../reference/qq_plot.html">cov_qq()</a></code>, <code><a href="../reference/minimization_plots.html">prm_vs_iteration()</a></code>, <code><a href="../reference/minimization_plots.html">grd_vs_iteration()</a></code>.</li>
+<li>Implemented: <code><a href="../reference/pred_vs_idv.html">dv_vs_idv()</a></code>, <code><a href="../reference/pred_vs_idv.html">ipred_vs_idv()</a></code>, <code><a href="../reference/pred_vs_idv.html">pred_vs_idv()</a></code>, <code><a href="../reference/pred_vs_idv.html">dv_preds_vs_idv()</a></code>, <code><a href="../reference/ind_plots.html">ind_plots()</a></code>, <code><a href="../reference/vpc.html">vpc()</a></code>, <code><a href="../reference/distrib_plot.html">prm_distrib()</a></code>, <code><a href="../reference/distrib_plot.html">eta_distrib()</a></code>, <code><a href="../reference/distrib_plot.html">res_distrib()</a></code>, <code><a href="../reference/distrib_plot.html">cov_distrib()</a></code>, <code><a href="../reference/qq_plot.html">prm_qq()</a></code>, <code><a href="../reference/qq_plot.html">eta_qq()</a></code>, <code><a href="../reference/qq_plot.html">res_qq()</a></code>, <code><a href="../reference/qq_plot.html">cov_qq()</a></code>, <code><a href="../reference/minimization_plots.html">prm_vs_iteration()</a></code>, <code><a href="../reference/minimization_plots.html">grd_vs_iteration()</a></code>.</li>
 <li>Updated/renamed: <code><a href="../reference/gg_themes.html">theme_bw2()</a></code>, <code><a href="../reference/gg_themes.html">theme_readable()</a></code>, <code><a href="../reference/xp_themes.html">theme_xp_default()</a></code>, <code><a href="../reference/xp_themes.html">theme_xp_xpose4()</a></code>.</li>
 </ul>
 </div>
@@ -339,8 +377,9 @@
 </div>
 </div>
     <div id="ggxpose-0-1-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#ggxpose-0-1-0" class="anchor"></a>ggxpose 0.1.0</h1>
+<h1 class="page-header">
+<a href="#ggxpose-0-1-0" class="anchor"></a>ggxpose 0.1.0<small> Unreleased </small>
+</h1>
 <div id="first-commit" class="section level3">
 <h3 class="hasAnchor">
 <a href="#first-commit" class="anchor"></a>First commit</h3>
@@ -362,13 +401,13 @@
 </ul>
 </div>
 </div>
-    </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#xpose-0-4-3">0.4.3</a></li>
         <li><a href="#xpose-0-4-2">0.4.2</a></li>
         <li><a href="#xpose-0-4-1">0.4.1</a></li>
         <li><a href="#xpose-0-4-0">0.4.0</a></li>
@@ -383,15 +422,18 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/OlofssonA'>Anna Olofsson</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://github.com/ronkeizer'>Ron Keizer</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
+  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

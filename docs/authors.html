@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script>
 <script src="pkgdown.js"></script>
+
+
+
   <link href="extra.css" rel="stylesheet">
   
+<meta property="og:title" content="Authors" />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +61,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">xpose</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="index.html">xpose</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -119,6 +137,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -126,59 +145,31 @@
       
       </header>
 
-      <div class="row">
-  <div class="contents col-md-12">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
       <h1>Authors</h1>
     </div>
 
     <ul class="list-unstyled">
       <li>
-        <p><strong><a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a></strong>. Author, maintainer, copyright holder.
+        <p><strong><a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a></strong>. Author, maintainer, copyright holder. 
         </p>
       </li>
       <li>
-        <p><strong><a href='https://github.com/andrewhooker'>Andrew C. Hooker</a></strong>. Author, copyright holder.
+        <p><strong><a href='https://github.com/andrewhooker'>Andrew C. Hooker</a></strong>. Author, copyright holder. 
         </p>
       </li>
       <li>
-        <p><strong><a href='https://github.com/OlofssonA'>Anna Olofsson</a></strong>. Author, copyright holder.
+        <p><strong><a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a></strong>. Author, copyright holder. 
         </p>
       </li>
       <li>
-        <p><strong><a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a></strong>. Author, copyright holder.
+        <p><strong><a href='https://github.com/MikeKSmith'>Mike K. Smith</a></strong>. Contributor. 
         </p>
       </li>
       <li>
-        <p><strong><a href='https://github.com/ronkeizer'>Ron Keizer</a></strong>. Author.
-        </p>
-      </li>
-      <li>
-        <p><strong>Nick Solomon</strong>. Contributor.
-        <br /><small>Wrote the geom_qq_line function</small></p>
-      </li>
-      <li>
-        <p><strong><a href='https://github.com/kharling'>Kajsa Harling</a></strong>. Contributor.
-        </p>
-      </li>
-      <li>
-        <p><strong><a href='https://github.com/MikeKSmith'>Mike K. Smith</a></strong>. Contributor.
-        </p>
-      </li>
-      <li>
-        <p><strong>Elodie Plan</strong>. Contributor.
-        </p>
-      </li>
-      <li>
-        <p><strong><a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a></strong>. Author, copyright holder.
-        </p>
-      </li>
-      <li>
-        <p><strong><a href='http://pharmetheus.com'><img src="http://wcop2016.org/wp-content/uploads/2014/09/B_pharmetheus-cropped.png" height="24" /</a></strong>. Contributor.
-        </p>
-      </li>
-      <li>
-        <p><strong><a href='http://www.pfizer.com'><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Pfizer.svg/200px-Pfizer.svg.png" height="24" /</a></strong>. Contributor.
+        <p><strong><a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a></strong>. Author, copyright holder. 
         </p>
       </li>
     </ul>
@@ -190,15 +181,18 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/OlofssonA'>Anna Olofsson</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://github.com/ronkeizer'>Ron Keizer</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
+  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

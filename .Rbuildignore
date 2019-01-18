@@ -1,6 +1,7 @@
 ^_config\.yml$
 ^_pkgdown\.yml$
 ^.*\.Rproj$
+^\.github$
 ^\.Rprofile$
 ^\.Rproj\.user$
 ^\.travis\.yml$

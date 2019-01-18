@@ -18,13 +18,29 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="Distribution plots of ETA and parameters — distrib_plot" />
+
+<meta property="og:description" content="Histograms and density plots of the ETA and parameter values." />
+
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +63,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">xpose</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">xpose</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -119,6 +139,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -126,38 +147,45 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Distribution plots of ETA and parameters</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/xpose/blob/master/R/plot_distibution.R'><code>R/plot_distibution.R</code></a></small>
+    <div class="hidden name"><code>distrib_plot.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Histograms and density plots of the ETA and parameter values.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>prm_distrib</span>(<span class='no'>xpdb</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drop_fixed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"hr"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Parameter distribution | @run"</span>,
-  <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"Based on @nind individuals"</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>, <span class='no'>.problem</span>, <span class='no'>quiet</span>, <span class='no'>...</span>)
+  <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"Based on @nind individuals"</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>,
+  <span class='kw'>tag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>, <span class='no'>.problem</span>, <span class='no'>quiet</span>,
+  <span class='no'>...</span>)
 
 <span class='fu'>eta_distrib</span>(<span class='no'>xpdb</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drop_fixed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"hr"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Eta distribution | @run"</span>,
   <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"Based on @nind individuals, Eta shrink: @etashk"</span>,
-  <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>, <span class='no'>.problem</span>, <span class='no'>quiet</span>,
-  <span class='no'>...</span>)
+  <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>, <span class='kw'>tag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>,
+  <span class='no'>.problem</span>, <span class='no'>quiet</span>, <span class='no'>...</span>)
 
 <span class='fu'>res_distrib</span>(<span class='no'>xpdb</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>res</span> <span class='kw'>=</span> <span class='st'>"CWRES"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"hr"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"@x distribution | @run"</span>,
-  <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"Based on @nobs observations"</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>, <span class='no'>.problem</span>, <span class='no'>quiet</span>, <span class='no'>...</span>)
+  <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"Based on @nobs observations"</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>,
+  <span class='kw'>tag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>, <span class='no'>.problem</span>, <span class='no'>quiet</span>,
+  <span class='no'>...</span>)
 
 <span class='fu'>cov_distrib</span>(<span class='no'>xpdb</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drop_fixed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"hr"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Continuous covariates distribution | @run"</span>,
-  <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"Based on @nind individuals"</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>, <span class='no'>.problem</span>, <span class='no'>quiet</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"Based on @nind individuals"</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"@dir"</span>,
+  <span class='kw'>tag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>facets</span>, <span class='no'>.problem</span>, <span class='no'>quiet</span>,
+  <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -190,6 +218,10 @@ density 'd', rug 'r' or any combination of the three.</p></td>
     <tr>
       <th>caption</th>
       <td><p>Page caption. Use <code>NULL</code> to remove.</p></td>
+    </tr>
+    <tr>
+      <th>tag</th>
+      <td><p>Plot identification tag. Use <code>NULL</code> to remove.</p></td>
     </tr>
     <tr>
       <th>log</th>
@@ -260,7 +292,7 @@ when using the <code>facets</code> argument in <code>xp_theme</code> variable is
 
     
     <p>Template titles can be used to create highly informative diagnostics plots. 
-They can be applied to any plot title, subtitle and caption. Template titles 
+They can be applied to any plot title, subtitle, caption and tag. Template titles 
 are defined via a single string containing key variables staring with a `@` (e.g. `@ofv`)
 which will be replaced by their actual value when rendering the plot.
 For example `'@run, @nobs observations in @nind subjects'` would become 
@@ -269,18 +301,18 @@ are listed under <code><a href='template_titles.html'>template_titles</a></code>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='xplot_distrib.html'>xplot_distrib</a></code></p>
+    <div class='dont-index'><p><code><a href='xplot_distrib.html'>xplot_distrib</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Histogram of parameters</span>
-<span class='fu'>prm_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'h'</span>)</div><div class='output co'>#&gt; <span class='message'>Dropped fixed variables ALAG1.</span></div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Removing duplicated rows based on: ID, variable</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 23 more variables</span></div><div class='img'><img src='distrib_plot-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>prm_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'h'</span>)</div><div class='output co'>#&gt; <span class='message'>Dropped fixed variables ALAG1.</span></div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Removing duplicated rows based on: ID</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 23 more variables</span></div><div class='img'><img src='distrib_plot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Density plot of etas with a rug</span>
-<span class='fu'>eta_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'dr'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Removing duplicated rows based on: ID, variable</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 23 more variables</span></div><div class='img'><img src='distrib_plot-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>eta_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'dr'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Removing duplicated rows based on: ID</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 23 more variables</span></div><div class='img'><img src='distrib_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Histogram of different residuals</span>
-<span class='fu'>res_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'hr'</span>, <span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>'IWRES'</span>, <span class='st'>'CWRES'</span>))</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 24 more variables</span></div><div class='img'><img src='distrib_plot-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>res_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'hr'</span>, <span class='kw'>res</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>'IWRES'</span>, <span class='st'>'CWRES'</span>))</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Filtering data by EVID == 0</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 24 more variables</span></div><div class='img'><img src='distrib_plot-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Density plot of continuous covariates</span>
-<span class='fu'>cov_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'d'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Removing duplicated rows based on: ID, variable</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 23 more variables</span></div><div class='img'><img src='distrib_plot-4.png' alt='' width='700' height='432.632880098887' /></div></pre>
+<span class='fu'>cov_distrib</span>(<span class='no'>xpdb_ex_pk</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'d'</span>)</div><div class='output co'>#&gt; <span class='message'>Using data from $prob no.1</span></div><div class='output co'>#&gt; <span class='message'>Removing duplicated rows based on: ID</span></div><div class='output co'>#&gt; <span class='message'>Tidying data by ID, SEX, MED1, MED2, DOSE ... and 23 more variables</span></div><div class='img'><img src='distrib_plot-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -303,15 +335,18 @@ are listed under <code><a href='template_titles.html'>template_titles</a></code>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/OlofssonA'>Anna Olofsson</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://github.com/ronkeizer'>Ron Keizer</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
+  <p>Developed by <a href='https://github.com/guiastrennec'>Benjamin Guiastrennec</a>, <a href='https://github.com/andrewhooker'>Andrew C. Hooker</a>, <a href='https://github.com/sebastianueckert'>Sebastian Ueckert</a>, <a href='https://katalog.uu.se/profile/?id=XX3384'>Mats O. Karlsson</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
