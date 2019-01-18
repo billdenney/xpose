@@ -171,4 +171,10 @@ xpose_data <- function(runno         = NULL,
     structure(class = c('xpose_data', 'uneval'))
 }
 
-
+# Allow assignment into xpose_data objects without loss of the class
+`[[<-.xpose_data` <- function(x, i, value) {
+  x <- unclass(x)
+  x[[i]] <- value
+  as.xpdb(x)
+}
+`$<-.xpose_data` <- `[[<-.xpose_data`
