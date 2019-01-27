@@ -31,7 +31,7 @@ xpdb # or print(xpdb)
 
 
 ### Access the model code
-The `get_code()` function can be used to access the parsed model code from the xpdb. This code was used to create the summary and find table names. The parsed code can be used to get additional information about the run. If the argument `.problem` is specified a subset of the code can be returned based on `$PROBLEM`. 
+The `get_code()` function can be used to access the parsed or raw model code from the xpdb. This code was used to create the summary and find table names. The parsed code can be used to get additional information about the run. If the argument `.problem` is specified a subset of the code can be returned based on `$PROBLEM`. 
 
 *Note that general code warnings and PsN outputs appended are listed as problem 0.*
 
@@ -40,6 +40,10 @@ code <- get_code(xpdb)
 code
 ```
 
+```{r demo get_code_raw}
+code <- get_code(xpdb, .type="raw")
+code
+```
 
 ### Access the output data
 The `get_data()` function can be used to access the imported table files. Tables can be accessed by `table` name or by `.problem`. In the latter a single dataset containing all aggregated tables is returned. If more than one `table` name or `.problem` number is provided a named list is returned. 

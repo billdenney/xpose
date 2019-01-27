@@ -24,6 +24,10 @@ test_that('get_code works properly', {
   
   # Return multiple problems
   expect_equal(get_code(xpdb_ex_pk, .problem = 0:1), xpdb_ex_pk$code[xpdb_ex_pk$code$problem %in% 0:1, ])
+  
+  # Raw extraction gives results
+  expect_equal(class(get_code(xpdb_ex_pk, .type="raw")), "character")
+  expect_equal(length(get_code(xpdb_ex_pk, .type="raw")), 1076)
 })
 
 

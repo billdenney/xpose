@@ -6,23 +6,30 @@
 #' @param .problem The problem to be used, in addition, problem 0 is attributed to 
 #' general output (e.g. NM-TRAN warnings in NONMEM). By default returns the 
 #' entire code.
-#' @return A tibble of the parsed model.
+#' @return A tibble of the parsed model (if \code{.type="parsed"}) or a
+#'   character vector of the model (if \code{.type="raw"}).
 #' @seealso \code{\link{xpose_data}}, \code{\link{read_nm_model}}
 #' @examples
 #' parsed_model <- get_code(xpdb_ex_pk)
 #' parsed_model
+#' raw_model <- get_code(xpdb_ex_pk, .type="raw")
 #' 
 #' @export
-get_code <- function(xpdb, .problem = NULL) {
+get_code <- function(xpdb, .problem = NULL, .type=c("parsed", "raw")) {
+  .type <- match.arg(.type)
   check_xpdb(xpdb, check = 'code')
-  x <- xpdb$code
-  
-  if (!is.null(.problem)) {
-    if (!all(.problem %in% x$problem)) {
-      stop('$prob no.', stringr::str_c(.problem[!.problem %in% x$problem], collapse = ', '), 
-           ' not found in model code.', call. = FALSE)
+  if (.type == "parsed") {
+    x <- xpdb$code
+    
+    if (!is.null(.problem)) {
+      if (!all(.problem %in% x$problem)) {
+        stop('$prob no.', stringr::str_c(.problem[!.problem %in% x$problem], collapse = ', '), 
+             ' not found in model code.', call. = FALSE)
+      }
+      x <- x[x$problem %in% .problem, ]
     }
-    x <- x[x$problem %in% .problem, ]
+  } else if (.type == "raw") {
+    x <- attr(xpdb$code, "raw_file")
   }
   x
 }
