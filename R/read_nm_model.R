@@ -61,9 +61,9 @@ read_nm_model <- function(runno   = NULL,
     stop('Model file ', basename(full_path), ' not found.', call. = FALSE) 
   }
   
-  model <- readr::read_lines(full_path)
+  model_raw <- readr::read_lines(full_path)
   
-  if (!any(stringr::str_detect(model, '^\\s*\\$PROB.+')) && ext %in% c('.lst', '.out', '.res')) {
+  if (!any(stringr::str_detect(model_raw, '^\\s*\\$PROB.+')) && ext %in% c('.lst', '.out', '.res')) {
     # Attempts to recover the model code from model file rather than in the nonmem output file
     full_path <- update_extension(full_path, c('.mod', '.ctl'))
     full_path <- full_path[file.exists(full_path)]
@@ -71,16 +71,17 @@ read_nm_model <- function(runno   = NULL,
     if (any(file.exists(full_path))) {
       warning(c('No model code found in `', ext, '` NONMEM output file importing `', 
                 get_extension(full_path)[1], '` instead.'), call. = FALSE)
-      model <- readr::read_lines(full_path[1])
+      model_raw <- readr::read_lines(full_path[1])
     }
   }
   
   # Return error if input is bad
-  if (!any(stringr::str_detect(model, '^\\s*\\$PROB.+'))) {
+  if (!any(stringr::str_detect(model_raw, '^\\s*\\$PROB.+'))) {
     stop(basename(full_path), ' is not a NONMEM model.', call. = FALSE)
   }
   
-  model <- dplyr::tibble(code = model) %>% 
+  model <-
+    dplyr::tibble(code = model_raw) %>% 
     dplyr::filter(!stringr::str_detect(.$code, '^;[^;]*$|^$')) %>% 
     dplyr::mutate(code = stringr::str_replace_all(.$code, '\\t+|\\s{2,}', ' ')) %>% 
     dplyr::mutate(
@@ -134,11 +135,13 @@ read_nm_model <- function(runno   = NULL,
   model[code_rows, 'code'] <- stringr::str_replace(model[code_rows, ]$code, '\\s*;.*$', '')
   
   # Remove na values and output
-  tidyr::replace_na(model, replace = list(code = '', comment = '')) %>% 
+  ret <-
+    tidyr::replace_na(model, replace = list(code = '', comment = '')) %>% 
     dplyr::select(dplyr::one_of('problem', 'level', 'subroutine', 'code', 'comment')) %>% 
     dplyr::mutate(problem = as.integer(.$problem),
                   level   = as.integer(.$level)) %>% 
     structure(file     = basename(full_path),
+              raw_file = model_raw,
               dir      = dirname(full_path),
               software = 'nonmem',
               class    = c('nm_model', class(.)))
