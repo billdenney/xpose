@@ -12,6 +12,8 @@ get_code(xpdb, .problem = NULL, .type = c("parsed", "raw"))
 \item{.problem}{The problem to be used, in addition, problem 0 is attributed to 
 general output (e.g. NM-TRAN warnings in NONMEM). By default returns the 
 entire code.}
+
+\item{.type}{The type of output (see the return value for options).}
 }
 \value{
 A tibble of the parsed model (if \code{.type="parsed"}) or a

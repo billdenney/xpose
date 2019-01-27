@@ -6,6 +6,7 @@
 #' @param .problem The problem to be used, in addition, problem 0 is attributed to 
 #' general output (e.g. NM-TRAN warnings in NONMEM). By default returns the 
 #' entire code.
+#' @param .type The type of output (see the return value for options).
 #' @return A tibble of the parsed model (if \code{.type="parsed"}) or a
 #'   character vector of the model (if \code{.type="raw"}).
 #' @seealso \code{\link{xpose_data}}, \code{\link{read_nm_model}}
