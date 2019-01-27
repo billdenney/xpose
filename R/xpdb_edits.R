@@ -164,7 +164,6 @@ summarise.xpose_data <- function(.data, ..., .problem, .source, .where) {
 #' See the dplyr vignette("programming") for an introduction to these concepts.
 #' @keywords internal
 #' @export
-#' @importFrom rlang `!!!`
 edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where) {
   
   # Check input
@@ -189,7 +188,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
         xpdb[['data']]$data,
         xpdb[['data']]$problem %in% .problem,
         .f = .fun,
-        `!!!`(rlang::quos(...))
+        !!!rlang::quos(...)
       )
     xpdb[['data']] <- xpdb[['data']] %>%
       dplyr::mutate(modified = dplyr::if_else(.$problem %in% .problem, TRUE, .$modified))
@@ -232,7 +231,8 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
           }
         },
         .fun = .fun,
-        .where = .where, `!!!`(rlang::quos(...))
+        .where = .where,
+        !!!rlang::quos(...)
       )
     
     xpdb[['special']] <- tidyr::unnest(xpdb[['special']])
@@ -255,7 +255,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
         .x = xpdb[['files']]$data,
         .p = xpdb[['files']]$problem %in% .problem & xpdb[['files']]$extension %in% .source,
         .f = .fun,
-        `!!!`(rlang::quos(...))
+        !!!rlang::quos(...)
       )
     xpdb[['files']] <- xpdb[['files']] %>%
       dplyr::mutate(modified = dplyr::if_else(.$problem %in% .problem & .$extension %in% .source, TRUE, .$modified))
