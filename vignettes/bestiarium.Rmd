@@ -12,15 +12,13 @@ vignette: >
 ```{r, include=FALSE}
 library(xpose)
 
-knitr::opts_chunk$set(fig.dpi    = 96,
-                      fig.align  = 'center', 
+knitr::opts_chunk$set(fig.dpi = 96,
+                      fig.align = 'center', 
                       fig.height = 6, 
-                      fig.width  = 6,
-                      dev        = 'png',
-                      dev.args   = list(type = 'cairo'),
-                      out.width  = '75%',
-                      comment    = '',
-                      message    = FALSE)
+                      fig.width = 6,
+                      out.width = '75%',
+                      comment = '',
+                      message = FALSE)
                       
 ```
 

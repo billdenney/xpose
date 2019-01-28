@@ -19,8 +19,6 @@ knitr::opts_chunk$set(fig.dpi    = 96,
                       fig.align  = 'center', 
                       fig.height = 4, 
                       fig.width  = 4,
-                      dev        = 'png',
-                      dev.args   = list(type = 'cairo'),
                       out.width  = '75%',
                       comment    = '')
 ```

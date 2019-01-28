@@ -24,14 +24,13 @@ vignette: >
 - [Elodie Plan](mailto:elodie.plan@pharmetheus.com) *(Pharmetheus)*
 - [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
 
-## 2018
-- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(Certara)*
+## 2018-2019
+- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(na)*
 - [Sebastian Ueckert](mailto:sebastian.ueckert@farmbio.uu.se) *(Uppsala University)*
 - [Mike K. Smith](mailto:mike.k.smith@pfizer.com) *(Pfizer)*
 - [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
 - [Andrew C. Hooker](mailto:andrew.hooker@farmbio.uu.se) *(Uppsala University)*
 
-  
 # Sponsors
 The xpose package development was kindly sponsored by:
 
