@@ -141,7 +141,7 @@ navbar:
         - text: "--------------------------"
         - text: "Getting started"
         - text: Cheat sheet (pdf)
-          href: articles/cheatsheet.pdf
+          href: reference/figures/cheatsheet.pdf
         - text: Introduction
           href: articles/introduction.html
         - text: Import model outputs
