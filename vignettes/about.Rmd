@@ -25,7 +25,7 @@ vignette: >
 - [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
 
 ## 2018-2019
-- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(na)*
+- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(non-affiliated)*
 - [Sebastian Ueckert](mailto:sebastian.ueckert@farmbio.uu.se) *(Uppsala University)*
 - [Mike K. Smith](mailto:mike.k.smith@pfizer.com) *(Pfizer)*
 - [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
@@ -38,7 +38,9 @@ The xpose package development was kindly sponsored by:
 - [Pfizer](http://www.pfizer.com) (2017)
 
 # History
-The new xpose was inspired from data visualization and model diagnostics concepts established by the [xpose4](http://xpose.sourceforge.net) package. Xpose4 was developed by the [Department of Pharmaceutical Biosciences](http://www.farmbio.uu.se/forskning/researchgroups/pharmacometrics/) at Uppsala University:
+The new xpose was inspired from data visualization and model diagnostics concepts established by the [xpose4](http://xpose.sourceforge.net) package. 
+
+Xpose4 was developed by the [Department of Pharmaceutical Biosciences](http://www.farmbio.uu.se/forskning/researchgroups/pharmacometrics/) at Uppsala University:
 
 - Copyright (C) 2009-present Andrew C. Hooker, Mats O. Karlsson and E. Niclas Jonsson.
 - Copyright (C) 2005-2008 Andrew C. Hooker, Justin J. Wilkins, Mats O. Karlsson and E. Niclas Jonsson.
