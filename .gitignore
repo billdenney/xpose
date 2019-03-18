@@ -9,7 +9,6 @@
 # Local directories
 temporary/
 inst/models
-docs/
 
 # Built vignettes
 vignettes/*.html
