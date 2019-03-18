@@ -2,7 +2,7 @@
 
   if (!interactive()) return()
   
-  text <- c('NoteL the next xpose release (v0.5) will bring some major changes.\nIf you rely on xpose for your work, please keep an eye on our github:\nhttps://github.com/UUPharmacometrics/xpose')
+  text <- c('Note: the next xpose release (v0.5) will bring some major changes.\nIf you rely on xpose for your work, please keep an eye on our github:\nhttps://github.com/UUPharmacometrics/xpose')
   
   packageStartupMessage(sample(text, size = 1))
 }
