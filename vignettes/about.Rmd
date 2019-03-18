@@ -4,12 +4,16 @@ author: "Benjamin Guiastrennec"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Customize plots}
+  %\VignetteIndexEntry{About}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Our team
+# Team
+## 2016
+- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(Uppsala University)*
+
+## 2017
 - [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(Uppsala University)*
 - [Andrew C. Hooker](mailto:andrew.hooker@farmbio.uu.se) *(Uppsala University)*
 - [Anna Olofsson](mailto:anna.olofsson@pharmetheus.com) *(Pharmetheus)*
@@ -19,15 +23,24 @@ vignette: >
 - [Mike K. Smith](mailto:mike.k.smith@pfizer.com) *(Pfizer)*
 - [Elodie Plan](mailto:elodie.plan@pharmetheus.com) *(Pharmetheus)*
 - [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
-  
-# Our sponsors
+
+## 2018-2019
+- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(non-affiliated)*
+- [Sebastian Ueckert](mailto:sebastian.ueckert@farmbio.uu.se) *(Uppsala University)*
+- [Mike K. Smith](mailto:mike.k.smith@pfizer.com) *(Pfizer)*
+- [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
+- [Andrew C. Hooker](mailto:andrew.hooker@farmbio.uu.se) *(Uppsala University)*
+
+# Sponsors
 The xpose package development was kindly sponsored by:
 
-- [Pharmetheus](http://pharmetheus.com)
-- [Pfizer](http://www.pfizer.com)
+- [Pharmetheus](https://pharmetheus.com) (2017)
+- [Pfizer](https://www.pfizer.com) (2017)
 
-# Our history
-The new xpose was inspired from data visualization and model diagnostics concepts established by the [xpose4](http://xpose.sourceforge.net) package. Xpose4 was developed by the [Department of Pharmaceutical Biosciences](http://www.farmbio.uu.se/forskning/researchgroups/pharmacometrics/) at Uppsala University:
+# History
+The new xpose was inspired from data visualization and model diagnostics concepts established by the [xpose4](http://xpose.sourceforge.net) package. 
+
+Xpose4 was developed by the [Department of Pharmaceutical Biosciences](https://www.farmbio.uu.se/forskning/researchgroups/pharmacometrics/) at Uppsala University:
 
 - Copyright (C) 2009-present Andrew C. Hooker, Mats O. Karlsson and E. Niclas Jonsson.
 - Copyright (C) 2005-2008 Andrew C. Hooker, Justin J. Wilkins, Mats O. Karlsson and E. Niclas Jonsson.

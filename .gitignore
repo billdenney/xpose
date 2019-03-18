@@ -13,6 +13,7 @@ inst/models
 # Built vignettes
 vignettes/*.html
 vignettes/*.R
+.github/*.html
 
 #OSX directories
 __MACOSX/
