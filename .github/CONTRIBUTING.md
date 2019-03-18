@@ -25,7 +25,7 @@ To contribute code to xpose please carefully follow the steps listed below.
 1. [Fork](https://github.com/UUPharmacometrics/xpose/fork) the xpose repository.
 1. Make the changes to the code on your fork.
 
-    + Use the tidyverse [coding style](http://style.tidyverse.org/).
+    + Use the tidyverse [coding style](https://style.tidyverse.org/).
     + Any new function should have [Roxygen](http://r-pkgs.had.co.nz/man.html) documentation. Internal functions should contain `#' @keywords internal`. Add examples to new functions. Make sure to update the documentation with `devtools::document()` before submitting the pull request.
     + [Tests](http://r-pkgs.had.co.nz/tests.html) should be added under *tests/testthat/* to ensure for proper code coverage.
     + New plots should be created using the generic `xplot_scatter()`, `xplot_distrib()` or `xplot_qq()`. Check for example the code of *R/plot_gof.R* to see how it should be done.

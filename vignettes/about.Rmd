@@ -34,13 +34,13 @@ vignette: >
 # Sponsors
 The xpose package development was kindly sponsored by:
 
-- [Pharmetheus](http://pharmetheus.com) (2017)
-- [Pfizer](http://www.pfizer.com) (2017)
+- [Pharmetheus](https://pharmetheus.com) (2017)
+- [Pfizer](https://www.pfizer.com) (2017)
 
 # History
 The new xpose was inspired from data visualization and model diagnostics concepts established by the [xpose4](http://xpose.sourceforge.net) package. 
 
-Xpose4 was developed by the [Department of Pharmaceutical Biosciences](http://www.farmbio.uu.se/forskning/researchgroups/pharmacometrics/) at Uppsala University:
+Xpose4 was developed by the [Department of Pharmaceutical Biosciences](https://www.farmbio.uu.se/forskning/researchgroups/pharmacometrics/) at Uppsala University:
 
 - Copyright (C) 2009-present Andrew C. Hooker, Mats O. Karlsson and E. Niclas Jonsson.
 - Copyright (C) 2005-2008 Andrew C. Hooker, Justin J. Wilkins, Mats O. Karlsson and E. Niclas Jonsson.

@@ -69,7 +69,7 @@ list_vars(xpdb)
 ```
 
 ### Pipes
-`xpose` makes use of the pipe operator `%>%` from the package [dplyr](http://dplyr.tidyverse.org). Pipes can be used to generate clear workflow.
+`xpose` makes use of the pipe operator `%>%` from the package [dplyr](https://dplyr.tidyverse.org). Pipes can be used to generate clear workflow.
 
 ```{r, eval = FALSE}
 xpose_data(runno = '001') %>% 
