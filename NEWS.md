@@ -1,3 +1,7 @@
+# xpose 0.4.4.9000
+### General
+* Fixed issue when ETA values were not named as ETA(X) in NONMEM (@billdenney #144)
+
 # xpose 0.4.4
 ### General
 * Improved documentation for `xpose_data` (@billdenney #99)
