@@ -1,3 +1,7 @@
+# xpose 0.4.4.9000
+### General
+* Off-diagonal ETA names are better-detected (@billdenney #121)
+
 # xpose 0.4.4
 ### General
 * Improved documentation for `xpose_data` (@billdenney #99)
