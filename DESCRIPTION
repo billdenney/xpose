@@ -1,7 +1,7 @@
 Package: xpose
 Type: Package
 Title: Diagnostics for Pharmacometric Models
-Version: 0.4.3
+Version: 0.4.4
 Authors@R: c(
       person('Benjamin', 'Guiastrennec',
              role  = c('aut', 'cre', 'cph'),
@@ -53,4 +53,4 @@ BugReports: https://github.com/UUPharmacometrics/xpose/issues
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
