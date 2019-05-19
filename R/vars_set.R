@@ -67,7 +67,7 @@ set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet)
   
   xpdb$data <- dat %>% 
     dplyr::mutate(grouping = .$problem) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
+    dplyr::group_by_at(.vars = 'grouping') %>% 
     tidyr::nest(.key = 'tmp') %>% 
     dplyr::mutate(out = purrr::map_if(.$tmp, .$grouping %in% .problem, function(x, args, quiet) {
       # Get the index
@@ -102,7 +102,7 @@ set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet)
       # Output new index
       x
     }, args = args, quiet = quiet)) %>% 
-    tidyr::unnest_(unnest_cols = 'out') %>% 
+    tidyr::unnest(!!rlang::sym('out')) %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
   
   as.xpdb(xpdb)
@@ -129,7 +129,7 @@ set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
   
   xpdb$data <- dat %>% 
     dplyr::mutate(grouping = .$problem) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
+    dplyr::group_by_at(.vars = 'grouping') %>% 
     tidyr::nest(.key = 'tmp') %>% 
     dplyr::mutate(out = purrr::map_if(.$tmp, .$grouping %in% .problem, function(x, args, quiet) {
       # Get the index
@@ -150,7 +150,7 @@ set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
       # Output new index
       x
     }, args = args, quiet = quiet)) %>% 
-    tidyr::unnest_(unnest_cols = 'out') %>% 
+    tidyr::unnest(!!rlang::sym('out')) %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
   
   as.xpdb(xpdb)
