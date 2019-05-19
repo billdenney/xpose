@@ -234,10 +234,10 @@ vpc <- function(xpdb,
                               name     = 'rug',
                               ggfun    = 'geom_rug',
                               rug_data =  vpc_dat$aggr_obs %>% 
-                                dplyr::distinct_(.dots = c('bin', stratify), .keep_all = TRUE) %>% 
+                                dplyr::distinct(!!!rlang::syms(c('bin', stratify)), .keep_all = TRUE) %>% 
                                 dplyr::filter(!is.na(.$bin)) %>% 
                                 tidyr::gather(key = 'edges', value = 'idv', dplyr::one_of('bin_min', 'bin_max')) %>% 
-                                dplyr::distinct_(.dots = c(stratify, 'idv'), .keep_all = TRUE))
+                                dplyr::distinct(!!!rlang::syms(c(stratify, 'idv')), .keep_all = TRUE))
                        ))
   }
   

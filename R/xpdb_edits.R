@@ -201,7 +201,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
     check_quo_vars(xpdb = xpdb, ..., .source = .source, .problem = .problem)
     
     xpdb[['special']] <- xpdb[['special']] %>%
-      dplyr::group_by_('problem') %>% 
+      dplyr::group_by_at(.vars = 'problem') %>% 
       tidyr::nest(.key = 'tmp')
     
     xpdb[['special']]$tmp <- purrr::map_if(.x = xpdb[['special']]$tmp, .p = xpdb[['special']]$problem %in% .problem,
@@ -256,7 +256,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
 #' @export
 xpdb_index_update <- function(xpdb, .problem) {
   xpdb[['data']] %>% 
-    dplyr::group_by_(.dots = 'problem') %>% 
+    dplyr::group_by_at(.vars = 'problem') %>% 
     tidyr::nest(.key = 'tmp') %>% 
     dplyr::mutate(tmp = purrr::map_if(.$tmp, 
                                       xpdb[['data']]$problem %in% .problem,
@@ -277,7 +277,7 @@ xpdb_index_update <- function(xpdb, .problem) {
                                         }
                                         x
                                       })) %>% 
-    tidyr::unnest_(unnest_cols = 'tmp')
+    tidyr::unnest(!!rlang::sym('tmp'))
 }
 
 
