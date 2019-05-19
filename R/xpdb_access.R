@@ -383,8 +383,8 @@ get_prm <- function(xpdb,
         prms <- purrr::map_df(prm_trans_formula, ~transform_prm(.x, mu = prm_mean, sigma = prm_cov, method = 'delta')) %>% 
           dplyr::mutate(se = sqrt(.$variance))
       } else {
-        prms <- dplyr::data_frame(mean = purrr::flatten_dbl(prm_mean), 
-                                  se   = purrr::flatten_dbl(prm_se)) %>% 
+        prms <- dplyr::tibble(mean = purrr::flatten_dbl(prm_mean), 
+                              se   = purrr::flatten_dbl(prm_se)) %>% 
           dplyr::mutate(rse = .$se/abs(.$mean))
       }
       

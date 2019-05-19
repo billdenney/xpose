@@ -62,7 +62,7 @@ set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet)
   if (is.null(args)) return(xpdb)
   
   args <- args %>%
-    dplyr::data_frame(col = ., type = names(.)) %>% 
+    dplyr::tibble(col = ., type = names(.)) %>% 
     dplyr::mutate(type = stringr::str_replace(.$type, '\\d$', ''))
   
   xpdb$data <- dat %>% 
@@ -125,7 +125,7 @@ set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
   args <- c(...)
   if (is.null(args)) return(xpdb)
   
-  args <- dplyr::data_frame(col = names(args), variable = args)
+  args <- dplyr::tibble(col = names(args), variable = args)
   
   xpdb$data <- dat %>% 
     dplyr::mutate(grouping = .$problem) %>% 

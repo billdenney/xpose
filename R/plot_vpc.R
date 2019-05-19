@@ -263,15 +263,15 @@ vpc <- function(xpdb,
     scale_linetype_manual(values = line_linetype)
   
   # Add metadata to plots
-  xp$xpose <- dplyr::data_frame(problem = vpc_prob, subprob = 0L, 
-                                descr = c('VPC directory', 'Number of simulations for VPC', 
-                                          'VPC confidence interval', 'VPC prediction interval', 
-                                          'VPC lower limit of quantification', 'VPC upper limit of quantification'),
-                                label = c('vpcdir', 'vpcnsim', 'vpcci', 'vpcpi', 'vpclloq', 'vpculoq'),
-                                value = c(vpc_dat$vpc_dir, vpc_dat$nsim, 
-                                          100*diff(vpc_dat$opt$ci), 100*diff(vpc_dat$opt$pi),
-                                          ifelse(is.null(vpc_dat$lloq), 'na', vpc_dat$lloq),
-                                          ifelse(is.null(vpc_dat$uloq), 'na', vpc_dat$uloq))) %>% 
+  xp$xpose <- dplyr::tibble(problem = vpc_prob, subprob = 0L, 
+                            descr = c('VPC directory', 'Number of simulations for VPC', 
+                                      'VPC confidence interval', 'VPC prediction interval', 
+                                      'VPC lower limit of quantification', 'VPC upper limit of quantification'),
+                            label = c('vpcdir', 'vpcnsim', 'vpcci', 'vpcpi', 'vpclloq', 'vpculoq'),
+                            value = c(vpc_dat$vpc_dir, vpc_dat$nsim, 
+                                      100*diff(vpc_dat$opt$ci), 100*diff(vpc_dat$opt$pi),
+                                      ifelse(is.null(vpc_dat$lloq), 'na', vpc_dat$lloq),
+                                      ifelse(is.null(vpc_dat$uloq), 'na', vpc_dat$uloq))) %>% 
     dplyr::bind_rows(xpdb$summary) %>% 
     {list(fun = stringr::str_c('vpc_', vpc_dat$type),
           summary  = .,
