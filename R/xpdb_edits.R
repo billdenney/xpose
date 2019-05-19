@@ -184,7 +184,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
     
     # do dplyr operation outside of mutate to avoid problems with n()
     xpdb[['data']]$data <- purrr::map_if(xpdb[['data']]$data, xpdb[['data']]$problem %in% .problem,
-                         .f = .fun, !!!rlang::quos(...))
+                         .f = .fun, !!!rlang::enquos(...))
     xpdb[['data']] <- xpdb[['data']] %>%
       dplyr::mutate(modified = dplyr::if_else(.$problem %in% .problem, TRUE, .$modified))
     
@@ -221,7 +221,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
                                           } else {
                                             stop('edits of `', .x$method, '` data are not yet supported in xpose.', call. = FALSE)
                                           }
-                                        }, .fun = .fun, .where = .where, !!!rlang::quos(...)) 
+                                        }, .fun = .fun, .where = .where, !!!rlang::enquos(...)) 
     
     xpdb[['special']] <- tidyr::unnest(xpdb[['special']])
   } else {
@@ -240,7 +240,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
     
     xpdb[['files']]$data <- purrr::map_if(.x = xpdb[['files']]$data, .p = xpdb[['files']]$problem %in% .problem &
                                        xpdb[['files']]$extension %in% .source,
-                                     .f = .fun, !!!rlang::quos(...))
+                                     .f = .fun, !!!rlang::enquos(...))
     xpdb[['files']] <- xpdb[['files']] %>%
       dplyr::mutate(modified = dplyr::if_else(.$problem %in% .problem & .$extension %in% .source, TRUE, .$modified))
   }
@@ -302,7 +302,7 @@ xpdb_index_update <- function(xpdb, .problem) {
 check_quo_vars <- function(xpdb, ..., .source, .problem) {
   if (.source == 'special') return(invisible())
   
-  quo_vars <- rlang::quos(...) %>% 
+  quo_vars <- rlang::enquos(...) %>% 
     purrr::map(all.vars) %>% 
     purrr::flatten_chr()
   
