@@ -111,7 +111,7 @@ rename.xpose_data <- function(.data, ..., .problem, .source, .where) {
 #'  ungroup(.problem = 1) %>% 
 #'  xplot_distrib(aes(x = CMAX, density_fill = SEX), type = 'dr')
 #'  
-#' @name summarize_xpdb
+#' @name summarise_xpdb
 #' @export
 group_by.xpose_data <- function(.data, ..., .problem, .source, .where) {
   edit_xpose_data(.fun = dplyr::group_by, .fname = 'group_by', .data = .data,
@@ -120,7 +120,7 @@ group_by.xpose_data <- function(.data, ..., .problem, .source, .where) {
 
 
 #' @method ungroup xpose_data
-#' @name summarize_xpdb
+#' @name summarise_xpdb
 #' @export
 ungroup.xpose_data <- function(x, ..., .problem, .source, .where) {
   edit_xpose_data(.fun = dplyr::ungroup, .fname = 'ungroup', .data = x,
@@ -128,21 +128,18 @@ ungroup.xpose_data <- function(x, ..., .problem, .source, .where) {
 }
 
 
-#' @method summarize xpose_data
-#' @name summarize_xpdb
+#' @method summarise xpose_data
+#' @name summarise_xpdb
 #' @export
-summarize.xpose_data <- function(.data, ..., .problem, .source, .where) {
-  edit_xpose_data(.fun = dplyr::summarize, .fname = 'summarize', .data = .data,
+summarise.xpose_data <- function(.data, ..., .problem, .source, .where) {
+  edit_xpose_data(.fun = dplyr::summarise, .fname = 'summarise', .data = .data,
                   .problem = .problem, .source = .source, .where = .where, ...)
 }
 
-#' @method summarise xpose_data
-#' @name summarize_xpdb
+#' @method summarize xpose_data
+#' @name summarise_xpdb
 #' @export
-summarise.xpose_data <- function(.data, ..., .problem, .source, .where) {
-  edit_xpose_data(.fun = dplyr::summarise, .fname = 'summarize', .data = .data,
-                  .problem = .problem, .source = .source, .where = .where, ...)
-}
+summarize.xpose_data <- summarise.xpose_data
 
 
 #' Master xpdb editing function
