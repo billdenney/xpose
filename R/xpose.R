@@ -7,4 +7,5 @@
 #' @import ggplot2
 #' @importFrom dplyr n
 #' @importFrom rlang :=
+#' @keywords internal
 "_PACKAGE"
