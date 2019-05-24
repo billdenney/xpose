@@ -1,6 +1,7 @@
 # xpose 0.4.4.9000
 ### General
 * Enable storing of the raw NONMEM .lst file output with a new `.type` argument to `get_code()` (@billdenney #103)
+* Off-diagonal ETA names are better-detected (@billdenney #121)
 * Fixed issue when ETA values were not named as ETA(X) in NONMEM (@billdenney #144)
 
 # xpose 0.4.4
