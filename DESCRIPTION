@@ -40,6 +40,7 @@ Imports:
   stats,
   vpc (>= 1.1.0)
 Suggests:
+  here,
   gridExtra,
   rmarkdown,
   knitr,
