@@ -10,8 +10,12 @@ vignette: >
 ---
 
 # Team
-## 2016
-- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(Uppsala University)*
+## 2018-2019
+- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(non-affiliated)*
+- [Sebastian Ueckert](mailto:sebastian.ueckert@farmbio.uu.se) *(Uppsala University)*
+- [Mike K. Smith](mailto:mike.k.smith@pfizer.com) *(Pfizer)*
+- [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
+- [Andrew C. Hooker](mailto:andrew.hooker@farmbio.uu.se) *(Uppsala University)*
 
 ## 2017
 - [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(Uppsala University)*
@@ -24,12 +28,9 @@ vignette: >
 - [Elodie Plan](mailto:elodie.plan@pharmetheus.com) *(Pharmetheus)*
 - [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
 
-## 2018-2019
-- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(non-affiliated)*
-- [Sebastian Ueckert](mailto:sebastian.ueckert@farmbio.uu.se) *(Uppsala University)*
-- [Mike K. Smith](mailto:mike.k.smith@pfizer.com) *(Pfizer)*
-- [Mats O. Karlsson](mailto:mats.karlsson@farmbio.uu.se) *(Uppsala University)*
-- [Andrew C. Hooker](mailto:andrew.hooker@farmbio.uu.se) *(Uppsala University)*
+## 2016
+- [Benjamin Guiastrennec](mailto:guiastrennec@gmail.com) *(Uppsala University)*
+
 
 # Sponsors
 The xpose package development was kindly sponsored by:
