@@ -20,4 +20,5 @@ attr(xpdb_ex_pk$code, 'dir') <- 'analysis/models/pk/'
 xpdb_ex_pk <- xpose::as.xpdb(xpdb_ex_pk)
 
 # Export rda to data folder
-save(xpdb_ex_pk, file = here::here('data/xpdb_ex_pk.rda'), compress = 'xz')
+save(xpdb_ex_pk, file = here::here('data/xpdb_ex_pk.rda'), 
+     compress = 'xz', version = 2)
