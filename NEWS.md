@@ -7,6 +7,7 @@
 
 # xpose 0.4.4
 ### General
+* `list_vars` now invisbly returns a list (@billdenney #124)
 * Improved documentation for `xpose_data` (@billdenney #99)
 * Fixed VPC error in the documentation (@callistosp #130)
 * Fixed bug leading to errors when plotting poorly formatted ETA name (@romainfrancois #127)
@@ -74,7 +75,7 @@
 
 ### Data import/edit
 * Improved `dir` and `file` arguments usage
-* Improved error robustness of `xpose_data()` 
+* Improved error robustness of `xpose_data()`
 * Added new dplyr verbs for xpdb editing: `slice()`, `select()`, `rename()`, `distinct()`, `summarize()`, `group_by()` and `ungroup()`
 * dplyr verbs can now also be used to edit vpc data
 * Added `irep()` function to add simulation counter to any dataset
@@ -96,7 +97,7 @@
 * New internal data structure using nested tibbles
 * Improvement of documentation, and testing
 
-### Data import 
+### Data import
 #### `read_nm_tables()`
 * Handles NONMEM tables in .csv, .zip format
 * Handles multiple $PROB and tables with FIRSTONLY option

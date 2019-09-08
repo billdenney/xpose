@@ -11,6 +11,12 @@ list_vars(xpdb, .problem = NULL)
 
 \item{.problem}{The problem to be used, by lists all available problems.}
 }
+\value{
+Prints the list of all available variables, and returns that list
+  invisibly.  The name of the list is the problem number, the names of the
+  elements of the sub-lists are the variable types, and the values of the
+  sub-lists are the column names.
+}
 \description{
 Function listing all available variables in an xpdb object.
 }
