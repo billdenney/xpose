@@ -12,14 +12,18 @@ test_that('data_opt function works properly', {
 
 test_that('only_obs function works properly', {
   expect_true(is.function(only_obs(xpdb_ex_pk, .problem = 1, quiet = TRUE)))
-  expect_equal(only_obs(xpdb_ex_pk, .problem = 1, quiet = TRUE)(x = xpdb_ex_pk$data$data[[1]]),
-               xpdb_ex_pk$data$data[[1]][xpdb_ex_pk$data$data[[1]]$EVID == 0, ])
+  expect_equal(
+    only_obs(xpdb_ex_pk, .problem = 1, quiet = TRUE)(x = xpdb_ex_pk$data$data[[1]]),
+    xpdb_ex_pk$data$data[[1]][xpdb_ex_pk$data$data[[1]]$EVID == 0, ]
+  )
 })
 
 test_that('only_distinct function works properly', {
   expect_true(is.function(only_distinct(xpdb_ex_pk, .problem = 1, facets = 'DOSE', quiet = TRUE)))
-  expect_equal(only_distinct(xpdb_ex_pk, .problem = 1, facets = 'DOSE', quiet = TRUE)(x = xpdb_ex_pk$data$data[[1]]),
-               dplyr::distinct_(.data = xpdb_ex_pk$data$data[[1]], .dots = c('ID', 'DOSE'), .keep_all = TRUE))
+  expect_equal(
+    only_distinct(xpdb_ex_pk, .problem = 1, facets = 'DOSE', quiet = TRUE)(x = xpdb_ex_pk$data$data[[1]]),
+    dplyr::distinct_at(.tbl = xpdb_ex_pk$data$data[[1]], .vars = c('ID', 'DOSE'), .keep_all = TRUE)
+  )
 })
 
 test_that('reorder_etas_factors function works properly', {

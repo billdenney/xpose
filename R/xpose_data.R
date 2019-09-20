@@ -116,12 +116,20 @@ xpose_data <- function(runno         = NULL,
     msg('Ignoring data import.', quiet)
     data <- NULL
   } else if (software == 'nonmem') {
-    data <- tryCatch(read_nm_tables(file = tbl_names, dir = NULL, 
-                                    quiet = quiet, simtab = simtab, ...), 
-                     error = function(e) {
-                       warning(e$message, call. = FALSE)
-                       return()
-                     })
+    data <-
+      tryCatch(
+        read_nm_tables(
+          file = tbl_names,
+          dir = NULL, 
+          quiet = quiet,
+          simtab = simtab,
+          ...
+        ), 
+        error = function(e) {
+          warning(e$message, call. = FALSE)
+          return()
+        }
+      )
   }
   
   # Generate model summary
@@ -131,8 +139,12 @@ xpose_data <- function(runno         = NULL,
   } else if (software == 'nonmem') {
     summary <-
       tryCatch(
-        summarise_nm_model(file = full_path, model = model_code, 
-                           software = software, rounding = xp_theme$rounding),
+        summarise_nm_model(
+          file = full_path,
+          model = model_code, 
+          software = software,
+          rounding = xp_theme$rounding
+        ),
         error = function(e) {
           warning(c('Failed to create run summary. ', e$message), call. = FALSE)
           return()
@@ -150,14 +162,20 @@ xpose_data <- function(runno         = NULL,
     } else {
       extra_files <- make_extension(extra_files) 
     }
-    out_files <- full_path %>% 
-      basename() %>% 
-      update_extension(ext = extra_files) %>% 
-      {tryCatch(read_nm_files(file = ., dir = dirname(full_path), quiet = quiet), 
-                error = function(e) {
-                  warning(e$message, call. = FALSE)
-                  return()
-                })}
+    out_files_names <-
+      update_extension(x=basename(full_path), ext = extra_files)
+    out_files <-
+      tryCatch(
+        read_nm_files(
+          file = out_files_names,
+          dir = dirname(full_path),
+          quiet = quiet
+        ),
+        error = function(e) {
+          warning(e$message, call. = FALSE)
+          return()
+        }
+      )
   }
   
   # Label themes
@@ -165,9 +183,21 @@ xpose_data <- function(runno         = NULL,
   attr(xp_theme, 'theme') <- as.character(substitute(xp_theme)) 
   
   # Output xpose_data
-  list(code = model_code, summary = summary, data = data,
-       files = out_files, gg_theme = gg_theme, xp_theme = xp_theme,
-       options = list(dir = dirname(full_path), quiet = quiet, 
-                      manual_import = manual_import)) %>% 
-    structure(class = c('xpose_data', 'uneval'))
+  structure(
+    list(
+      code = model_code,
+      summary = summary,
+      data = data,
+      files = out_files,
+      gg_theme = gg_theme,
+      xp_theme = xp_theme,
+      options =
+        list(
+          dir = dirname(full_path),
+          quiet = quiet, 
+          manual_import = manual_import
+        )
+    ),
+    class = c('xpose_data', 'uneval')
+  )
 }

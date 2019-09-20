@@ -22,7 +22,6 @@ Access special model data from an xpdb object.
 \examples{
 special <- get_summary(xpdb_ex_pk)
 special
-
 }
 \seealso{
 \code{\link{list_special}}, \code{\link{xpose_data}}

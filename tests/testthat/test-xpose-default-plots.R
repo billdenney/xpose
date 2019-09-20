@@ -87,7 +87,6 @@ test_that('layers of xplot_qq', {
   expect_equal(class(q1$layers[[2]]$geom)[1], 'GeomPath')
 })
 
-
 test_that('faceting works properly', {
   expect_true(is.null(p1$facet$params$facets))
   expect_true(is.null(d1$facet$params$facets))
@@ -97,12 +96,12 @@ test_that('faceting works properly', {
   expect_true(is.list(d2$facet$params$facets))
   expect_true(is.list(q2$facet$params$facets))
   
-  expect_equal(as.character(p3$facet$params$cols[[1]])[2], 'SEX')   # Improve ?
-  expect_equal(as.character(p3$facet$params$rows[[1]])[2], 'MED2')  # Improve ?
-  expect_equal(as.character(d3$facet$params$cols[[1]])[2], 'SEX')   # Improve ?
-  expect_equal(as.character(d3$facet$params$rows[[1]])[2], 'MED2')  # Improve ?
-  expect_equal(as.character(q3$facet$params$cols[[1]])[2], 'SEX')   # Improve ?
-  expect_equal(as.character(q3$facet$params$rows[[1]])[2], 'MED2')  # Improve ?
+  expect_equal(rlang::as_label(p3$facet$params$cols[[1]]), 'SEX')   # Improve ?
+  expect_equal(rlang::as_label(p3$facet$params$rows[[1]]), 'MED2')  # Improve ?
+  expect_equal(rlang::as_label(d3$facet$params$cols[[1]]), 'SEX')   # Improve ?
+  expect_equal(rlang::as_label(d3$facet$params$rows[[1]]), 'MED2')  # Improve ?
+  expect_equal(rlang::as_label(q3$facet$params$cols[[1]]), 'SEX')   # Improve ?
+  expect_equal(rlang::as_label(q3$facet$params$rows[[1]]), 'MED2')  # Improve ?
 })
 
 test_that('xpose_geom mapping works properly', {

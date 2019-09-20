@@ -28,7 +28,6 @@ read_nm_files <- function(runno  = NULL,
                           file   = NULL,
                           dir    = NULL,
                           quiet  = FALSE) {
-  
   # Check inputs
   if (is.null(runno) && is.null(file)) {
     stop('Argument `runno` or `file` required.', call. = FALSE)
@@ -54,26 +53,29 @@ read_nm_files <- function(runno  = NULL,
   
   msg(c('Reading: ', stringr::str_c(bases[file.exists(full_path)], collapse = ', ')), quiet)
   
-  out <- full_path %>% 
+  out <-
+    full_path %>% 
     dplyr::tibble(path = ., name = basename(.)) %>% 
     dplyr::filter(file.exists(.$path)) %>% 
-    dplyr::mutate(grouping = 1:n(),
-                  raw = purrr::map(.$path, .f = readr::read_lines)) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
-    tidyr::nest() %>% 
+    dplyr::mutate(
+      grouping = 1:n(),
+      raw = purrr::map(.$path, .f = readr::read_lines)
+    ) %>%
+    tidyr::nest(data=setdiff(names(.), "grouping")) %>%
     dplyr::mutate(tmp = purrr::map(.$data, .f = parse_nm_files, quiet)) %>% 
     dplyr::mutate(drop = purrr::map_lgl(.$tmp, is.null)) 
   
   if (all(out$drop)) stop('No output file imported.', call. = FALSE)
   
-  out %>% 
+  out %>%
     dplyr::filter(!.$drop) %>% 
-    tidyr::unnest_(unnest_cols = 'data') %>% 
-    tidyr::unnest_(unnest_cols = 'tmp') %>% 
+    tidyr::unnest(cols = 'data') %>%
+    tidyr::unnest(cols = 'tmp') %>% 
     dplyr::mutate(extension = get_extension(.$name, dot = FALSE),
                   modified = FALSE) %>% 
-    dplyr::select(dplyr::one_of('name', 'extension', 'problem', 'subprob', 
-                                'method', 'data', 'modified'))
+    dplyr::select_at(
+      .vars=c('name', 'extension', 'problem', 'subprob', 'method', 'data', 'modified')
+    )
 }
 
 
@@ -131,11 +133,10 @@ parse_nm_files <- function(dat, quiet) {
     dplyr::mutate(problem = as.numeric(.$problem),
                   subprob = as.numeric(.$subprob),
                   raw = stringr::str_trim(.$raw, side = 'both')) %>% 
-    dplyr::group_by_(.dots = c('problem', 'subprob', 'method')) %>% 
+    dplyr::group_by_at(.vars = c('problem', 'subprob', 'method')) %>% 
     tidyr::nest() %>% 
     dplyr::mutate(data = purrr::map(.$data, .f = raw_to_tibble, sep = sep, file = dat$name))
-}  
-
+}
 
 #' Convert raw strings to tibble
 #' 

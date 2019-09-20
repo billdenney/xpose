@@ -14,6 +14,7 @@
 #' @export
 #' @importFrom dplyr group_by_at
 #' @importFrom purrr map
+#' @importFrom stats setNames
 #' @importFrom stringr str_c
 list_vars <- function(xpdb, .problem=NULL) {
   name_map <-
@@ -49,7 +50,7 @@ list_vars <- function(xpdb, .problem=NULL) {
             fmt=paste0("%-", max(nchar(new_names)) + 1, "s"),
             new_names
           )
-        setNames(object=x, nm=new_names)
+        stats::setNames(object=x, nm=new_names)
       }
     )
   lapply(
@@ -69,8 +70,9 @@ list_vars <- function(xpdb, .problem=NULL) {
   invisible(ret)
 }
 
-#' @importFrom tidyr nest
 #' @importFrom dplyr bind_rows
+#' @importFrom stats setNames
+#' @importFrom tidyr nest
 list_vars_prep <- function(xpdb, .problem=NULL) {
   check_xpdb(xpdb, check = "data")
   x <- xpdb$data
@@ -90,7 +92,7 @@ list_vars_prep <- function(xpdb, .problem=NULL) {
       "ipred", "param", "eta", "res", "catcov", "contcov", "a", "na")
   ret <-
     tidyr::nest(
-      data=dplyr::group_by_at(.tbl=x, .vars="problem")
+      .data=dplyr::group_by_at(.tbl=x, .vars="problem")
     )
   ret$list_of_vars <-
     purrr::map(
@@ -104,5 +106,5 @@ list_vars_prep <- function(xpdb, .problem=NULL) {
         ret
       }
     )
-  setNames(object=ret$list_of_vars, nm=as.character(ret$problem))
+  stats::setNames(object=ret$list_of_vars, nm=as.character(ret$problem))
 }

@@ -1,7 +1,7 @@
 Package: xpose
 Type: Package
 Title: Diagnostics for Pharmacometric Models
-Version: 0.4.4.8001
+Version: 0.4.4.8003
 Authors@R: c(
       person('Benjamin', 'Guiastrennec',
              role  = c('aut', 'cre', 'cph'),
@@ -17,25 +17,29 @@ Authors@R: c(
              email = 'mike.k.smith@pfizer.com'),
       person('Mats O.', 'Karlsson',
              role  = c('aut', 'cph'),
-             email = 'mats.karlsson@farmbio.uu.se'))
+             email = 'mats.karlsson@farmbio.uu.se'),
+      person("Bill", "Denney",
+             email="wdenney@humanpredictions.com",
+             role=c("ctb"),
+             comment=c(ORCID="0000-0002-5759-428X")))
 Description: Diagnostics for non-linear mixed-effects (population)
     models from 'NONMEM' <http://www.iconplc.com/innovation/nonmem/>.
     'xpose' facilitates data import, creation of numerical run summary
     and provide 'ggplot2'-based graphics for data exploration and model
     diagnostics.
 Depends:
-  R (>= 3.1.2),
+  R (>= 3.5.0),
   ggplot2 (>= 2.2.1)
 Imports:
-  dplyr (>= 0.7.0),
+  dplyr (>= 0.8.3),
   ggforce,
   grDevices,
-  purrr (>= 0.2.0),
+  purrr (>= 0.3.2),
   readr,
-  rlang (>= 0.1.2),
+  rlang (>= 0.4.0),
   stringr,
   tibble (>= 1.3.1),
-  tidyr (>= 0.6),
+  tidyr (>= 1.0),
   utils,
   stats,
   vpc (>= 1.0.0)

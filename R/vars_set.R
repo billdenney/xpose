@@ -45,6 +45,7 @@
 #' 
 #' @name set_vars
 #' @export
+#' @importFrom tibble tibble
 set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet) {
   # Check input
   check_xpdb(xpdb, check = 'data')
@@ -62,13 +63,12 @@ set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet)
   if (is.null(args)) return(xpdb)
   
   args <- args %>%
-    dplyr::data_frame(col = ., type = names(.)) %>% 
+    tibble::tibble(col = ., type = names(.)) %>% 
     dplyr::mutate(type = stringr::str_replace(.$type, '\\d$', ''))
   
   xpdb$data <- dat %>% 
     dplyr::mutate(grouping = .$problem) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
-    tidyr::nest(.key = 'tmp') %>% 
+    tidyr::nest(tmp=setdiff(names(.), "grouping")) %>% 
     dplyr::mutate(out = purrr::map_if(.$tmp, .$grouping %in% .problem, function(x, args, quiet) {
       # Get the index
       index <- x$index[[1]]
@@ -102,13 +102,13 @@ set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet)
       # Output new index
       x
     }, args = args, quiet = quiet)) %>% 
-    tidyr::unnest_(unnest_cols = 'out') %>% 
-    dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
+    tidyr::unnest(cols = 'out') %>% 
+    dplyr::select_at(.vars=c('problem', 'simtab', 'index', 'data', 'modified'))
   
   as.xpdb(xpdb)
 }
 
-
+#' @importFrom tibble tibble
 set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
   # Check input
   check_xpdb(xpdb, check = 'data')
@@ -125,12 +125,11 @@ set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
   args <- c(...)
   if (is.null(args)) return(xpdb)
   
-  args <- dplyr::data_frame(col = names(args), variable = args)
+  args <- tibble::tibble(col = names(args), variable = args)
   
   xpdb$data <- dat %>% 
     dplyr::mutate(grouping = .$problem) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
-    tidyr::nest(.key = 'tmp') %>% 
+    tidyr::nest(tmp=setdiff(names(.), "grouping")) %>% 
     dplyr::mutate(out = purrr::map_if(.$tmp, .$grouping %in% .problem, function(x, args, quiet) {
       # Get the index
       index <- x$index[[1]]
@@ -150,8 +149,8 @@ set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
       # Output new index
       x
     }, args = args, quiet = quiet)) %>% 
-    tidyr::unnest_(unnest_cols = 'out') %>% 
-    dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
+    tidyr::unnest(cols = 'out') %>% 
+    dplyr::select_at(.vars=c('problem', 'simtab', 'index', 'data', 'modified'))
   
   as.xpdb(xpdb)
 }

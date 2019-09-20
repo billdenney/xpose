@@ -21,7 +21,7 @@
 list_data <- function(xpdb) {
   check_xpdb(xpdb, check = 'data')
   xpdb$data %>% 
-    dplyr::select(dplyr::one_of('problem', 'simtab', 'data', 'modified')) %>% 
+    dplyr::select_at(.vars=c('problem', 'simtab', 'data', 'modified')) %>% 
     {utils::capture.output(print(.))} %>% 
     {c('Data:', .[-1])} %>% 
     cat(sep = '\n')
@@ -32,7 +32,7 @@ list_data <- function(xpdb) {
 list_files <- function(xpdb) {
   check_xpdb(xpdb, check = 'files')
   xpdb$files %>% 
-    dplyr::select(dplyr::one_of('name', 'extension', 'problem', 'subprob', 'method', 'data', 'modified')) %>% 
+    dplyr::select_at(.vars=c('name', 'extension', 'problem', 'subprob', 'method', 'data', 'modified')) %>% 
     {utils::capture.output(print(.))} %>% 
     {c('Files:', .[-1])} %>% 
     cat(sep = '\n')
@@ -42,8 +42,8 @@ list_files <- function(xpdb) {
 #' @export
 list_special <- function(xpdb) {
   check_xpdb(xpdb, check = 'special')
-  xpdb$special %>% 
-    dplyr::select(dplyr::one_of('problem', 'method', 'type', 'data', 'modified')) %>% 
+  xpdb$special %>%
+    dplyr::select_at(.vars=c('problem', 'method', 'type', 'data', 'modified')) %>% 
     {utils::capture.output(print(.))} %>% 
     {c('Specials:', .[-1])} %>% 
     cat(sep = '\n')

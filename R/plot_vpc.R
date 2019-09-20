@@ -50,6 +50,8 @@
 #'  vpc_data(opt = vpc_opt(n_bins = 7)) %>% 
 #'  vpc()
 #' @export
+#' @importFrom dplyr bind_rows
+#' @importFrom tibble tibble
 vpc <- function(xpdb,
                 vpc_type = NULL,
                 mapping  = NULL,
@@ -227,18 +229,22 @@ vpc <- function(xpdb,
   if (stringr::str_detect(type, stringr::fixed('r', ignore_case = TRUE))) {
     extra_arg <- list(...)
     if (!'rug_sides' %in% names(extra_arg)) extra_arg$rug_sides <- 't'
-    xp <- xp + do.call('xp_geoms', 
-                       c(extra_arg,
-                         list(mapping  = aes_c(aes_string(rug_x = 'idv'), mapping),
-                              xp_theme = xpdb$xp_theme,
-                              name     = 'rug',
-                              ggfun    = 'geom_rug',
-                              rug_data =  vpc_dat$aggr_obs %>% 
-                                dplyr::distinct_(.dots = c('bin', stratify), .keep_all = TRUE) %>% 
-                                dplyr::filter(!is.na(.$bin)) %>% 
-                                tidyr::gather(key = 'edges', value = 'idv', dplyr::one_of('bin_min', 'bin_max')) %>% 
-                                dplyr::distinct_(.dots = c(stratify, 'idv'), .keep_all = TRUE))
-                       ))
+    xp <-
+      xp +
+      do.call(
+        'xp_geoms',
+        c(extra_arg,
+          list(mapping  = aes_c(aes_string(rug_x = 'idv'), mapping),
+               xp_theme = xpdb$xp_theme,
+               name     = 'rug',
+               ggfun    = 'geom_rug',
+               rug_data =  vpc_dat$aggr_obs %>% 
+                 dplyr::distinct_at(.vars=c('bin', stratify), .keep_all = TRUE) %>% 
+                 dplyr::filter(!is.na(.$bin)) %>% 
+                 tidyr::gather(key = 'edges', value = 'idv', dplyr::one_of('bin_min', 'bin_max')) %>% 
+                 dplyr::distinct_at(.vars=c(stratify, 'idv'), .keep_all = TRUE))
+        )
+      )
   }
   
   # Define panels
@@ -263,15 +269,18 @@ vpc <- function(xpdb,
     scale_linetype_manual(values = line_linetype)
   
   # Add metadata to plots
-  xp$xpose <- dplyr::data_frame(problem = vpc_prob, subprob = 0L, 
-                                descr = c('VPC directory', 'Number of simulations for VPC', 
-                                          'VPC confidence interval', 'VPC prediction interval', 
-                                          'VPC lower limit of quantification', 'VPC upper limit of quantification'),
-                                label = c('vpcdir', 'vpcnsim', 'vpcci', 'vpcpi', 'vpclloq', 'vpculoq'),
-                                value = c(vpc_dat$vpc_dir, vpc_dat$nsim, 
-                                          100*diff(vpc_dat$opt$ci), 100*diff(vpc_dat$opt$pi),
-                                          ifelse(is.null(vpc_dat$lloq), 'na', vpc_dat$lloq),
-                                          ifelse(is.null(vpc_dat$uloq), 'na', vpc_dat$uloq))) %>% 
+  xp$xpose <-
+    tibble::tibble(
+      problem = vpc_prob, subprob = 0L, 
+      descr = c('VPC directory', 'Number of simulations for VPC', 
+                'VPC confidence interval', 'VPC prediction interval', 
+                'VPC lower limit of quantification', 'VPC upper limit of quantification'),
+      label = c('vpcdir', 'vpcnsim', 'vpcci', 'vpcpi', 'vpclloq', 'vpculoq'),
+      value = c(vpc_dat$vpc_dir, vpc_dat$nsim, 
+                100*diff(vpc_dat$opt$ci), 100*diff(vpc_dat$opt$pi),
+                ifelse(is.null(vpc_dat$lloq), 'na', vpc_dat$lloq),
+                ifelse(is.null(vpc_dat$uloq), 'na', vpc_dat$uloq))
+    ) %>% 
     dplyr::bind_rows(xpdb$summary) %>% 
     {list(fun = stringr::str_c('vpc_', vpc_dat$type),
           summary  = .,

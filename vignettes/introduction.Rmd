@@ -52,14 +52,12 @@ A summary of a model run can be displayed to the console by using the `summary()
 summary(xpdb)
 ```
 
-
 ### Parameter estimates
 A table of parameter estimates can be displayed to the console by using the `prm_table()` function on an xpdb object.
 
 ```{r demo prm_table}
 prm_table(xpdb)
 ```
-
 
 ### Listing variables
 A list of available variables for plotting can be displayed to the console by using the `list_vars()` function on an xpdb object.
@@ -72,8 +70,8 @@ list_vars(xpdb)
 `xpose` makes use of the pipe operator `%>%` from the package [dplyr](https://dplyr.tidyverse.org). Pipes can be used to generate clear workflow.
 
 ```{r, eval = FALSE}
-xpose_data(runno = '001') %>% 
-  dv_vs_ipred() %>% 
+xpose_data(runno = '001') %>%
+  dv_vs_ipred() %>%
   xpose_save(file = 'run001_dv_vs_ipred.pdf')
 ```
 
@@ -82,7 +80,7 @@ Multiples edits can be made to the xpdb object. For instance the type (visible u
 
 ```{r, change idv}
 # With the TIME default
-xpdb %>% 
+xpdb %>%
   dv_vs_idv()
 
 # After IDV reassignment
@@ -101,12 +99,10 @@ dv_vs_ipred(xpdb)
 res_vs_pred(xpdb, res = 'CWRES')
 ```
 
-
 ### Saving plots
 The `xpose_save` function was designed to facilitate the export of xpose plots. The file extension is guessed from the file name and must match one of .pdf (default), .jpeg, .png, .bmp or .tiff. If no extension is provided as part of the file name a .pdf will be generated. Finally, if the `plot` argument is left empty `xpose_save` will automatically save the last plot that was created or modified.
 
 The `xpose_save()` function is compatible with templates titles and keywords such as `@run` for the run number and `@plotfun` for the name of the plotting function can be used to automatically name files. Learn more about the template titles keywords using `help('template_titles')`. 
-
 
 ```{r, eval = FALSE}
 # Save the last generated plot

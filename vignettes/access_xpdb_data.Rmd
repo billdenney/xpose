@@ -55,7 +55,6 @@ data <- get_data(xpdb, table = 'cotab001')
 data
 ```
 
-
 ### Access the run files
 The `get_file()` function can be used to access the imported output files. Files can be accessed by `file` name, by `.problem`, `.subprob` and/or `.method`. If more than one `file` name, `.problem`, `.subprob`, or `.method` is provided a named list is returned. 
 

@@ -137,7 +137,7 @@ read_nm_model <- function(runno   = NULL,
   # Remove na values and output
   ret <-
     tidyr::replace_na(model, replace = list(code = '', comment = '')) %>% 
-    dplyr::select(dplyr::one_of('problem', 'level', 'subroutine', 'code', 'comment')) %>% 
+    dplyr::select_at(.vars=c('problem', 'level', 'subroutine', 'code', 'comment')) %>% 
     dplyr::mutate(problem = as.integer(.$problem),
                   level   = as.integer(.$level)) %>% 
     structure(file     = basename(full_path),

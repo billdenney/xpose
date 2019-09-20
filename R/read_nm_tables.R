@@ -47,6 +47,9 @@
 #' 
 #' }
 #' @export
+#' @importFrom dplyr arrange_at bind_rows if_else mutate tibble
+#' @importFrom purrr map_dbl
+#' @importFrom stringr str_c
 read_nm_tables <- function(file          = NULL,
                            dir           = NULL,
                            combined      = TRUE,
@@ -59,10 +62,13 @@ read_nm_tables <- function(file          = NULL,
   if (is.null(file)) stop('Argument `file` required.', call. = FALSE)
   
   if (!is.null(file) && !is.nm.table.list(file)) {
-    file <- dplyr::tibble(problem   = 1, 
-                          file      = file_path(dir, file),
-                          firstonly = FALSE,
-                          simtab    = FALSE)
+    file <-
+      dplyr::tibble(
+        problem   = 1, 
+        file      = file_path(dir, file),
+        firstonly = FALSE,
+        simtab    = FALSE
+      )
   }
   
   user_mode <- !is.nm.table.list(file)
@@ -80,7 +86,7 @@ read_nm_tables <- function(file          = NULL,
     stop('No table imported due to duplicated names.', call. = FALSE)
   }
   
-  tables <- file[file.exists(file$file), ]
+  tables_prep <- file[file.exists(file$file), ]
   
   # Search for compressed tables
   if (ziptab) { 
@@ -89,117 +95,181 @@ read_nm_tables <- function(file          = NULL,
       tables_zip$file <- stringr::str_c(tables_zip$file, '.zip')
       tables_zip <- tables_zip[file.exists(tables_zip$file), ]
       if (nrow(tables_zip) > 0) {
-        tables <- tables %>% 
+        tables_prep <-
+          tables_prep %>% 
           dplyr::bind_rows(tables_zip) %>% 
-          dplyr::arrange_(.dots = c('problem', 'file'))
+          dplyr::arrange_at(.vars = c('problem', 'file'))
       }
     }
   }
   
   # Print reading messages
-  tables %>% 
-    dplyr::mutate(grouping = 1:n(),
-                  name = stringr::str_c(basename(.$file), dplyr::if_else(.$firstonly, ' (firstonly)', ''))) %>% 
-    dplyr::group_by_(.dots = c('problem', 'simtab')) %>% 
-    tidyr::nest() %>% 
-    dplyr::mutate(string = purrr::map_chr(.$data, ~stringr::str_c(.$name, collapse = ', '))) %>% 
-    {stringr::str_c(.$string, ' [$prob no.', .$problem, dplyr::if_else(.$simtab, ', simulation', ''), 
-                    ']', collapse = '\n         ')} %>% 
-                    {msg(c('Reading: ', .), quiet)}
-  
+  reading_msg_prep <-
+    tables_prep %>%
+    dplyr::mutate(
+      grouping = 1:n(),
+      name =
+        stringr::str_c(
+          basename(.$file),
+          dplyr::if_else(.$firstonly, ' (firstonly)', '')
+        )
+    ) %>% 
+    dplyr::group_by_at(.vars = c('problem', 'simtab')) %>%
+    dplyr::summarize_at(.vars="name", .funs=list(string=~paste(name, collapse=", ")))
+  msg(
+    txt=
+      c('Reading: ',
+        stringr::str_c(
+          reading_msg_prep$string,
+          ' [$prob no.', reading_msg_prep$problem,
+          dplyr::if_else(reading_msg_prep$simtab, ', simulation', ''), 
+          ']',
+          collapse = '\n         '
+        )
+      ),
+    quiet=quiet
+  )
+
   # Collect options for table import
-  tables <- tables %>% 
-    dplyr::mutate(top = purrr::map(.$file, ~readr::read_lines(file = ., n_max = 3)),
-                  grouping = 1:n()) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
-    tidyr::nest() %>% 
-    dplyr::mutate(args = purrr::map(.x = .$data, .f = read_args, quiet, ...)) %>% 
-    tidyr::unnest_(unnest_cols = 'data') %>% 
-    tidyr::unnest_(unnest_cols = 'args') %>% 
-    dplyr::mutate(name = basename(.$file)) %>% 
-    dplyr::select(dplyr::one_of('problem', 'name', 'simtab', 'firstonly', 'fun', 'params'))
+  tables_param <-
+    tables_prep %>%
+    dplyr::mutate(
+      top = purrr::map(.$file, ~readr::read_lines(file = ., n_max = 3)),
+      grouping = 1:n()
+    ) %>%
+    dplyr::group_by_at(.vars = 'grouping') %>%
+    tidyr::nest() %>%
+    ungroup() %>%
+    dplyr::mutate_at(
+      .vars="data",
+      .funs=list(args = function(data) purrr::map(.x = data, .f = read_args, quiet, ...))
+    ) %>%
+    tidyr::unnest(cols = 'data') %>%
+    tidyr::unnest(cols = 'args') %>%
+    dplyr::mutate(name = basename(.$file)) %>%
+    dplyr::select_at(
+      .vars = c('problem', 'name', 'simtab', 'firstonly', 'fun', 'params')
+    )
   
-  if (nrow(tables) == 0) stop('No table imported.', call. = FALSE)
+  if (nrow(tables_param) == 0) stop('No table imported.', call. = FALSE)
   
   # Read in data
-  tables <- tables %>% 
-    dplyr::bind_cols(tables %>% 
-                       dplyr::select(dplyr::one_of(c('fun', 'params'))) %>% 
-                       {purrr::invoke_map(.f = .$fun, .x = .$params)} %>%
-                       dplyr::tibble(data = .))
+  tables_read_prep <-
+    purrr::invoke_map(.f = tables_param$fun, .x = tables_param$params)
+  tables_read <- 
+    tables_param %>%
+    mutate(data=tables_read_prep)
   
   if (!combined) {
-    return(purrr::set_names(x = purrr::map(tables$data, ~tidyr::drop_na(., dplyr::one_of('ID'))),
-                            nm = tables$name))
+    return(
+      purrr::set_names(
+        x = purrr::map(
+          tables_read$data,
+          ~tidyr::drop_na(., dplyr::one_of('ID'))),
+        nm = tables_read$name
+      )
+    )
   }
   
   # Index datasets
-  tables <- tables %>% 
-    dplyr::mutate(grouping = 1:n()) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
-    tidyr::nest(.key = 'tmp') %>% 
-    dplyr::mutate(index = purrr::map(.$tmp, index_table),
-                  nrow =  purrr::map_dbl(.$tmp, ~nrow(.$data[[1]]))) %>% 
-    tidyr::unnest_(unnest_cols = 'tmp') %>% 
-    dplyr::ungroup()
-  
-  
+  tables_index <- tables_read
+  tables_index$tmp <-
+    lapply(
+      X=seq_len(nrow(tables_read)),
+      FUN=function(idx) tables_read[idx,]
+    )
+  tables_index$index <-
+    lapply(
+      X=tables_index$tmp,
+      FUN=index_table
+    )
+  tables_index$nrow <- purrr::map_dbl(.x=tables_index$data, .f=nrow)
+  tables_index$tmp <- NULL
+
   # Combine tables with same number of rows
-  tables <- tables %>% 
-    dplyr::group_by_(.dots = c('problem', 'simtab', 'firstonly')) %>% 
-    tidyr::nest(.key = 'tmp') %>% 
-    dplyr::mutate(out = purrr::map(.$tmp, combine_tables)) %>% 
-    tidyr::unnest_(unnest_cols = 'out') %>% 
-    dplyr::select(dplyr::one_of('problem', 'simtab', 'firstonly', 'data', 'index'))
+  tables_comb_row_match <-
+    tables_index %>%
+    tidyr::nest(
+      tmp=
+        setdiff(
+          names(tables_index),
+          c('problem', 'simtab', 'firstonly')
+        )
+    )
+  tables_comb_row_match$out <-
+    purrr::map(tables_comb_row_match$tmp, combine_tables)
+  tables_comb_row_match$tmp <- NULL
+  tables_comb_row_match <-
+    tables_comb_row_match %>%
+    tidyr::unnest(cols = 'out') %>%
+    dplyr::select_at(.vars = c('problem', 'simtab', 'firstonly', 'data', 'index'))
   
-  if (nrow(tables) == 0) stop('No table imported.', call. = FALSE)
+  if (nrow(tables_comb_row_match) == 0) stop('No table imported.', call. = FALSE)
   
   # Remove duplicated columns to decrease xpdb size
+  tables_deduplicate <- tables_comb_row_match
   if (rm_duplicates) {
-    tables <- tables %>% 
-      dplyr::mutate(grouping = 1:n()) %>% 
-      dplyr::group_by_(.dots = 'grouping') %>% 
-      tidyr::nest(.key = 'tmp') %>% 
-      dplyr::mutate(out = purrr::map(.$tmp, ~dplyr::select(.$data[[1]], 
-                                                           dplyr::one_of(unique(unlist(.$index[[1]]$col)))))) %>% 
-      tidyr::unnest_(unnest_cols = 'tmp') %>% 
-      dplyr::select(dplyr::one_of('problem', 'simtab', 'firstonly', 'index', 'out')) %>% 
-      dplyr::rename_(.dots = c('data' = 'out'))
+    tables_deduplicate <-
+      tables_comb_row_match %>%
+      dplyr::mutate(grouping = 1:n()) %>%
+      tidyr::nest(tmp=setdiff(names(.), "grouping")) %>%
+      dplyr::mutate(
+        out =
+          purrr::map(
+            .$tmp,
+            ~dplyr::select(
+              .$data[[1]], 
+              dplyr::one_of(unique(unlist(.$index[[1]]$col)))
+            )
+          )
+      ) %>%
+      tidyr::unnest(cols = 'tmp') %>%
+      dplyr::select_at(.vars=c('problem', 'simtab', 'firstonly', 'index', 'out')) %>%
+      dplyr::rename(data='out')
   }
   
   # Merge firsonly tables with main tables
-  if (any(tables$firstonly)) {
+  tables_with_firstonly <- tables_deduplicate
+  if (any(tables_deduplicate$firstonly)) {
     msg('Consolidating tables with `firstonly`', quiet)
-    tables <- tables %>%
-      dplyr::group_by_(.dots = c('problem', 'simtab')) %>%
-      tidyr::nest(.key = 'tmp') %>% 
-      dplyr::mutate(out = purrr::map(.$tmp, merge_firstonly, quiet)) %>% 
-      tidyr::unnest_(unnest_cols = 'out') %>% 
-      dplyr::select(dplyr::one_of('problem', 'simtab', 'data', 'index'))
+    tables_with_firstonly <-
+      tables_deduplicate %>%
+      tidyr::nest(tmp=setdiff(names(.), c('problem', 'simtab'))) %>% 
+      dplyr::mutate(out = purrr::map(.$tmp, merge_firstonly, quiet))
+    tables_with_firstonly$tmp <- NULL
+    tables_with_firstonly <-
+      tables_with_firstonly %>%
+      tidyr::unnest(cols = 'out') %>% 
+      dplyr::select_at(.vars=c('problem', 'simtab', 'data', 'index'))
   }
   
-  if (nrow(tables) == 0) stop('No table imported.', call. = FALSE)
+  if (nrow(tables_with_firstonly) == 0) stop('No table imported.', call. = FALSE)
   
   # Convert catcov, id, occ, dvid to factor
-  tables <- tables %>% 
+  tables_converted <-
+    tables_with_firstonly %>% 
     dplyr::mutate(grouping = .$problem) %>% 
-    dplyr::group_by_(.dots = 'grouping') %>% 
-    tidyr::nest(.key = 'tmp') %>% 
-    dplyr::mutate(tmp = purrr::map(.$tmp, function(x) {
-      col_to_factor <- colnames(x$data[[1]]) %in% 
-        x$index[[1]]$col[x$index[[1]]$type %in% c('catcov', 'id', 'occ', 'dvid')]
-      x$data[[1]] <- dplyr::mutate_if(x$data[[1]], col_to_factor, as.factor)
-      x
-    })) %>% 
-    tidyr::unnest_(unnest_cols = 'tmp') %>% 
+    tidyr::nest(tmp=setdiff(names(.), "grouping")) %>% 
+    dplyr::mutate(
+      tmp =
+        purrr::map(
+          .$tmp,
+          function(x) {
+            col_to_factor <- colnames(x$data[[1]]) %in% 
+              x$index[[1]]$col[x$index[[1]]$type %in% c('catcov', 'id', 'occ', 'dvid')]
+            x$data[[1]] <- dplyr::mutate_if(x$data[[1]], col_to_factor, as.factor)
+            x
+          }
+        )
+    ) %>% 
+    tidyr::unnest(cols = 'tmp') %>% 
     dplyr::mutate(modified = FALSE) %>% 
-    dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
+    dplyr::select_at(.vars=c('problem', 'simtab', 'index', 'data', 'modified'))
   
   # If user mode return simple tibble as only 1 problem should be used
-  if (user_mode) return(tables$data[[1]])
-  tables
+  if (user_mode) return(tables_converted$data[[1]])
+  tables_converted
 }
-
 
 #' Define data import functions
 #' 
@@ -286,7 +356,6 @@ combine_tables <- function(x) {
     warning(c('Dropped ', stringr::str_c('`', x$name, '`', collapse = ', '), 
               ' due to missmatch in row number.'), call. = FALSE)
     return(dplyr::tibble(data = list(), index = list()))
-    
   }
   
   # Check for ID column
@@ -297,14 +366,15 @@ combine_tables <- function(x) {
   }
   
   # Combine tables
-  dplyr::tibble(data = x$data %>%
-                  dplyr::bind_cols() %>%
-                  purrr::set_names(make.unique(names(.))) %>%
-                  tidyr::drop_na(dplyr::one_of('ID')) %>%
-                  list(),
-                index = list(dplyr::bind_rows(x$index)))
+  dplyr::tibble(
+    data = x$data %>%
+      dplyr::bind_cols() %>%
+      purrr::set_names(make.unique(names(.))) %>%
+      tidyr::drop_na(dplyr::one_of('ID')) %>%
+      list(),
+    index = list(dplyr::bind_rows(x$index))
+  )
 }
-
 
 #' Merge firstonly table with full length tables
 #' 

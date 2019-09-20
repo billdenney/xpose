@@ -40,7 +40,6 @@ files
 
 # Tip to list available files in the xpdb
 print(xpdb_ex_pk)
-
 }
 \seealso{
 \code{\link{list_files}}, \code{\link{xpose_data}}, \code{\link{read_nm_files}}

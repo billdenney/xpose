@@ -39,11 +39,18 @@ prm_table <- function(xpdb,
     uncertainty_lab <- ifelse(transform, 'RSE', 'SE')
     if (!transform) prm$rse <- prm$se
     
-    header <- dplyr::data_frame(name = 'Parameter', label = 'Label', 
-                                value = 'Value', rse = uncertainty_lab, fixed = '   ')
+    header <-
+      tibble::tibble(
+        name = 'Parameter',
+        label = 'Label', 
+        value = 'Value',
+        rse = uncertainty_lab,
+        fixed = '   '
+      )
     
     cat('\nEstimates for $prob no.', prm_attr$problem, 
-        ', subprob no.', prm_attr$subprob, ', method ', prm_attr$method, '\n', sep = '')
+        ', subprob no.', prm_attr$subprob,
+        ', method ', prm_attr$method, '\n', sep = '')
     
     prm %>% 
       dplyr::mutate_all(.funs = 'as.character') %>% 

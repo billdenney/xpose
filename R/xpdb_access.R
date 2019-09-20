@@ -16,6 +16,7 @@
 #' raw_model <- get_code(xpdb_ex_pk, .type="raw")
 #' 
 #' @export
+#' @importFrom stringr str_c
 get_code <- function(xpdb, .problem = NULL, .type=c("parsed", "raw")) {
   .type <- match.arg(.type)
   check_xpdb(xpdb, check = 'code')
@@ -64,6 +65,10 @@ get_code <- function(xpdb, .problem = NULL, .type=c("parsed", "raw")) {
 #' print(xpdb_ex_pk)
 #' 
 #' @export
+#' @importFrom dplyr mutate select_at
+#' @importFrom purrr map set_names
+#' @importFrom stringr str_c
+#' @importFrom tidyr nest unnest
 get_data <- function(xpdb, 
                      table    = NULL, 
                      .problem = NULL,
@@ -99,20 +104,20 @@ get_data <- function(xpdb,
     }
   } else {
     # When selecting tables based on their name
-    full_index <- x %>% 
-      dplyr::select(dplyr::one_of('problem', 'index')) %>% 
-      tidyr::unnest_(unnest_cols = 'index')
+    full_index <-
+      x %>% 
+      dplyr::select_at(.vars=c('problem', 'index')) %>% 
+      tidyr::unnest(cols = 'index')
     
     if (any(!table %in% full_index$table)) {
       stop(stringr::str_c(table[!table %in% full_index$table], collapse = ', '), 
            ' not found in model output data.', call. = FALSE) 
     }
     x <- full_index[full_index$table %in% table, ] %>% 
-      dplyr::group_by_(.dots = c('problem', 'table')) %>% 
-      tidyr::nest(.key = 'tmp') %>% 
+      tidyr::nest(tmp=setdiff(names(.), c('problem', 'table'))) %>% 
       dplyr::mutate(cols = purrr::map(.$tmp, ~.$col)) %>% 
-      dplyr::group_by_(.dots = 'table') %>% 
-      tidyr::nest(.key = 'tmp') %>% 
+      dplyr::select_at(.vars=setdiff(names(.), "tmp")) %>%
+      tidyr::nest(tmp=setdiff(names(.), "table")) %>% 
       dplyr::mutate(out = purrr::map(.$tmp, function(y) {
         x[x$problem == y$problem, ]$data[[1]][, y$cols[[1]]]
       }))
@@ -152,8 +157,9 @@ get_data <- function(xpdb,
 #' 
 #' # Tip to list available files in the xpdb
 #' print(xpdb_ex_pk)
-#' 
 #' @export
+#' @importFrom purrr set_names
+#' @importFrom stringr str_c
 get_file <- function(xpdb, 
                      file     = NULL, 
                      ext      = NULL, 
@@ -217,10 +223,13 @@ get_file <- function(xpdb,
   # Prepare output
   if (nrow(x) > 1) {
     msg(c('Returning data from ', stringr::str_c(unique(x$name), collapse = ', ')), quiet)
-    x$data %>% 
-      purrr::set_names(stringr::str_c(x$name, '_prob_', x$problem, 
-                                      '_subprob_', x$subprob, '_', 
-                                      x$method)) %>% 
+    x$data %>%
+      purrr::set_names(
+        stringr::str_c(
+          x$name, '_prob_', x$problem, 
+          '_subprob_', x$subprob, '_', 
+          x$method)
+      ) %>% 
       return()
   } else {
     msg(c('Returning data from ', x$name, ', $prob no.', x$problem , 
@@ -245,8 +254,8 @@ get_file <- function(xpdb,
 #' @examples
 #' run_summary <- get_summary(xpdb_ex_pk)
 #' run_summary
-#' 
 #' @export
+#' @importFrom stringr str_c
 get_summary <- function(xpdb, 
                         .problem  = NULL, 
                         .subprob  = NULL, 
@@ -303,6 +312,11 @@ get_summary <- function(xpdb,
 #' prm_table(xpdb_ex_pk, .problem = 1)
 #' 
 #' @export
+#' @importFrom dplyr arrange_at filter mutate select_at
+#' @importFrom purrr flatten_chr flatten_dbl map map_df transpose
+#' @importFrom stringr str_c str_detect
+#' @importFrom tibble column_to_rownames tibble
+#' @importFrom tidyr separate spread
 get_prm <- function(xpdb, 
                     .problem  = NULL, 
                     .subprob  = NULL, 
@@ -338,26 +352,34 @@ get_prm <- function(xpdb,
          stringr::str_c(.method, collapse = '/'), '.', call. = FALSE) 
   }
   
-  prm_df <- prm_df %>% 
-    dplyr::select(-dplyr::one_of('name', 'modified')) %>% 
+  prm_df <-
+    prm_df %>%
+    dplyr::select_at(.vars=setdiff(names(.), c('name', 'modified'))) %>%
     tidyr::spread(key = 'extension', value = 'data')
   
   msg(c('Returning parameter estimates from $prob no.', stringr::str_c(unique(prm_df$problem), collapse = ', '), 
         ', subprob no.', stringr::str_c(unique(prm_df$subprob), collapse = ', '), 
         ', method ', stringr::str_c(unique(prm_df$method), collapse = ', ')), quiet)
   
-  prm_df <- prm_df %>% 
-    dplyr::mutate(prm_names = purrr::map(.x = as.list(.$problem), .f = function(x, code) {
-      
-      # Collect parameter names from the model code
-      code <- code[code$problem == x & nchar(code$code) > 0,]
-      list(theta = code$comment[code$subroutine == 'the'],
-           omega = code[code$subroutine == 'ome', ] %>%
-             dplyr::filter(!(stringr::str_detect(.$code, 'BLOCK\\(\\d+\\)(?!.*SAME)') & .$comment == '')) %>% 
-             {purrr::flatten_chr(.[, 'comment'])},
-           sigma = code$comment[code$subroutine == 'sig'])
-      
-    }, code = xpdb$code)) %>% 
+  prm_df <-
+    prm_df %>% 
+    dplyr::mutate(
+      prm_names =
+        purrr::map(
+          .x = as.list(.$problem),
+          .f = function(x, code) {
+            # Collect parameter names from the model code
+            code <- code[code$problem == x & nchar(code$code) > 0,]
+            list(theta = code$comment[code$subroutine == 'the'],
+                 omega = code[code$subroutine == 'ome', ] %>%
+                   dplyr::filter(!(stringr::str_detect(.$code, 'BLOCK\\(\\d+\\)(?!.*SAME)') & .$comment == '')) %>% 
+                   {purrr::flatten_chr(.[, 'comment'])},
+                 sigma = code$comment[code$subroutine == 'sig'])
+            
+          },
+          code = xpdb$code
+        )
+    ) %>% 
     purrr::transpose() %>% 
     purrr::map(.f = function(data) {
       prm_mean <- grab_iter(ext = data$ext, iter = -1000000000)
@@ -388,37 +410,64 @@ get_prm <- function(xpdb,
         # obtain transformation formulas 
         prm_trans_formula <- get_prm_transformation_formulas(names(prm_mean))
         # transform parameters & calculate var, rse for transformation
-        prms <- purrr::map_df(prm_trans_formula, ~transform_prm(.x, mu = prm_mean, sigma = prm_cov, method = 'delta')) %>% 
+        prms <-
+          purrr::map_df(
+            prm_trans_formula,
+            ~transform_prm(
+              .x,
+              mu = prm_mean,
+              sigma = prm_cov,
+              method = 'delta'
+            )
+          ) %>% 
           dplyr::mutate(se = sqrt(.$variance))
       } else {
-        prms <- dplyr::data_frame(mean = purrr::flatten_dbl(prm_mean), 
-                                  se   = purrr::flatten_dbl(prm_se)) %>% 
+        prms <-
+          tibble::tibble(
+            mean = purrr::flatten_dbl(prm_mean), 
+            se   = purrr::flatten_dbl(prm_se)
+          ) %>%
           dplyr::mutate(rse = .$se/abs(.$mean))
       }
       
-      prms <- prms %>% 
-        dplyr::mutate(fixed = as.logical(as.numeric(prm_fix)),
-                      name  = names(prm_mean)) %>%
-        dplyr::mutate(type = dplyr::case_when(stringr::str_detect(.$name, 'THETA') ~ 'the',
-                                              stringr::str_detect(.$name, 'OMEGA') ~ 'ome',
-                                              stringr::str_detect(.$name, 'SIGMA') ~ 'sig'),
-                      number = stringr::str_replace_all(.$name, '[^\\d,]+', ''),
-                      se     = ifelse(.$fixed, NA_real_, as.numeric(.$se)),
-                      rse    = ifelse(.$fixed, NA_real_, abs(as.numeric(.$rse)))) %>%
+      prms <-
+        prms %>% 
+        dplyr::mutate(
+          fixed = as.logical(as.numeric(prm_fix)),
+          name  = names(prm_mean)
+        ) %>%
+        dplyr::mutate(
+          type =
+            dplyr::case_when(
+              stringr::str_detect(.$name, 'THETA') ~ 'the',
+              stringr::str_detect(.$name, 'OMEGA') ~ 'ome',
+              stringr::str_detect(.$name, 'SIGMA') ~ 'sig'
+            ),
+          number = stringr::str_replace_all(.$name, '[^\\d,]+', ''),
+          se     = ifelse(.$fixed, NA_real_, as.numeric(.$se)),
+          rse    = ifelse(.$fixed, NA_real_, abs(as.numeric(.$rse)))
+        ) %>%
         tidyr::separate(col = 'number', into = c('m', 'n'), sep = ',', fill = 'right') %>% 
         dplyr::mutate(diagonal = dplyr::if_else(.$m == .$n, TRUE, FALSE)) %>% 
-        dplyr::rename_(.dots = list(value = 'mean')) %>% 
-        dplyr::mutate(label = '',
-                      value = signif(.$value, digits = digits),
-                      se    = signif(.$se, digits = digits),
-                      rse   = signif(.$rse, digits = digits),
-                      n     = as.numeric(.$n),
-                      m     = as.numeric(.$m),
-                      order = dplyr::case_when(type == 'the' ~ 1,
-                                               type == 'ome' ~ 2,
-                                               TRUE ~ 3)) %>% 
-        dplyr::arrange_(.dots = 'order') %>% 
-        dplyr::select(dplyr::one_of('type', 'name', 'label', 'value', 'se', 'rse', 'fixed', 'diagonal', 'm', 'n'))
+        dplyr::rename(value = 'mean') %>% 
+        dplyr::mutate(
+          label = '',
+          value = signif(.$value, digits = digits),
+          se    = signif(.$se, digits = digits),
+          rse   = signif(.$rse, digits = digits),
+          n     = as.numeric(.$n),
+          m     = as.numeric(.$m),
+          order =
+            dplyr::case_when(
+              type == 'the' ~ 1,
+              type == 'ome' ~ 2,
+              TRUE ~ 3
+            )
+        ) %>% 
+        dplyr::arrange_at(.vars = 'order') %>% 
+        dplyr::select_at(
+          .vars=c('type', 'name', 'label', 'value', 'se', 'rse', 'fixed', 'diagonal', 'm', 'n')
+        )
       
       # Assign THETA labels
       n_theta     <- sum(prms$type == 'the')
@@ -462,13 +511,22 @@ get_prm <- function(xpdb,
       
       # Filter_all
       if (!show_all) {
-        prms <- dplyr::filter(.data = prms, !(prms$type %in% c('ome', 'sig') & 
-                                                prms$value == 0 & !prms$diagonal))
+        prms <-
+          dplyr::filter(
+            .data = prms,
+            !(prms$type %in% c('ome', 'sig') & 
+                prms$value == 0 & !prms$diagonal)
+          )
       }
       
       # Add metadata to output
-      structure(.Data = prms, file = 'ext', problem = data$problem, 
-                subprob = data$subprob, method = data$method)
+      structure(
+        .Data = prms,
+        file = 'ext',
+        problem = data$problem, 
+        subprob = data$subprob,
+        method = data$method
+      )
       
     })
   
@@ -484,13 +542,15 @@ get_prm <- function(xpdb,
 #'
 #' @keywords internal
 #' @export
+#' @importFrom dplyr filter select_at
+#' @importFrom purrr flatten
 grab_iter <- function(ext, iter) {
   out <- ext %>% 
     dplyr::filter(.$ITERATION == iter) %>% 
-    dplyr::select(-dplyr::one_of('ITERATION', 'OBJ'))
+    dplyr::select_at(.vars=setdiff(names(.), c('ITERATION', 'OBJ')))
   
   if (nrow(out) == 0) out[1,] <- NA_real_
-  
+
   purrr::flatten(out)
 }
 
@@ -502,21 +562,28 @@ grab_iter <- function(ext, iter) {
 #' @return List of formulas decribing the transformation
 #' @keywords internal
 #' @export
+#' @importFrom purrr is_character map_if set_names
+#' @importFrom rlang sym
+#' @importFrom stringr str_detect str_replace
 get_prm_transformation_formulas <- function(prm_names) {
   prm_names %>% 
     purrr::set_names() %>% 
-    purrr::map_if(~stringr::str_detect(.x, "^THETA"), 
-                  ~substitute(~par, list(par = rlang::sym(.x)))) %>% 
-    purrr::map_if(~purrr::is_character(.x) && stringr::str_detect(.x, '^(OMEGA|SIGMA)\\((\\d+),\\2\\)$'), 
-                  ~substitute(~sqrt(par), list(par = rlang::sym(.x)))) %>% 
-    purrr::map_if(~purrr::is_character(.x) && stringr::str_detect(.x, '^(OMEGA|SIGMA)\\(\\d+,\\d+\\)$'), 
-                  ~substitute(~cov/(sqrt(var1)*sqrt(var2)), 
-                              list(cov = rlang::sym(.x),
-                                   var1 = stringr::str_replace(.x, '\\((\\d+),(\\d+)\\)', 
-                                                               '(\\1,\\1)') %>% rlang::sym(),
-                                   var2 = stringr::str_replace(.x, '\\((\\d+),(\\d+)\\)', 
-                                                               '(\\2,\\2)') %>% rlang::sym())))
-  
+    purrr::map_if(
+      ~stringr::str_detect(.x, "^THETA"), 
+      ~substitute(~par, list(par = rlang::sym(.x)))
+    ) %>% 
+    purrr::map_if(
+      ~purrr::is_character(.x) && stringr::str_detect(.x, '^(OMEGA|SIGMA)\\((\\d+),\\2\\)$'), 
+      ~substitute(~sqrt(par), list(par = rlang::sym(.x)))
+    ) %>% 
+    purrr::map_if(
+      ~purrr::is_character(.x) && stringr::str_detect(.x, '^(OMEGA|SIGMA)\\(\\d+,\\d+\\)$'), 
+      ~substitute(~cov/(sqrt(var1)*sqrt(var2)), 
+                  list(cov = rlang::sym(.x),
+                       var1 = stringr::str_replace(.x, '\\((\\d+),(\\d+)\\)', 
+                                                   '(\\1,\\1)') %>% rlang::sym(),
+                       var2 = stringr::str_replace(.x, '\\((\\d+),(\\d+)\\)', 
+                                                   '(\\2,\\2)') %>% rlang::sym())))
 }
 
 
@@ -533,8 +600,9 @@ get_prm_transformation_formulas <- function(prm_names) {
 #' @examples
 #' special <- get_summary(xpdb_ex_pk)
 #' special
-#' 
 #' @export
+#' @importFrom purrr set_names
+#' @importFrom stringr str_c
 get_special <- function(xpdb, .problem = NULL, quiet) {
   check_xpdb(xpdb, check = 'special')
   if (missing(quiet)) quiet <- xpdb$options$quiet

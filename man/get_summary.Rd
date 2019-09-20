@@ -26,7 +26,6 @@ Access model summary data from an xpdb object.
 \examples{
 run_summary <- get_summary(xpdb_ex_pk)
 run_summary
-
 }
 \seealso{
 \code{\link{xpose_data}}, \code{\link{template_titles}}, \code{\link{summary.xpose_data}}

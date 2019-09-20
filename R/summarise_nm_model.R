@@ -1,3 +1,6 @@
+#' @importFrom dplyr arrange_at bind_rows case_when filter mutate select_at
+#' @importFrom rlang sym
+#' @importFrom tidyr complete
 summarise_nm_model <- function(file, model, software, rounding) {
   sum <- dplyr::bind_rows(
     sum_software(software),                    # Software name
@@ -33,16 +36,16 @@ summarise_nm_model <- function(file, model, software, rounding) {
   )
   
   # Complete missing cases for consistency
-  tmp <- sum %>% 
-    dplyr::filter(.$problem != 0)
+  tmp <- sum[sum$problem != 0, , drop=FALSE]
   
   if (nrow(tmp) == 0) return(sum)
-  
-  tmp %>% 
-    tidyr::complete_(cols = c(quote(problem), quote(label)), 
-                     fill = list(subprob = 0, value = 'na')) %>%
+  tmp %>%
+    tidyr::complete(
+      problem=tmp$problem, label=tmp$label,
+      fill = list(subprob = 0, value = 'na')
+    ) %>%
     dplyr::bind_rows(dplyr::filter(sum, sum$problem == 0)) %>%
-    dplyr::arrange_(.dots = c('problem', 'label', 'subprob')) %>%
+    dplyr::arrange_at(.vars = c('problem', 'subprob')) %>%
     dplyr::mutate(descr = dplyr::case_when(
       .$label == 'software' ~ 'Software',
       .$label == 'version' ~ 'Software version',
@@ -74,15 +77,18 @@ summarise_nm_model <- function(file, model, software, rounding) {
       .$label == 'method' ~ 'Estimation method',
       .$label == 'epsshk' ~ 'Epsilon shrinkage',
       .$label == 'etashk' ~ 'Eta shrinkage')) %>% 
-    dplyr::select(dplyr::one_of('problem', 'subprob', 'descr', 'label', 'value'))
+    dplyr::select_at(.vars=c('problem', 'subprob', 'descr', 'label', 'value'))
 }
 
 # Default template for function output
+#' @importFrom dplyr tibble
 sum_tpl <- function(label, value) {
-  dplyr::tibble(problem = 0,
-                subprob = 0,
-                label   = label,
-                value   = value)
+  dplyr::tibble(
+    problem = 0,
+    subprob = 0,
+    label   = label,
+    value   = value
+  )
 }
 
 # Software name
@@ -91,6 +97,8 @@ sum_software <- function(software) {
 }
 
 # Software version
+#' @importFrom dplyr filter
+#' @importFrom stringr str_detect str_match
 sum_version <- function(model, software) {
   if (software == 'nonmem') {
     x <- model %>% 
@@ -119,6 +127,8 @@ sum_directory <- function(file) {
 }
 
 # Reference model
+#' @importFrom dplyr filter
+#' @importFrom stringr regex str_detect str_match
 sum_reference <- function(model, software) {
   if (software == 'nonmem') {
     x <- model %>% 
@@ -131,7 +141,9 @@ sum_reference <- function(model, software) {
   }
 }
 
-# Run start time 
+# Run start time
+#' @importFrom dplyr filter slice
+#' @importFrom stringr str_detect
 sum_timestart <- function(model, software) {
   if (software == 'nonmem') {
     x <- model %>% 
@@ -145,6 +157,8 @@ sum_timestart <- function(model, software) {
 }
 
 # Run stop time
+#' @importFrom dplyr filter slice
+#' @importFrom stringr str_detect
 sum_timestop <- function(model, software) {
   if (software == 'nonmem') {
     x <- model %>% 
@@ -158,6 +172,7 @@ sum_timestop <- function(model, software) {
 }
 
 # Problem no.
+#' @importFrom dplyr tibble
 sum_probn <- function(model, software) {
   if (software == 'nonmem') {
     x <- unique(model$problem[model$problem != 0]) 
@@ -173,6 +188,7 @@ sum_probn <- function(model, software) {
 }
 
 # Model Label
+#' @importFrom dplyr filter mutate select_at
 sum_label <- function(model, software) {
   if (software == 'nonmem') {
     x <- model %>% 
@@ -181,27 +197,36 @@ sum_label <- function(model, software) {
     if (nrow(x) == 0) return(sum_tpl('label', 'na'))
     
     x %>% 
-      dplyr::mutate(subprob = 0,
-                    label = 'label',
-                    value = as.character(.$code)) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::mutate(
+        subprob = 0,
+        label = 'label',
+        value = as.character(.$code)
+      ) %>%
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
 # Model description
+#' @importFrom dplyr filter slice
+#' @importFrom stringr regex str_c str_detect str_match str_replace
 sum_description <- function(model, software) {
   if (software == 'nonmem') {
     x <- dplyr::filter(.data = model, model$level == 0)
-    start <- which(stringr::str_detect(tolower(x$comment), 
-                                       stringr::regex('2.\\s*description\\s*:', 
-                                                      ignore_case = TRUE)))
+    start <-
+      which(
+        stringr::str_detect(
+          tolower(x$comment), 
+          stringr::regex('2.\\s*description\\s*:', ignore_case = TRUE)
+        )
+      )
     if (length(start) == 1) {
       end <- which(stringr::str_detect(tolower(x$comment), '(3|x\\d)\\.\\s*\\w+'))
       end <- end[(end - start) > 0]
       end <- ifelse(length(end) == 0, nrow(x), min(end) - 1)
       
-      x <- dplyr::slice(.data = x, seq(start, end)) %>% 
-      {stringr::str_replace(.$comment, '^\\s*;\\s*', '')} %>% 
+      x <-
+        dplyr::slice(.data = x, seq(start, end)) %>% 
+        {stringr::str_replace(.$comment, '^\\s*;\\s*', '')} %>% 
         stringr::str_c(collapse = ' ') %>% 
         {sum_tpl('descr', stringr::str_match(., ':\\s*(.+)$')[, 2])}
       return(value = x)
@@ -211,36 +236,45 @@ sum_description <- function(model, software) {
 }
 
 # Input data
+#' @importFrom dplyr distinct_at filter mutate select_at
+#' @importFrom stringr str_match
 sum_input_data <- function(model, software) {
   if (software == 'nonmem') {
     x <- model %>% 
       dplyr::filter(.$subroutine == 'dat') %>% 
-      dplyr::distinct_(.dots = 'level', .keep_all = TRUE) # Assumes that the data is on the first row
-    
+      dplyr::distinct_at(.vars='level', .keep_all = TRUE) # Assumes that the data is on the first row
+
     if (nrow(x) == 0) return(sum_tpl('data', 'na'))
-    
+
     x %>% 
       dplyr::mutate(subprob = 0,
                     label = 'data',
                     value = stringr::str_match(.$code, '^\\s*?([^\\s]+)\\s+')[, 2]) %>% # Note: only take the first match
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
 # Number of observations
+#' @importFrom dplyr filter mutate
+#' @importFrom stringr fixed str_detect str_match
 sum_nobs <- function(model, software) {
   if (software == 'nonmem') {
-    x <- model %>% 
+    x <-
+      model %>% 
       dplyr::filter(.$subroutine == 'lst') %>% 
-      dplyr::filter(stringr::str_detect(.$code, stringr::fixed('TOT. NO. OF OBS RECS')))
+      dplyr::filter(
+        stringr::str_detect(.$code, stringr::fixed('TOT. NO. OF OBS RECS'))
+      )
     
     if (nrow(x) == 0) return(sum_tpl('nobs', 'na'))
     
     x %>% 
-      dplyr::mutate(subprob = 0,
-                    label = 'nobs',
-                    value = stringr::str_match(.$code, '\\d+')) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::mutate(
+        subprob = 0,
+        label = 'nobs',
+        value = stringr::str_match(.$code, '\\d+')
+      ) %>% 
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -257,7 +291,7 @@ sum_nind <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'nind',
                     value = stringr::str_match(.$code, '\\d+')) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -274,7 +308,7 @@ sum_nsim <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'nsim',
                     value = stringr::str_match(.$code, 'NSUB.*=\\s*(\\d+)')[, 2]) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -291,7 +325,7 @@ sum_simseed <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'simseed',
                     value = stringr::str_match(.$code, '\\((\\d+)\\)')[, 2]) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -308,7 +342,7 @@ sum_subroutine <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'subroutine',
                     value = stringr::str_match(.$code, 'ADVAN(\\d+)')[, 2]) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -322,12 +356,12 @@ sum_runtime <- function(model, software) {
     if (nrow(x) == 0) return(sum_tpl('runtime', 'na'))
     
     x %>% 
-      dplyr::group_by_(.dots = 'problem') %>% 
+      dplyr::group_by_at(.vars = 'problem') %>% 
       dplyr::mutate(subprob = (1:n()) - 1) %>% 
       dplyr::ungroup() %>% 
       dplyr::mutate(label = 'runtime',
                     value = as.ctime(stringr::str_match(.$code, '([\\.\\d]+)')[, 2])) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -344,7 +378,7 @@ sum_covtime <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'covtime',
                     value = as.ctime(stringr::str_match(.$code, '([\\.\\d]+)')[, 2])) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -359,7 +393,7 @@ sum_term <- function(model, software) {
     
     x %>% 
       dplyr::slice(purrr::map2(start, end, ~seq(.x,.y)) %>% purrr::flatten_int()) %>% 
-      dplyr::group_by_(.dots = 'problem') %>% 
+      dplyr::group_by_at(.vars = 'problem') %>% 
       tidyr::nest() %>% 
       dplyr::mutate(value = purrr::map_chr(.$data, function(y) {
         drop <- min(which(stringr::str_detect(y$code, 'NO. OF')))
@@ -369,7 +403,7 @@ sum_term <- function(model, software) {
           stringr::str_c(collapse = '\n') %>% 
           stringr::str_replace('0MINIM', 'MINIM')})) %>% 
       dplyr::mutate(subprob = 0, label = 'term') %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -390,12 +424,11 @@ sum_warnings <- function(model, software) {
       dplyr::filter(!stringr::str_detect(.$code, 'FOR PROBLEM\\s+(\\d+)')) %>% 
       dplyr::mutate(code = stringr::str_trim(.$code)) %>% 
       dplyr::mutate(code = stringr::str_trunc(.$code, width = 56)) %>% 
-      dplyr::distinct_(.dots = c('problem', 'code')) %>%
-      dplyr::group_by_(.dots = 'problem') %>% 
-      tidyr::nest() %>% 
+      dplyr::distinct_at(.vars = c('problem', 'code')) %>%
+      tidyr::nest(data=setdiff(names(.), "problem")) %>% 
       dplyr::mutate(value = purrr::map_chr(.$data, ~stringr::str_c(.$code, collapse = '\n'))) %>% 
       dplyr::mutate(subprob = 0, label = 'warnings') %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -419,7 +452,7 @@ sum_nsig <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'nsig',
                     value = stringr::str_match(.$code, ':\\s+([\\.\\d]+)')[, 2]) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -433,7 +466,7 @@ sum_condn <- function(model, software, rounding) {
     if (nrow(x) == 0) return(sum_tpl('condn', 'na'))
     
     x %>% 
-      dplyr::group_by_(.dots = 'problem') %>% 
+      dplyr::group_by_at(.vars = 'problem') %>% 
       tidyr::nest() %>% 
       dplyr::mutate(subprob = 0,
                     label = 'condn',
@@ -445,7 +478,7 @@ sum_condn <- function(model, software, rounding) {
                         {max(.)/min(.)} %>% 
                         round(digits = rounding) %>% 
                         as.character()})) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -462,7 +495,7 @@ sum_nesample <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'nesample',
                     value = stringr::str_match(.$code, 'ESAMPLE\\s*=\\s*(\\d+)')[, 2]) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -479,7 +512,7 @@ sum_esampleseed <- function(model, software) {
       dplyr::mutate(subprob = 0,
                     label = 'esampleseed',
                     value = stringr::str_match(.$code, 'SEED\\s*=\\s*(\\d+)')[, 2]) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value'))
   }
 }
 
@@ -494,9 +527,9 @@ sum_ofv <- function(model, software) {
     
     x %>% 
       dplyr::mutate(value = stringr::str_match(.$code, '\\*\\s+(.+)\\s+\\*')[, 2]) %>% 
-      dplyr::group_by_(.dots =  'problem') %>% 
+      dplyr::group_by_at(.vars = 'problem') %>% 
       dplyr::mutate(subprob = (1:n()) - 1, label = 'ofv') %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value')) %>% 
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value')) %>% 
       dplyr::ungroup()
   }
 }
@@ -509,7 +542,7 @@ sum_method <- function(model, software) {
       dplyr::filter(stringr::str_detect(.$code, 'METH|NSUB'))
     
     if (nrow(x) == 0) return(sum_tpl('method', 'na'))
-    
+
     x %>% 
       dplyr::mutate(value = stringr::str_match(.$code, 'METH[OD]*\\s*=\\s*([^\\s]+)')[, 2],
                     inter = stringr::str_detect(.$code, '\\sINTER'),
@@ -523,9 +556,9 @@ sum_method <- function(model, software) {
       dplyr::mutate(value = stringr::str_c(stringr::str_to_lower(.$value), dplyr::if_else(.$inter, '-i', ''),
                                            dplyr::if_else(.$lapl, ' laplacian', ''), 
                                            dplyr::if_else(.$like, ' likelihood', ''))) %>% 
-      dplyr::group_by_(.dots = 'problem') %>% 
+      dplyr::group_by_at(.vars = 'problem') %>% 
       dplyr::mutate(subprob = (1:n()) - 1, label = 'method') %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value')) %>% 
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value')) %>% 
       dplyr::ungroup()
   }
 }
@@ -537,8 +570,7 @@ sum_shk <- function(model, software, type, rounding) {
     ## Method 3 (worse one)
     x <- model %>% 
       dplyr::filter(.$subroutine == 'lst') %>% 
-      dplyr::group_by_(.dots = 'problem') %>% 
-      tidyr::nest() %>% 
+      tidyr::nest(data=setdiff(names(.), "problem")) %>% 
       dplyr::mutate(start = purrr::map_int(.x = .$data, .f = function(x) {
         stringr::str_c(stringr::str_to_upper(type), 'SHRINK[^V]') %>% 
           stringr::regex(ignore_case = TRUE) %>% 
@@ -561,17 +593,17 @@ sum_shk <- function(model, software, type, rounding) {
       dplyr::mutate(code = stringr::str_split(.$code, '\\s+')) %>% 
       dplyr::mutate(value = purrr::map(.$code, ~round(as.numeric(.), digits = rounding)),
                     grouping = purrr::map(.$code, ~stringr::str_c(' [', 1:length(.), ']', sep = ''))) %>% 
-      dplyr::group_by_(.dots = 'problem') %>% 
+      dplyr::group_by_at(.vars = 'problem') %>% 
       dplyr::mutate(subprob = (1:n()) - 1) %>% 
       dplyr::ungroup() %>% 
-      tidyr::unnest_(unnest_cols = c('value', 'grouping')) %>% 
+      tidyr::unnest(cols = c('value', 'grouping')) %>% 
       dplyr::filter(.$value != 100) %>% 
       dplyr::mutate(value = stringr::str_c(.$value, .$grouping)) %>% 
-      dplyr::group_by_(.dots = c('problem', 'subprob')) %>% 
+      dplyr::group_by_at(.vars = c('problem', 'subprob')) %>% 
       tidyr::nest() %>% 
       dplyr::mutate(label = stringr::str_c(type, 'shk'),
                     value = purrr::map_chr(.$data, ~stringr::str_c(.$value, collapse = ', '))) %>% 
-      dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value')) %>% 
+      dplyr::select_at(.vars=c('problem', 'subprob', 'label', 'value')) %>% 
       dplyr::ungroup()
   }
 }

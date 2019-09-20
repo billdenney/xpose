@@ -67,6 +67,7 @@ get_psn_vpc_strat <- function(psn_cmd) {
 }
 
 # Gets vpc options from PsN directory
+#' @importFrom tibble tibble
 psn_vpc_parser <- function(xpdb, psn_folder, psn_bins, opt, quiet) {
   
   psn_folder <- parse_title(string = psn_folder, xpdb = xpdb, quiet = quiet,
@@ -97,7 +98,10 @@ psn_vpc_parser <- function(xpdb, psn_folder, psn_bins, opt, quiet) {
     # Get list of options from PsN
     psn_opt <- readr::read_lines(file = file_path(psn_folder, 'version_and_option_info.txt')) 
     psn_cmd <- psn_opt[which(stringr::str_detect(psn_opt, '^Command:')) + 1]
-    psn_opt <- dplyr::data_frame(raw = psn_opt[stringr::str_detect(psn_opt,'^-')]) %>% 
+    psn_opt <-
+      tibble::tibble(
+        raw = psn_opt[stringr::str_detect(psn_opt,'^-')]
+      ) %>% 
       tidyr::separate_(col = 'raw', into = c('arg', 'value'), sep = '=') %>% 
       dplyr::mutate(arg = stringr::str_replace(.$arg, '^-', ''))
     
