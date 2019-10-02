@@ -40,10 +40,14 @@ update_themes <- function(xpdb     = NULL,
     if (is.function(gg_theme) || attr(gg_theme, 'complete')) {
       attr(gg_theme, 'theme') <- as.character(substitute(gg_theme)) 
       xpdb$gg_theme <- gg_theme
+    } else if (is.function(xpdb$gg_theme)) {
+      gg_theme_attr <- paste(attr(xpdb$gg_theme, 'theme'), '(modified)')
+      xpdb$gg_theme <- do.call(xpdb$gg_theme, args = list()) + gg_theme
+      attr(xpdb$gg_theme, 'theme') <- gg_theme_attr
     } else {
       attr(xpdb$gg_theme, 'theme') <- paste(attr(xpdb$gg_theme, 'theme'), '(modified)')
       xpdb$gg_theme <- xpdb$gg_theme + gg_theme
-    }  
+    }
   } else if (!is.null(gg_theme) & !is.theme(gg_theme)) {
     msg('`gg_theme` argument not used. Reason: invalid input.', quiet)
   }

@@ -120,9 +120,9 @@ vpc <- function(xpdb,
   
   # Assign gg_theme
   if (missing(gg_theme)) {
-    gg_theme <- xpdb$gg_theme 
+    gg_theme <- xpdb$gg_theme
   } else {
-    gg_theme <- update_themes(xpdb = xpdb, gg_theme = gg_theme)
+    gg_theme <- update_themes(xpdb = xpdb, gg_theme = gg_theme)$gg_theme 
   }
   if (is.function(gg_theme)) {
     gg_theme <- do.call(gg_theme, args = list())
