@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -41,13 +43,13 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="NONMEM output table import function — read_nm_tables" />
 
+<meta property="og:title" content="NONMEM output table import function — read_nm_tables" />
 <meta property="og:description" content="Quickly import NONMEM output tables into R. This function automatically 
 detects the optimal settings to import the tables from nonmem." />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -78,7 +80,7 @@ detects the optimal settings to import the tables from nonmem." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">xpose</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.5</span>
       </span>
     </div>
 
@@ -131,7 +133,6 @@ detects the optimal settings to import the tables from nonmem." />
   <a href="../articles/faq.html">FAQ</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../articles/about.html">About</a>
@@ -170,16 +171,14 @@ detects the optimal settings to import the tables from nonmem." />
     </div>
 
     <div class="ref-description">
-    
     <p>Quickly import NONMEM output tables into R. This function automatically 
 detects the optimal settings to import the tables from nonmem.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>read_nm_tables</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>combined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>rm_duplicates</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>simtab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ziptab</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -218,11 +217,12 @@ Default <code>NULL</code> reads all tables.</p></td>
       <td><p>Additional arguments to be passed to the <code><a href='https://readr.tidyverse.org/reference/read_table.html'>read_table2</a></code> or <code><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></code> functions.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="table-format-requirement"><a class="anchor" href="#table-format-requirement"></a>Table format requirement</h2>
 
     
-    <p>When using <code>read_nm_tables</code> with the <code>combined</code> argument set to <code>FALSE</code> an <code>ID</code> column 
+
+<p>When using <code>read_nm_tables</code> with the <code>combined</code> argument set to <code>FALSE</code> an <code>ID</code> column 
 must be present in all data tables. When <code>combined</code> is set to <code>TRUE</code> instead an <code>ID</code> column must be 
 present in at least one table for each problem and for each `firstonly` category. <code>ID</code> columns are required 
 to properly combine/merge tables and removing <code>NA</code> records. If the <code>ID</code> column is missing from a table and 
@@ -230,10 +230,9 @@ to properly combine/merge tables and removing <code>NA</code> records. If the <c
 the data is returned beware that <code>NA</code> records might be left in the data and the output should be checked carefully.
 If <code>combined = TRUE</code> <code>read_nm_tables</code> xpose is more strict and will return the following warning instead: 
 <code>Dropped `&lt;tablenames&gt;` due to missing required `ID` column.</code>.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Import tables manually and return them as a list of individual tables</span>
 <span class='no'>nm_tables</span> <span class='kw'>&lt;-</span> <span class='fu'>read_nm_tables</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'sdtab001'</span>, <span class='st'>'patab001'</span>),
                             <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>'models'</span>, <span class='kw'>combined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -253,15 +252,13 @@ If <code>combined = TRUE</code> <code>read_nm_tables</code> xpose is more strict
                             <span class='kw'>col_type</span> <span class='kw'>=</span> <span class='kw pkg'>readr</span><span class='kw ns'>::</span><span class='fu'><a href='https://readr.tidyverse.org/reference/cols.html'>cols</a></span>(<span class='kw'>.default</span> <span class='kw'>=</span> <span class='st'>'c'</span>),
                             <span class='kw'>n_max</span> <span class='kw'>=</span> <span class='fl'>10</span>)
 
-<span class='co'># }</span></pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#table-format-requirement">Table format requirement</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -275,7 +272,7 @@ If <code>combined = TRUE</code> <code>read_nm_tables</code> xpose is more strict
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9100.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

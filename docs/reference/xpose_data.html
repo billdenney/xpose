@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -41,12 +43,12 @@
 
   <link href="../extra.css" rel="stylesheet">
   
+
 <meta property="og:title" content="Import NONMEM output into R — xpose_data" />
-
 <meta property="og:description" content="Gather model outputs into a R database" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -77,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">xpose</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.5</span>
       </span>
     </div>
 
@@ -130,7 +132,6 @@
   <a href="../articles/faq.html">FAQ</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../articles/about.html">About</a>
@@ -169,16 +170,14 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Gather model outputs into a R database</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>xpose_data</span>(<span class='kw'>runno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"run"</span>, <span class='kw'>ext</span> <span class='kw'>=</span> <span class='st'>".lst"</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>gg_theme</span> <span class='kw'>=</span> <span class='no'>theme_readable</span>,
   <span class='kw'>xp_theme</span> <span class='kw'>=</span> <span class='fu'><a href='xp_themes.html'>theme_xp_default</a></span>(), <span class='kw'>simtab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>manual_import</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ignore</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>extra_files</span>, <span class='no'>quiet</span>, <span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -251,7 +250,7 @@ imported. Default is '.ext', '.cov', '.cor', '.phi', ".grd" for NONMEM.</p></td>
 <code><a href='read_nm_tables.html'>read_nm_tables</a></code> functions.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="file-path-generation"><a class="anchor" href="#file-path-generation"></a>File path generation</h2>
 
     <p>The rules for model file names generation are
@@ -266,7 +265,7 @@ imported. Default is '.ext', '.cov', '.cor', '.phi', ".grd" for NONMEM.</p></td>
   <code>model/pk/run001.lst</code>. Note: in this case the file extension should be
   provided as part of the `file` argument.</p></li>
 </ul>
-    
+
     <h2 class="hasAnchor" id="table-format-requirement"><a class="anchor" href="#table-format-requirement"></a>Table format requirement</h2>
 
     <p>When importing data, an <code>ID</code> column
@@ -275,10 +274,9 @@ imported. Default is '.ext', '.cov', '.cor', '.phi', ".grd" for NONMEM.</p></td>
   combine/merge tables and removing <code>NA</code> records. If <code>ID</code> columns
   are missing xpose will return the following warning: <code>Dropped
   `&lt;tablenames&gt;` due to missing required `ID` column.</code></p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Using the `file` argument to point to the model file:</span>
 <span class='no'>xpdb</span> <span class='kw'>&lt;-</span> <span class='fu'>xpose_data</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>'run001.lst'</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>'models'</span>)
 
@@ -294,18 +292,14 @@ imported. Default is '.ext', '.cov', '.cor', '.phi', ".grd" for NONMEM.</p></td>
 <span class='co'># Using `simtab` to disable import of simulation tables</span>
 <span class='no'>xpdb</span> <span class='kw'>&lt;-</span> <span class='fu'>xpose_data</span>(<span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>'run001.lst'</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>'models'</span>, <span class='kw'>simtab</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='co'># }</span><div class='input'>
-</div></pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#file-path-generation">File path generation</a></li>
-
       <li><a href="#table-format-requirement">Table format requirement</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -319,7 +313,7 @@ imported. Default is '.ext', '.cov', '.cor', '.phi', ".grd" for NONMEM.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9100.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>
