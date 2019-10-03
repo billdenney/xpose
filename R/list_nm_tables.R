@@ -31,6 +31,7 @@ list_nm_tables <- function(nm_model = NULL) {
   table_list <- table_list %>% 
     dplyr::group_by_at(.vars = c('problem', 'level')) %>% 
     tidyr::nest() %>% 
+    dplyr::ungroup() %>% 
     dplyr::mutate(string = purrr::map_chr(.$data, ~stringr::str_c(.$code, collapse = ' '))) %>% 
     dplyr::mutate(file = stringr::str_match(.$string, '\\s+FILE\\s*=\\s*([^\\s]+)')[, 2]) %>% 
     dplyr::filter(!is.na(.$file))
@@ -48,6 +49,7 @@ list_nm_tables <- function(nm_model = NULL) {
     dplyr::filter(.$problem > 0) %>% 
     dplyr::group_by_at(.vars = 'problem') %>% 
     tidyr::nest() %>% 
+    dplyr::ungroup() %>% 
     dplyr::mutate(simtab = purrr::map_lgl(.$data, ~!any(stringr::str_detect(.$subroutine, 'est')))) %>% 
     dplyr::select(dplyr::one_of(c('problem', 'simtab')))
   

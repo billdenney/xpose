@@ -361,6 +361,7 @@ sum_term <- function(model, software) {
       dplyr::slice(purrr::map2(start, end, ~seq(.x,.y)) %>% purrr::flatten_int()) %>% 
       dplyr::group_by_at(.vars = 'problem') %>% 
       tidyr::nest() %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(value = purrr::map_chr(.$data, function(y) {
         drop <- min(which(stringr::str_detect(y$code, 'NO. OF')))
         dplyr::slice(.data = y, seq(1, (drop - 1))) %>% 
@@ -393,6 +394,7 @@ sum_warnings <- function(model, software) {
       dplyr::distinct(!!!rlang::syms(c('problem', 'code'))) %>%
       dplyr::group_by_at(.vars = 'problem') %>% 
       tidyr::nest() %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(value = purrr::map_chr(.$data, ~stringr::str_c(.$code, collapse = '\n'))) %>% 
       dplyr::mutate(subprob = 0, label = 'warnings') %>% 
       dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value'))
@@ -435,6 +437,7 @@ sum_condn <- function(model, software, rounding) {
     x %>% 
       dplyr::group_by_at(.vars = 'problem') %>% 
       tidyr::nest() %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(subprob = 0,
                     label = 'condn',
                     value = purrr::map_chr(.$data, function(x) {
@@ -539,6 +542,7 @@ sum_shk <- function(model, software, type, rounding) {
       dplyr::filter(.$subroutine == 'lst') %>% 
       dplyr::group_by_at(.vars = 'problem') %>% 
       tidyr::nest() %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(start = purrr::map_int(.x = .$data, .f = function(x) {
         stringr::str_c(stringr::str_to_upper(type), 'SHRINK[^V]') %>% 
           stringr::regex(ignore_case = TRUE) %>% 
@@ -550,7 +554,7 @@ sum_shk <- function(model, software, type, rounding) {
     
     if (nrow(x) == 0) return(sum_tpl(stringr::str_c(type, 'shk'), 'na'))
     
-    x %>% 
+    x <- x %>% 
       dplyr::mutate(rows = purrr::map2(.x = .$data, .y = .$start, .f = function(x, start) {
         x$code[start:nrow(x)] %>% 
           {start + (which.max(stringr::str_detect(., '^\\s+\\D')[-1]) - 1)} %>% 
@@ -563,12 +567,22 @@ sum_shk <- function(model, software, type, rounding) {
                     grouping = purrr::map(.$code, ~stringr::str_c(' [', 1:length(.), ']', sep = ''))) %>% 
       dplyr::group_by_at(.vars = 'problem') %>% 
       dplyr::mutate(subprob = (1:n()) - 1) %>% 
-      dplyr::ungroup() %>% 
-      tidyr::unnest(!!!rlang::syms(c('value', 'grouping'))) %>% 
+      dplyr::ungroup()
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      x <- x %>% tidyr::unnest(cols = dplyr::one_of('value', 'grouping'))
+    } else {
+      x <- x %>% tidyr::unnest(dplyr::one_of('value', 'grouping'))
+    }
+    ## END TEMP
+    
+    x %>% 
       dplyr::filter(.$value != 100) %>% 
       dplyr::mutate(value = stringr::str_c(.$value, .$grouping)) %>% 
       dplyr::group_by_at(.vars = c('problem', 'subprob')) %>% 
       tidyr::nest() %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(label = stringr::str_c(type, 'shk'),
                     value = purrr::map_chr(.$data, ~stringr::str_c(.$value, collapse = ', '))) %>% 
       dplyr::select(dplyr::one_of('problem', 'subprob', 'label', 'value')) %>% 

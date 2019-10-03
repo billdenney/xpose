@@ -23,6 +23,7 @@ print.xpose_data <- function(x, ...) {
       dplyr::mutate(grouping = 1:n()) %>% 
       dplyr::group_by_at(.vars = 'grouping') %>% 
       tidyr::nest() %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(string = purrr::map_chr(.$data, summarize_table_names)) %>% 
       {stringr::str_c(.$string, collapse = '\n               ')}
   } else {
@@ -36,6 +37,7 @@ print.xpose_data <- function(x, ...) {
       dplyr::mutate(grouping = 1:n()) %>% 
       dplyr::group_by_at(.vars = 'grouping') %>% 
       tidyr::nest() %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(string = purrr::map_chr(.$data, summarize_table_names)) %>% 
       {stringr::str_c(.$string, collapse = '\n               ')}
   } else {

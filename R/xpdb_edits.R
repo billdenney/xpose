@@ -181,7 +181,7 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
     
     # do dplyr operation outside of mutate to avoid problems with n()
     xpdb[['data']]$data <- purrr::map_if(xpdb[['data']]$data, xpdb[['data']]$problem %in% .problem,
-                         .f = .fun, !!!rlang::enquos(...))
+                                         .f = .fun, !!!rlang::enquos(...))
     xpdb[['data']] <- xpdb[['data']] %>%
       dplyr::mutate(modified = dplyr::if_else(.$problem %in% .problem, TRUE, .$modified))
     
@@ -201,26 +201,38 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
     check_quo_vars(xpdb = xpdb, ..., .source = .source, .problem = .problem)
     
     xpdb[['special']] <- xpdb[['special']] %>%
-      dplyr::group_by_at(.vars = 'problem') %>% 
-      tidyr::nest(.key = 'tmp')
+      dplyr::group_by_at(.vars = 'problem')
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      xpdb[['special']] <- xpdb[['special']] %>% 
+        tidyr::nest(tmp = -dplyr::one_of('problem')) %>% 
+        dplyr::ungroup()
+    } else {
+      xpdb[['special']] <- xpdb[['special']] %>% 
+        tidyr::nest(.key = 'tmp') %>% 
+        dplyr::ungroup()
+    }
+    ## END TEMP
     
     xpdb[['special']]$tmp <- purrr::map_if(.x = xpdb[['special']]$tmp, .p = xpdb[['special']]$problem %in% .problem,
-                                        .f = function(.x, .fun, .where, ...) {
-                                          if (.x$method == 'vpc') {
-                                            if (any(!.where %in% names(.x$data[[1]]))) {
-                                              warning('elements ', stringr::str_c(.where[!.where %in% names(.x$data[[1]])], collapse = ', '), 
-                                                      ' not found in ', .x$method, ' ', .x$type, call. = FALSE)
-                                            }
-                                            .x$data[[1]] <- .x$data[[1]] %>% 
-                                              purrr::map_at(.at = .where, .f = .fun, ...)
-                                            .x$modified <- TRUE
-                                            return(.x)
-                                          } else {
-                                            stop('edits of `', .x$method, '` data are not yet supported in xpose.', call. = FALSE)
-                                          }
-                                        }, .fun = .fun, .where = .where, !!!rlang::enquos(...)) 
+                                           .f = function(.x, .fun, .where, ...) {
+                                             if (.x$method == 'vpc') {
+                                               if (any(!.where %in% names(.x$data[[1]]))) {
+                                                 warning('elements ', stringr::str_c(.where[!.where %in% names(.x$data[[1]])], collapse = ', '), 
+                                                         ' not found in ', .x$method, ' ', .x$type, call. = FALSE)
+                                               }
+                                               .x$data[[1]] <- .x$data[[1]] %>% 
+                                                 purrr::map_at(.at = .where, .f = .fun, ...)
+                                               .x$modified <- TRUE
+                                               return(.x)
+                                             } else {
+                                               stop('edits of `', .x$method, '` data are not yet supported in xpose.', call. = FALSE)
+                                             }
+                                           }, .fun = .fun, .where = .where, !!!rlang::enquos(...)) 
     
-    xpdb[['special']] <- tidyr::unnest(xpdb[['special']])
+    xpdb[['special']] <- xpdb[['special']] %>% 
+      tidyr::unnest(dplyr::one_of('tmp'))
   } else {
     if (missing(.problem)) .problem <- max(xpdb[['files']]$problem)
     if (!all(.source %in% xpdb[['files']]$extension)) {
@@ -236,8 +248,8 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
     check_quo_vars(xpdb = xpdb, ..., .source = .source, .problem = .problem)
     
     xpdb[['files']]$data <- purrr::map_if(.x = xpdb[['files']]$data, .p = xpdb[['files']]$problem %in% .problem &
-                                       xpdb[['files']]$extension %in% .source,
-                                     .f = .fun, !!!rlang::enquos(...))
+                                            xpdb[['files']]$extension %in% .source,
+                                          .f = .fun, !!!rlang::enquos(...))
     xpdb[['files']] <- xpdb[['files']] %>%
       dplyr::mutate(modified = dplyr::if_else(.$problem %in% .problem & .$extension %in% .source, TRUE, .$modified))
   }
@@ -255,9 +267,19 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
 #' @keywords internal
 #' @export
 xpdb_index_update <- function(xpdb, .problem) {
-  xpdb[['data']] %>% 
-    dplyr::group_by_at(.vars = 'problem') %>% 
-    tidyr::nest(.key = 'tmp') %>% 
+  dat <- xpdb[['data']] %>% 
+    dplyr::group_by_at(.vars = 'problem')
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    dat <- dat %>% tidyr::nest(tmp = -dplyr::one_of('problem'))
+  } else {
+    dat <- dat %>% tidyr::nest(.key = 'tmp')
+  }
+  ## END TEMP
+  
+  dat %>% 
+    dplyr::ungroup() %>% 
     dplyr::mutate(tmp = purrr::map_if(.$tmp, 
                                       xpdb[['data']]$problem %in% .problem,
                                       function(x) {
@@ -277,7 +299,7 @@ xpdb_index_update <- function(xpdb, .problem) {
                                         }
                                         x
                                       })) %>% 
-    tidyr::unnest(!!rlang::sym('tmp'))
+    tidyr::unnest(dplyr::one_of('tmp'))
 }
 
 
@@ -320,7 +342,7 @@ check_quo_vars <- function(xpdb, ..., .source, .problem) {
         dplyr::mutate(string = stringr::str_c('missing: ', .$missing, ' variables in ', 
                                               ifelse(.source == 'data', '', stringr::str_c('`', .source, '` file ')), 
                                               '$prob no.', .$problem, '.')) %>% 
-                                              {stop(stringr::str_c(.$string, collapse = '\n       '), call. = FALSE)}
+        {stop(stringr::str_c(.$string, collapse = '\n       '), call. = FALSE)}
     }
   }
 }

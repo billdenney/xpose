@@ -22,6 +22,7 @@ summary.xpose_data <- function(object, .problem = NULL, ...) {
     dplyr::slice(order(match(.$label, order))) %>% 
     dplyr::group_by_at(.vars = c('problem', 'label', 'descr')) %>% 
     tidyr::nest() %>% 
+    dplyr::ungroup() %>% 
     dplyr::mutate(value = purrr::map_chr(.$data, function(x) {
       if (nrow(x) == 1) return(x$value)
       value <- stringr::str_c(x$value, ' (subprob no.', x$subprob, ')', sep = '')
@@ -35,6 +36,7 @@ summary.xpose_data <- function(object, .problem = NULL, ...) {
                   grouping = as.character(.$problem)) %>% 
     dplyr::group_by_at(.vars = 'grouping') %>% 
     tidyr::nest() %>% 
+    dplyr::ungroup() %>% 
     {purrr::map(.$data, function(x) {
       x <- dplyr::filter(.data = x, !stringr::str_detect(x$descr, 'Problem number'))
       if (x$problem[1] == 0) {

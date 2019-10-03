@@ -93,20 +93,40 @@ get_data <- function(xpdb,
     # When selecting tables based on their name
     full_index <- x %>% 
       dplyr::select(dplyr::one_of('problem', 'index')) %>% 
-      tidyr::unnest(!!rlang::sym('index'))
+      tidyr::unnest(dplyr::one_of('index'))
     
     if (any(!table %in% full_index$table)) {
       stop(stringr::str_c(table[!table %in% full_index$table], collapse = ', '), 
            ' not found in model output data.', call. = FALSE) 
     }
     x <- full_index[full_index$table %in% table, ] %>% 
-      dplyr::group_by_at(.vars = c('problem', 'table')) %>% 
-      tidyr::nest(.key = 'tmp') %>% 
+      dplyr::group_by_at(.vars = c('problem', 'table'))
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      x <- x %>% tidyr::nest(tmp = -dplyr::one_of('problem', 'table'))
+    } else {
+      x <- x %>% tidyr::nest(.key = 'tmp')
+    }
+    ## END TEMP
+    
+    x <- x %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(cols = purrr::map(.$tmp, ~.$col)) %>% 
-      dplyr::group_by_at(.vars = 'table') %>% 
-      tidyr::nest(.key = 'tmp') %>% 
+      dplyr::group_by_at(.vars = 'table')
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      x <- x %>% tidyr::nest(tmp = -dplyr::one_of('table'))
+    } else {
+      x <- x %>% tidyr::nest(.key = 'tmp')
+    }
+    ## END TEMP
+    
+    x <- x %>% 
+      dplyr::ungroup() %>% 
       dplyr::mutate(out = purrr::map(.$tmp, function(y) {
-        x[x$problem == y$problem, ]$data[[1]][, y$cols[[1]]]
+        xpdb$data[xpdb$data$problem == y$problem, ]$data[[1]][, y$cols[[1]]]
       }))
     
     if (length(unique(x$table)) > 1) {

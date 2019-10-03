@@ -102,10 +102,11 @@ read_nm_tables <- function(file          = NULL,
                   name = stringr::str_c(basename(.$file), dplyr::if_else(.$firstonly, ' (firstonly)', ''))) %>% 
     dplyr::group_by_at(.vars = c('problem', 'simtab')) %>% 
     tidyr::nest() %>% 
+    dplyr::ungroup() %>%
     dplyr::mutate(string = purrr::map_chr(.$data, ~stringr::str_c(.$name, collapse = ', '))) %>% 
     {stringr::str_c(.$string, ' [$prob no.', .$problem, dplyr::if_else(.$simtab, ', simulation', ''), 
                     ']', collapse = '\n         ')} %>% 
-                    {msg(c('Reading: ', .), quiet)}
+    {msg(c('Reading: ', .), quiet)}
   
   # Collect options for table import
   tables <- tables %>% 
@@ -113,9 +114,10 @@ read_nm_tables <- function(file          = NULL,
                   grouping = 1:n()) %>% 
     dplyr::group_by_at(.vars = 'grouping') %>% 
     tidyr::nest() %>% 
+    dplyr::ungroup() %>%
     dplyr::mutate(args = purrr::map(.x = .$data, .f = read_args, quiet, ...)) %>% 
-    tidyr::unnest(!!rlang::sym('data')) %>% 
-    tidyr::unnest(!!rlang::sym('args')) %>% 
+    tidyr::unnest(dplyr::one_of('data')) %>% 
+    tidyr::unnest(dplyr::one_of('args')) %>% 
     dplyr::mutate(name = basename(.$file)) %>% 
     dplyr::select(dplyr::one_of('problem', 'name', 'simtab', 'firstonly', 'fun', 'params'))
   
@@ -136,20 +138,40 @@ read_nm_tables <- function(file          = NULL,
   # Index datasets
   tables <- tables %>% 
     dplyr::mutate(grouping = 1:n()) %>% 
-    dplyr::group_by_at(.vars = 'grouping') %>% 
-    tidyr::nest(.key = 'tmp') %>% 
+    dplyr::group_by_at(.vars = 'grouping')
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    tables <- tables %>% tidyr::nest(tmp = -dplyr::one_of('grouping'))
+  } else {
+    tables <- tables %>% tidyr::nest(.key = 'tmp')
+  }
+  ## END TEMP
+  
+  tables <- tables %>%
+    dplyr::ungroup() %>% 
     dplyr::mutate(index = purrr::map(.$tmp, index_table),
                   nrow =  purrr::map_dbl(.$tmp, ~nrow(.$data[[1]]))) %>% 
-    tidyr::unnest(!!rlang::sym('tmp')) %>% 
+    tidyr::unnest(dplyr::one_of('tmp')) %>% 
     dplyr::ungroup()
   
   
   # Combine tables with same number of rows
   tables <- tables %>% 
-    dplyr::group_by_at(.vars = c('problem', 'simtab', 'firstonly')) %>% 
-    tidyr::nest(.key = 'tmp') %>% 
+    dplyr::group_by_at(.vars = c('problem', 'simtab', 'firstonly'))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    tables <- tables %>% tidyr::nest(tmp = -dplyr::one_of('problem', 'simtab', 'firstonly'))
+  } else {
+    tables <- tables %>% tidyr::nest(.key = 'tmp')
+  }
+  ## END TEMP
+  
+  tables <- tables %>% 
+    dplyr::ungroup() %>% 
     dplyr::mutate(out = purrr::map(.$tmp, combine_tables)) %>% 
-    tidyr::unnest(!!rlang::sym('out')) %>% 
+    tidyr::unnest(dplyr::one_of('out')) %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'firstonly', 'data', 'index'))
   
   if (nrow(tables) == 0) stop('No table imported.', call. = FALSE)
@@ -158,23 +180,43 @@ read_nm_tables <- function(file          = NULL,
   if (rm_duplicates) {
     tables <- tables %>% 
       dplyr::mutate(grouping = 1:n()) %>% 
-      dplyr::group_by_at(.vars = 'grouping') %>% 
-      tidyr::nest(.key = 'tmp') %>% 
+      dplyr::group_by_at(.vars = 'grouping')
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      tables <- tables %>% tidyr::nest(tmp = -dplyr::one_of('grouping'))
+    } else {
+      tables <- tables %>% tidyr::nest(.key = 'tmp')
+    }
+    ## END TEMP
+    
+    tables <- tables %>% 
+      dplyr::ungroup() %>%
       dplyr::mutate(out = purrr::map(.$tmp, ~dplyr::select(.$data[[1]], 
                                                            dplyr::one_of(unique(unlist(.$index[[1]]$col)))))) %>% 
-      tidyr::unnest(!!rlang::sym('tmp')) %>% 
+      tidyr::unnest(dplyr::one_of('tmp')) %>% 
       dplyr::select(dplyr::one_of('problem', 'simtab', 'firstonly', 'index', 'out')) %>% 
-      dplyr::rename(!!rlang::sym('data') := !!rlang::sym('out'))
+      dplyr::rename(!!rlang::sym('data') := dplyr::one_of('out'))
   }
   
   # Merge firsonly tables with main tables
   if (any(tables$firstonly)) {
     msg('Consolidating tables with `firstonly`', quiet)
     tables <- tables %>%
-      dplyr::group_by_at(.vars = c('problem', 'simtab')) %>%
-      tidyr::nest(.key = 'tmp') %>% 
+      dplyr::group_by_at(.vars = c('problem', 'simtab'))
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      tables <- tables %>% tidyr::nest(tmp = -dplyr::one_of('problem', 'simtab'))
+    } else {
+      tables <- tables %>% tidyr::nest(.key = 'tmp')
+    }
+    ## END TEMP
+    
+    tables <- tables %>% 
+      dplyr::ungroup() %>%
       dplyr::mutate(out = purrr::map(.$tmp, merge_firstonly, quiet)) %>% 
-      tidyr::unnest(!!rlang::sym('out')) %>% 
+      tidyr::unnest(dplyr::one_of('out')) %>% 
       dplyr::select(dplyr::one_of('problem', 'simtab', 'data', 'index'))
   }
   
@@ -183,15 +225,25 @@ read_nm_tables <- function(file          = NULL,
   # Convert catcov, id, occ, dvid to factor
   tables <- tables %>% 
     dplyr::mutate(grouping = .$problem) %>% 
-    dplyr::group_by_at(.vars = 'grouping') %>% 
-    tidyr::nest(.key = 'tmp') %>% 
+    dplyr::group_by_at(.vars = 'grouping')
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    tables <- tables %>% tidyr::nest(tmp = -dplyr::one_of('grouping'))
+  } else {
+    tables <- tables %>% tidyr::nest(.key = 'tmp')
+  }
+  ## END TEMP
+  
+  tables <- tables %>% 
+    dplyr::ungroup() %>%
     dplyr::mutate(tmp = purrr::map(.$tmp, function(x) {
       col_to_factor <- colnames(x$data[[1]]) %in% 
         x$index[[1]]$col[x$index[[1]]$type %in% c('catcov', 'id', 'occ', 'dvid')]
       x$data[[1]] <- dplyr::mutate_if(x$data[[1]], col_to_factor, as.factor)
       x
     })) %>% 
-    tidyr::unnest(!!rlang::sym('tmp')) %>% 
+    tidyr::unnest(dplyr::one_of('tmp')) %>% 
     dplyr::mutate(modified = FALSE) %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
   

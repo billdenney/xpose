@@ -30,11 +30,13 @@ list_vars <- function(xpdb, .problem = NULL) {
     dplyr::mutate(grouping = as.integer(.$problem)) %>% 
     dplyr::group_by_at(.vars = 'grouping') %>% 
     tidyr::nest() %>% 
+    dplyr::ungroup() %>% 
     {purrr::map(.$data, function(df) {
       cat('\nList of available variables for problem no.', df$problem[1], '\n')
       df$index[[1]] %>% 
         dplyr::group_by_at(.vars = 'type') %>% 
         tidyr::nest() %>% 
+        dplyr::ungroup() %>% 
         dplyr::mutate(string = purrr::map_chr(.$data, ~stringr::str_c(unique(.$col), collapse = ', ')),
                       descr = dplyr::case_when(.$type == 'id' ~ 'Subject identifier (id)',
                                                .$type == 'occ' ~ 'Occasion flag (occ)',
