@@ -106,4 +106,4 @@ When working with xpose, a working knowledge of ggplot2 is recommended. Help for
 
 
 ## Contribute
-Please note that the xpose project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md) and [contributing guidelines](.github/CONTRIBUTING.md). By contributing to this project, you agree to abide these.
+Please note that the xpose project is released with a [Contributor Code of Conduct](https://github.com/UUPharmacometrics/xpose/blob/master/.github/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/UUPharmacometrics/xpose/blob/master/.github/CONTRIBUTING.md). By contributing to this project, you agree to abide these.
