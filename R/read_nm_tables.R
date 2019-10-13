@@ -115,9 +115,21 @@ read_nm_tables <- function(file          = NULL,
     dplyr::group_by_at(.vars = 'grouping') %>% 
     tidyr::nest() %>% 
     dplyr::ungroup() %>%
-    dplyr::mutate(args = purrr::map(.x = .$data, .f = read_args, quiet, ...)) %>% 
-    tidyr::unnest(dplyr::one_of('data')) %>% 
-    tidyr::unnest(dplyr::one_of('args')) %>% 
+    dplyr::mutate(args = purrr::map(.x = .$data, .f = read_args, quiet, ...))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    tables <- tables %>% 
+      tidyr::unnest(dplyr::one_of('data')) %>% 
+      tidyr::unnest(dplyr::one_of('args'))
+  } else {
+    tables <- tables %>% 
+      tidyr::unnest(!!rlang::sym('data')) %>% 
+      tidyr::unnest(!!rlang::sym('args'))
+  }
+  ## END TEMP
+  
+  tables <- tables %>% 
     dplyr::mutate(name = basename(.$file)) %>% 
     dplyr::select(dplyr::one_of('problem', 'name', 'simtab', 'firstonly', 'fun', 'params'))
   
@@ -151,8 +163,17 @@ read_nm_tables <- function(file          = NULL,
   tables <- tables %>%
     dplyr::ungroup() %>% 
     dplyr::mutate(index = purrr::map(.$tmp, index_table),
-                  nrow =  purrr::map_dbl(.$tmp, ~nrow(.$data[[1]]))) %>% 
-    tidyr::unnest(dplyr::one_of('tmp')) %>% 
+                  nrow =  purrr::map_dbl(.$tmp, ~nrow(.$data[[1]])))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    tables <- tables %>% tidyr::unnest(dplyr::one_of('tmp'))
+  } else {
+    tables <- tables %>% tidyr::unnest(!!rlang::sym('tmp'))
+  }
+  ## END TEMP
+  
+  tables <- tables %>% 
     dplyr::ungroup()
   
   
@@ -170,8 +191,17 @@ read_nm_tables <- function(file          = NULL,
   
   tables <- tables %>% 
     dplyr::ungroup() %>% 
-    dplyr::mutate(out = purrr::map(.$tmp, combine_tables)) %>% 
-    tidyr::unnest(dplyr::one_of('out')) %>% 
+    dplyr::mutate(out = purrr::map(.$tmp, combine_tables))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    tables <- tables %>% tidyr::unnest(dplyr::one_of('out'))
+  } else {
+    tables <- tables %>% tidyr::unnest(!!rlang::sym('out'))
+  }
+  ## END TEMP
+  
+  tables <- tables %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'firstonly', 'data', 'index'))
   
   if (nrow(tables) == 0) stop('No table imported.', call. = FALSE)
@@ -193,8 +223,16 @@ read_nm_tables <- function(file          = NULL,
     tables <- tables %>% 
       dplyr::ungroup() %>%
       dplyr::mutate(out = purrr::map(.$tmp, ~dplyr::select(.$data[[1]], 
-                                                           dplyr::one_of(unique(unlist(.$index[[1]]$col)))))) %>% 
-      tidyr::unnest(dplyr::one_of('tmp')) %>% 
+                                                           dplyr::one_of(unique(unlist(.$index[[1]]$col))))))
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      tables <- tables %>% tidyr::unnest(dplyr::one_of('tmp'))
+    } else {
+      tables <- tables %>% tidyr::unnest(!!rlang::sym('tmp'))
+    }
+    
+    tables <- tables %>% 
       dplyr::select(dplyr::one_of('problem', 'simtab', 'firstonly', 'index', 'out')) %>% 
       dplyr::rename(!!rlang::sym('data') := dplyr::one_of('out'))
   }
@@ -215,8 +253,17 @@ read_nm_tables <- function(file          = NULL,
     
     tables <- tables %>% 
       dplyr::ungroup() %>%
-      dplyr::mutate(out = purrr::map(.$tmp, merge_firstonly, quiet)) %>% 
-      tidyr::unnest(dplyr::one_of('out')) %>% 
+      dplyr::mutate(out = purrr::map(.$tmp, merge_firstonly, quiet))
+    
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      tables <- tables %>% tidyr::unnest(dplyr::one_of('out'))
+    } else {
+      tables <- tables %>% tidyr::unnest(!!rlang::sym('out'))
+    }
+    ## END TEMP
+    
+    tables <- tables %>% 
       dplyr::select(dplyr::one_of('problem', 'simtab', 'data', 'index'))
   }
   
@@ -242,8 +289,17 @@ read_nm_tables <- function(file          = NULL,
         x$index[[1]]$col[x$index[[1]]$type %in% c('catcov', 'id', 'occ', 'dvid')]
       x$data[[1]] <- dplyr::mutate_if(x$data[[1]], col_to_factor, as.factor)
       x
-    })) %>% 
-    tidyr::unnest(dplyr::one_of('tmp')) %>% 
+    }))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    tables <- tables %>% tidyr::unnest(dplyr::one_of('tmp'))
+  } else {
+    tables <- tables %>% tidyr::unnest(!!rlang::sym('tmp'))
+  }
+  ## END TEMP
+  
+  tables <- tables %>% 
     dplyr::mutate(modified = FALSE) %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
   

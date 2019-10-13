@@ -92,9 +92,16 @@ get_data <- function(xpdb,
   } else {
     # When selecting tables based on their name
     full_index <- x %>% 
-      dplyr::select(dplyr::one_of('problem', 'index')) %>% 
-      tidyr::unnest(dplyr::one_of('index'))
+      dplyr::select(dplyr::one_of('problem', 'index'))
     
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      full_index <- full_index %>% tidyr::unnest(dplyr::one_of('index'))
+    } else {
+      full_index <- full_index %>% tidyr::unnest(!!rlang::sym('index'))
+    }
+    ## END TEMP
+      
     if (any(!table %in% full_index$table)) {
       stop(stringr::str_c(table[!table %in% full_index$table], collapse = ', '), 
            ' not found in model output data.', call. = FALSE) 

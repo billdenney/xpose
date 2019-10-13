@@ -77,7 +77,7 @@ set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet)
   }
   ## END TEMP
   
-  xpdb$data <- dat %>% 
+  dat <- dat %>% 
     dplyr::ungroup() %>% 
     dplyr::mutate(out = purrr::map_if(.$tmp, .$grouping %in% .problem, function(x, args, quiet) {
       # Get the index
@@ -111,8 +111,17 @@ set_var_types <- function(xpdb, .problem = NULL, ..., auto_factor = TRUE, quiet)
       
       # Output new index
       x
-    }, args = args, quiet = quiet)) %>% 
-    tidyr::unnest(dplyr::one_of('out')) %>% 
+    }, args = args, quiet = quiet))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    dat <- dat %>% tidyr::unnest(dplyr::one_of('out'))
+  } else {
+    dat <- dat %>% tidyr::unnest(!!rlang::sym('out'))
+  }
+  ## END TEMP
+  
+  xpdb$data <- dat %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
   
   as.xpdb(xpdb)
@@ -149,7 +158,7 @@ set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
   }
   ## END TEMP
   
-  xpdb$data <- dat %>% 
+  dat <- dat %>% 
     dplyr::ungroup() %>% 
     dplyr::mutate(out = purrr::map_if(.$tmp, .$grouping %in% .problem, function(x, args, quiet) {
       # Get the index
@@ -169,8 +178,17 @@ set_var_generic <- function(xpdb, .problem = NULL, what = NULL, ..., quiet) {
       
       # Output new index
       x
-    }, args = args, quiet = quiet)) %>% 
-    tidyr::unnest(dplyr::one_of('out')) %>% 
+    }, args = args, quiet = quiet))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    dat <- dat %>% tidyr::unnest(dplyr::one_of('out'))
+  } else {
+    dat <- dat %>% tidyr::unnest(!!rlang::sym('out'))
+  }
+  ## END TEMP
+  
+  xpdb$data <- dat %>% 
     dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'modified'))
   
   as.xpdb(xpdb)

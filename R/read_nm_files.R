@@ -67,10 +67,22 @@ read_nm_files <- function(runno  = NULL,
   
   if (all(out$drop)) stop('No output file imported.', call. = FALSE)
   
+  out <- out %>% 
+    dplyr::filter(!.$drop)
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    out <- out %>%
+      tidyr::unnest(dplyr::one_of('data')) %>% 
+      tidyr::unnest(dplyr::one_of('tmp'))
+  } else {
+    out <- out %>% 
+      tidyr::unnest(!!rlang::sym('data')) %>% 
+      tidyr::unnest(!!rlang::sym('tmp'))
+  }
+  ## END TEMP
+  
   out %>% 
-    dplyr::filter(!.$drop) %>% 
-    tidyr::unnest(dplyr::one_of('data')) %>% 
-    tidyr::unnest(dplyr::one_of('tmp')) %>% 
     dplyr::mutate(extension = get_extension(.$name, dot = FALSE),
                   modified = FALSE) %>% 
     dplyr::select(dplyr::one_of('name', 'extension', 'problem', 'subprob', 

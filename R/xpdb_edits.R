@@ -231,8 +231,16 @@ edit_xpose_data <- function(.fun, .fname, .data, ..., .problem, .source, .where)
                                              }
                                            }, .fun = .fun, .where = .where, !!!rlang::enquos(...)) 
     
-    xpdb[['special']] <- xpdb[['special']] %>% 
-      tidyr::unnest(dplyr::one_of('tmp'))
+    ## TEMP handling
+    if (tidyr_new_interface()) {
+      xpdb[['special']] <- xpdb[['special']] %>% 
+        tidyr::unnest(dplyr::one_of('tmp'))
+    } else {
+      xpdb[['special']] <- xpdb[['special']] %>% 
+        tidyr::unnest(!!rlang::sym('tmp'))
+    }
+    ## END TEMP
+    
   } else {
     if (missing(.problem)) .problem <- max(xpdb[['files']]$problem)
     if (!all(.source %in% xpdb[['files']]$extension)) {
@@ -278,7 +286,7 @@ xpdb_index_update <- function(xpdb, .problem) {
   }
   ## END TEMP
   
-  dat %>% 
+  dat <- dat %>% 
     dplyr::ungroup() %>% 
     dplyr::mutate(tmp = purrr::map_if(.$tmp, 
                                       xpdb[['data']]$problem %in% .problem,
@@ -298,8 +306,15 @@ xpdb_index_update <- function(xpdb, .problem) {
                                                             units = NA_character_))
                                         }
                                         x
-                                      })) %>% 
-    tidyr::unnest(dplyr::one_of('tmp'))
+                                      }))
+  
+  ## TEMP handling
+  if (tidyr_new_interface()) {
+    dat %>% tidyr::unnest(dplyr::one_of('tmp'))
+  } else {
+    dat %>% tidyr::unnest(!!rlang::sym('tmp'))
+  }
+  ## END TEMP
 }
 
 

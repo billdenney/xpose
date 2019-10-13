@@ -573,7 +573,7 @@ sum_shk <- function(model, software, type, rounding) {
     if (tidyr_new_interface()) {
       x <- x %>% tidyr::unnest(cols = dplyr::one_of('value', 'grouping'))
     } else {
-      x <- x %>% tidyr::unnest(dplyr::one_of('value', 'grouping'))
+      x <- x %>% tidyr::unnest(!!!rlang::syms(c('value', 'grouping')))
     }
     ## END TEMP
     
