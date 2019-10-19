@@ -1,40 +1,47 @@
 #' NONMEM output table import function
 #'
-#' @description Quickly import NONMEM output tables into R. This function automatically 
-#' detects the optimal settings to import the tables from nonmem.
+#' @description Quickly import NONMEM output tables into R. This function
+#'   automatically detects the optimal settings to import the tables from
+#'   nonmem.
 #'
-#' @param file A character vector of path to the files or a \code{nm_table_list} object created with \code{list_nm_tables}.
+#' @param file A character vector of path to the files or a \code{nm_table_list}
+#'   object created with \code{list_nm_tables}.
 #' @param dir Location of the model files.
-#' @param combined Logical value indicating whether multiple tables should be combined into a single one. If the number of rows 
-#' does not match an error will be returned.
-#' @param rm_duplicates Logical value indicating whether duplicated columns should be removed.
+#' @param combined Logical value indicating whether multiple tables should be
+#'   combined into a single one. If the number of rows does not match an error
+#'   will be returned.
+#' @param rm_duplicates Logical value indicating whether duplicated columns
+#'   should be removed.
 #' @param quiet Logical, if \code{FALSE} messages are printed to the console.
-#' @param simtab If \code{TRUE} only reads in simulation tables, if \code{FALSE} only reads estimation tables. 
-#' Default \code{NULL} reads all tables.
-#' @param ziptab If \code{TRUE} search for the tables that have been compressed and renamed ´<file>.zip'.
-#' @param ... Additional arguments to be passed to the \code{\link[readr]{read_table2}} or \code{\link[readr]{read_csv}} functions.
-#' 
+#' @param simtab If \code{TRUE} only reads in simulation tables, if \code{FALSE}
+#'   only reads estimation tables. Default \code{NULL} reads all tables.
+#' @param ziptab If \code{TRUE} search for the tables that have been compressed
+#'   and renamed ´<file>.zip'.
+#' @param ... Additional arguments to be passed to the
+#'   \code{\link[readr]{read_table2}} or \code{\link[readr]{read_csv}}
+#'   functions.
+#'
 #' @examples
 #' \dontrun{
 #' # Import tables manually and return them as a list of individual tables
-#' nm_tables <- read_nm_tables(file = c('sdtab001', 'patab001'), 
+#' nm_tables <- read_nm_tables(file = c('sdtab001', 'patab001'),
 #'                             dir = 'models', combined = FALSE)
-#' 
+#'
 #' # Import tables manually and return them as a single merged table
-#' nm_tables <- read_nm_tables(file = c('sdtab001', 'patab001'), 
+#' nm_tables <- read_nm_tables(file = c('sdtab001', 'patab001'),
 #'                             dir = 'models', combined = TRUE)
-#' 
+#'
 #' # Import tables automatically (used internally by xpose_data())
-#' nm_tables <- read_nm_model(file = 'run001.lst', dir = 'models') %>% 
-#'               list_nm_tables() %>% 
+#' nm_tables <- read_nm_model(file = 'run001.lst', dir = 'models') %>%
+#'               list_nm_tables() %>%
 #'               read_nm_tables()
-#' 
-#' # Passing arguments to readr via `...` 
+#'
+#' # Passing arguments to readr via `...`
 #' # (e.g. import columns as character and only first 10 rows)
-#' nm_tables <- read_nm_tables(file = 'sdtab001', dir = 'models', 
-#'                             col_type = readr::cols(.default = 'c'), 
+#' nm_tables <- read_nm_tables(file = 'sdtab001', dir = 'models',
+#'                             col_type = readr::cols(.default = 'c'),
 #'                             n_max = 10)
-#' 
+#'
 #' }
 #' @export
 read_nm_tables <- function(file          = NULL,
@@ -112,7 +119,8 @@ read_nm_tables <- function(file          = NULL,
   
   # Save the file information
   file <- tables %>% 
-    dplyr::select_at(.vars = dplyr::vars('problem', 'name', 'file', 'md5'))
+    dplyr::select_at(.vars = dplyr::vars('problem', 'name', 'file', 'md5')) %>% 
+    dplyr::mutate(type = 'table')
   
   # Collect options for table import
   tables <- tables %>% 
@@ -208,8 +216,10 @@ read_nm_tables <- function(file          = NULL,
   # If user mode return simple tibble as only 1 problem should be used
   if (user_mode) return(tables$data[[1]])
   
-  # For the xpose data return the data and the file info
-  list(data = tables, file = file)
+  # Else return the data and the file info
+  list(data      = tables, 
+       file_info = file) %>% 
+    structure(class = 'nm_tables')
 }
 
 
