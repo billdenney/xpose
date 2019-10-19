@@ -161,7 +161,7 @@ navbar:
   - text: Functions
     href: reference/index.html
   - text: Plots
-    href: articles/bestiarium.html
+    href: articles/plot_list.html
   - text: FAQ
     href: articles/faq.html
   right:

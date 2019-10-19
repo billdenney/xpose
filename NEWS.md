@@ -1,6 +1,12 @@
-# xpose 0.4.4.9000
+# xpose 0.4.5.9000
 ### General
-* Enable storing of the raw NONMEM .lst file output with a new `.type` argument to `get_code()` (@billdenney #103)
+* Enable storing of the raw NONMEM output file. Added a new `raw` argument to `get_code()` (@billdenney #103)
+
+# xpose 0.4.5
+## General
+* The `gg_theme` argument in `xpose_data`, `update_themes` or plots now accepts a function returning a complete ggplot2 theme. In addition theme `gg_theme` can now accept theme elements in `update_themes` and plots. (#157)
+* Added compatibility with tidyr 1.0.0 (#166)
+* Small fixes to vignettes, documentations and website
 
 # xpose 0.4.4
 ### General
