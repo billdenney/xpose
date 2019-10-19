@@ -53,8 +53,8 @@ read_nm_model <- function(runno   = NULL,
     full_path <- file_path(dir, file)
   }
   
-  if (!ext %in% c('.lst', '.out', '.res', '.mod', '.ctl')) {
-    stop('NONMEM model file extension should be one lst, out, res, mod or ctl.', call. = FALSE) 
+  if (!ext %in% c('.lst', '.out', '.res', '.mod', '.ctl', '.nmlog', '.nmctl')) {
+    stop('NONMEM model file extension should be one lst, out, res, mod, ctl, nmlog or nmctl.', call. = FALSE) 
   }
   
   if (!file.exists(full_path)) { 
@@ -63,9 +63,10 @@ read_nm_model <- function(runno   = NULL,
   
   model <- readr::read_lines(full_path)
   
-  if (!any(stringr::str_detect(model, '^\\s*\\$PROB.+')) && ext %in% c('.lst', '.out', '.res')) {
+  if (!any(stringr::str_detect(model, '^\\s*\\$PROB.+')) && 
+      ext %in% c('.lst', '.out', '.res', '.nmlog')) {
     # Attempts to recover the model code from model file rather than in the nonmem output file
-    full_path <- update_extension(full_path, c('.mod', '.ctl'))
+    full_path <- update_extension(full_path, c('.mod', '.ctl', '.nmctl'))
     full_path <- full_path[file.exists(full_path)]
     
     if (any(file.exists(full_path))) {
@@ -80,7 +81,7 @@ read_nm_model <- function(runno   = NULL,
     stop(basename(full_path), ' is not a NONMEM model.', call. = FALSE)
   }
   
-  model <- dplyr::tibble(code = model) %>% 
+  model <- tibble::tibble(code = model) %>% 
     dplyr::filter(!stringr::str_detect(.$code, '^;[^;]*$|^$')) %>% 
     dplyr::mutate(code = stringr::str_replace_all(.$code, '\\t+|\\s{2,}', ' ')) %>% 
     dplyr::mutate(
