@@ -1,6 +1,7 @@
 # xpose 0.4.5.9000
 ### General
 * Improved the detection of modifications to the xpdb the tables through md5 check sum (@sebastianueckert)
+* Fix bug in all general plot functions where a qualified package access (e.g. `xpose::dv_vs_ipred`) would result in an error when printing (@rfaelens, #95)
 
 ### Data import
 * Added raw NONMEM output file to the xpose database. Added a new `raw = TRUE/FALSE` argument to `get_code()` (@billdenney #103)

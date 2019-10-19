@@ -66,7 +66,7 @@ prm_qq <- function(xpdb,
            xscale = check_scales('x', log), 
            yscale = check_scales('y', log), 
            title = title, subtitle = subtitle, caption = caption,
-           tag = tag, plot_name = as.character(match.call()[[1]]), 
+           tag = tag, plot_name = paste0(as.character(match.call()[[1]]), collapse = ''), 
            xscale_name = 'Quantiles of normal', 
            yscale_name = 'Quantiles of parameter', ...)
 }
@@ -118,7 +118,7 @@ eta_qq <- function(xpdb,
            xscale = check_scales('x', log), 
            yscale = check_scales('y', log), 
            title = title, subtitle = subtitle, caption = caption,
-           tag = tag, plot_name = as.character(match.call()[[1]]), 
+           tag = tag, plot_name = paste0(as.character(match.call()[[1]]), collapse = ''), 
            xscale_name = 'Quantiles of normal', 
            yscale_name = 'Quantiles of eta', ...)
 }
@@ -171,7 +171,7 @@ res_qq <- function(xpdb,
            xscale = check_scales('x', log), 
            yscale = check_scales('y', log), 
            title = title, subtitle = subtitle, caption = caption,
-           tag = tag, plot_name = as.character(match.call()[[1]]), ...) +
+           tag = tag, plot_name = paste0(as.character(match.call()[[1]]), collapse = ''), ...) +
     labs(x = 'Quantiles of normal', 
          y = 'Quantiles of @sample')
 }
@@ -217,7 +217,7 @@ cov_qq <- function(xpdb,
            xscale = check_scales('x', log), 
            yscale = check_scales('y', log), 
            title = title, subtitle = subtitle, caption = caption,
-           tag = tag, plot_name = as.character(match.call()[[1]]), 
+           tag = tag, plot_name = paste0(as.character(match.call()[[1]]), collapse = ''), 
            xscale_name = 'Quantiles of normal', 
            yscale_name = 'Quantiles of covariate', ...)
 }
