@@ -1,3 +1,14 @@
+# xpose 0.4.5.9000
+### General
+* Improved the detection of modifications to the xpdb the tables through md5 check sum (@sebastianueckert)
+
+### Data import
+* Added raw NONMEM output file to the xpose database. Added a new `raw = TRUE/FALSE` argument to `get_code()` (@billdenney #103)
+* Improved on the data import code (i.e. performance gains on the data import overhead)
+* `read_nm_model()` now accepts `.nmlog` and `.nmctl` extensions for NONMEM
+* All source files are now stored along with their md5 check sum. They can be accessed with `get_source_files()` (#140)
+
+
 # xpose 0.4.5
 ## General
 * The `gg_theme` argument in `xpose_data`, `update_themes` or plots now accepts a function returning a complete ggplot2 theme. In addition theme `gg_theme` can now accept theme elements in `update_themes` and plots. (#157)
