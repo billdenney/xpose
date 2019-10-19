@@ -48,7 +48,7 @@ list_nm_tables <- function(nm_model = NULL) {
     dplyr::mutate(string = purrr::map_chr(.x = !!rlang::sym('data'), 
                                           .f = ~stringr::str_c(.x$code, collapse = ' '))) %>% 
     dplyr::mutate(file = stringr::str_match(string = !!rlang::sym('string'), 
-                                            pattern = '\\s+FILE\\s*=\\s*([^\\s]+)')[, 2]) %>% 
+                                            pattern = '(^|\\s+)FILE\\s*=\\s*([^\\s]+)')[, 3]) %>% 
     tidyr::drop_na(dplyr::one_of('file'))
   
   if (nrow(table_list) == 0) return(null_object)
