@@ -7,7 +7,8 @@
 * Improved on the data import code (i.e. performance gains on the data import overhead)
 * `read_nm_model()` now accepts `.nmlog` and `.nmctl` extensions for NONMEM
 * All source files are now stored along with their md5 check sum. They can be accessed with `get_source_files()` (#140)
-
+* Fixed a bug that prevented the import of table in the format $TABLE FILE=<file> <col-names> 
+* The `ID` column is no longer required in the tables (#97)
 
 # xpose 0.4.5
 ## General
