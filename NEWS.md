@@ -1,3 +1,7 @@
+# xpose 0.4.5.9000
+### General
+* Enable storing of the raw NONMEM output file. Added a new `raw` argument to `get_code()` (@billdenney #103)
+
 # xpose 0.4.5
 ## General
 * The `gg_theme` argument in `xpose_data`, `update_themes` or plots now accepts a function returning a complete ggplot2 theme. In addition theme `gg_theme` can now accept theme elements in `update_themes` and plots. (#157)
