@@ -261,15 +261,15 @@ read_funs <- function(fun) {
 read_args <- function(top, file, name, quiet, col_types = readr::cols(.default = 'd'), 
                       na = 'NA', comment = 'TABLE', skip = 1, ...) {
   
-  # Check the data format
-  if (is.na(top[3]) || !stringr::str_detect(top[3], '\\d+E[+-]\\d+\\s*')) {
+  # Check the data format (i.e. 0.000 or 0.000E-00)
+  if (is.na(top[3]) || !stringr::str_detect(top[3], '\\d+(\\.|,)\\d+(E[+-]\\d+)?\\s*')) {
     warning(c('Dropped: ', name, ' due to unexpected data format'), call. = FALSE)
     return(tibble::tibble(fun = list(), params = list()))
   }
   
   # Determine the proper reading function to use
-  fun <- dplyr::case_when(stringr::str_detect(top[3], '\\d,\\d+E[+-]\\d+\\s*;') ~ 'csv2',
-                          stringr::str_detect(top[3], '\\d.\\d+E[+-]\\d+\\s*,') ~ 'csv', 
+  fun <- dplyr::case_when(stringr::str_detect(top[3], '\\d+,\\d+(E[+-]\\d+)?\\s*;') ~ 'csv2',
+                          stringr::str_detect(top[3], '\\d+\\.\\d+(E[+-]\\d+)?\\s*,') ~ 'csv', 
                           TRUE ~ 'table')
   
   # Check whether there a TABLE NO. to be dropped
