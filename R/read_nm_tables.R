@@ -209,9 +209,9 @@ read_nm_tables <- function(file          = NULL,
         .tbl = .x, 
         .predicate = colnames(.x) %in% .y$col[.y$type %in% c('catcov', 'id', 'occ', 'dvid')],
         .funs = as.factor))) %>% 
-    dplyr::mutate(md5_base = purrr::map_chr(.x = !!rlang::sym('data'), 
-                                            .f = digest::digest)) %>% 
-    dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'md5_base'))
+    dplyr::mutate(md5_ref = purrr::map_chr(.x = !!rlang::sym('data'), 
+                                           .f = digest::digest)) %>% 
+    dplyr::select(dplyr::one_of('problem', 'simtab', 'index', 'data', 'md5_ref'))
   
   # If user mode return simple tibble as only 1 problem should be used
   if (user_mode) return(tables$data[[1]])
@@ -243,7 +243,8 @@ read_funs <- function(fun) {
 #' 
 #' @param top A list containing a the 3 first records of a 
 #' dataset.
-#' @param file The file name of a dataset
+#' @param file The full file name of a dataset.
+#' @param name The base name of the file.
 #' @param quiet Should messages be displayed to the console.
 #' @param col_types Defines the type of each column to be passed to 
 #' the `readr` import function.

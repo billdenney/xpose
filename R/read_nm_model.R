@@ -169,8 +169,8 @@ read_nm_model <- function(runno   = NULL,
   # Ouptut code
   tibble::tibble(code = list(model_raw, model),
                  raw  = c(TRUE, FALSE)) %>% 
-    dplyr::mutate(md5_base = purrr::map_chr(.x = !!rlang::sym('code'), 
-                                            .f = digest::digest)) %>% 
+    dplyr::mutate(md5_ref = purrr::map_chr(.x = !!rlang::sym('code'), 
+                                           .f = digest::digest)) %>% 
     list(data      = .,
          file_info = file) %>% 
     structure(class = 'nm_model')
