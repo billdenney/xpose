@@ -54,8 +54,8 @@ manual_nm_import <- function(tab_names = c('sdtab', 'mutab', 'patab', 'catab', '
 #' @export
 list_nm_tables_manual <- function(runno = NULL, file = NULL, dir = NULL, tab_list) {
   # Check inputs
-  if (is.null(runno) & is.null(file)) {
-    stop('Arguments `runno` or `file` should be provided. Check ?manual_nm_import for help.',
+  if (is.null(runno) && is.null(file)) {
+    stop('Argument `runno` or `file` required. Check ?manual_nm_import for help.', 
          call. = FALSE)
   }
   
