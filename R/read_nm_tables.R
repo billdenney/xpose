@@ -216,9 +216,20 @@ read_nm_tables <- function(file          = NULL,
   # If user mode return simple tibble as only 1 problem should be used
   if (user_mode) return(tables$data[[1]])
   
-  # Else return the data and the file info
-  list(data      = tables, 
-       file_info = file) %>% 
+  # Make sure that the file info reflects only the files present in the index
+  tables %>% 
+    dplyr::select(dplyr::one_of('problem', 'index')) %>% 
+    tidyr::unnest(!!rlang::sym('index')) %>% 
+    dplyr::distinct(!!!rlang::syms(c('problem', 'table')), 
+                    .keep_all = FALSE) %>% 
+    dplyr::rename(name = dplyr::one_of('table')) %>% 
+    {dplyr::semi_join(x = file,
+                      y = .,
+                      by = c('problem', 'name'))} %>% 
+  
+  # Final output
+  {list(data      = tables, 
+        file_info = .)} %>% 
     structure(class = 'nm_tables')
 }
 
