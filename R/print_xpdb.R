@@ -1,21 +1,22 @@
-#' Print an xpose_data object
-#' 
-#' @description This function returns to the console a list of the files and options 
-#' attached to an \code{\link{xpose_data}} object.
-#' 
-#' @param x An \code{xpose_data} object generated with \code{\link{xpose_data}}.
+#' Print an xpdb object
+#'
+#' @description This function returns to the console a list of the files and
+#'   options attached to an \code{\link{xpdb}} object.
+#'
+#' @param x An \code{xpdb} object generated with \code{\link{create_nm_xpdb}}.
 #' @param ... Ignored in this function
-#' 
-#' @method print xpose_data
-#' @examples 
+#'
+#' @method print xpdb
+#' @examples
 #' # Using the print function
 #' print(xpdb_ex_pk)
-#' 
+#'
 #' # Or simply by writting the xpdb name
 #' xpdb_ex_pk
-#' 
+#'
 #' @export
-print.xpose_data <- function(x, ...) {
+print.xpdb <- function(x, ...) {
+  
   # Summarize estimation tables names
   if (!is.null(x$data) && any(!x$data$simtab)) {
     tab_names <- x$data %>% 
@@ -88,5 +89,7 @@ summarize_table_names <- function(dat) {
     sort() %>% 
     unique() %>% 
     stringr::str_c(collapse = ', ') %>% 
-    {stringr::str_c('$prob no.', dat$problem, ifelse(dat$modified, ' (modified)', ''), ': ', .)}
+    {stringr::str_c('$prob no.', dat$problem, 
+                    '', #ifelse(dat$modified, ' (modified)', ''), # Add check_xpdb_changes
+                    ': ', .)}
 }
