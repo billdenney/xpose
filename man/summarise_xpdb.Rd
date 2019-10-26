@@ -2,35 +2,36 @@
 % Please edit documentation in R/xpdb_edits.R
 \name{summarise_xpdb}
 \alias{summarise_xpdb}
-\alias{group_by.xpose_data}
-\alias{ungroup.xpose_data}
-\alias{summarise.xpose_data}
-\alias{summarize.xpose_data}
+\alias{group_by.xpdb}
+\alias{ungroup.xpdb}
+\alias{summarise.xpdb}
+\alias{summarize.xpdb}
 \title{Group/ungroup and summarize variables in an xpdb}
 \usage{
-\method{group_by}{xpose_data}(.data, ..., .problem, .source, .where)
+\method{group_by}{xpdb}(.data, ..., .problem, .source, .where)
 
-\method{ungroup}{xpose_data}(x, ..., .problem, .source, .where)
+\method{ungroup}{xpdb}(x, ..., .problem, .source, .where)
 
-\method{summarise}{xpose_data}(.data, ..., .problem, .source, .where)
+\method{summarise}{xpdb}(.data, ..., .problem, .source, .where)
 
-\method{summarize}{xpose_data}(.data, ..., .problem, .source, .where)
+\method{summarize}{xpdb}(.data, ..., .problem, .source, .where)
 }
 \arguments{
 \item{.data}{An xpose database object.}
 
-\item{...}{Name-value pairs of expressions. Use \code{NULL} to drop a variable.
+\item{...}{Name-value pairs of expressions. Use \code{NULL} to drop a
+  variable.
 
-These arguments are automatically quoted and evaluated in the 
-context of the data frame. They support unquoting and splicing. 
-See the dplyr vignette("programming") for an introduction to these concepts.}
+  These arguments are automatically quoted and evaluated in the context of
+  the data frame. They support unquoting and splicing. See the dplyr
+  vignette("programming") for an introduction to these concepts.}
 
 \item{.problem}{The problem from which the data will be modified}
 
-\item{.source}{The source of the data in the xpdb. Can either be 'data' or an output 
-file extension e.g. 'phi'.}
+\item{.source}{The source of the data in the xpdb. Can either be 'data' or an
+output file extension e.g. 'phi'.}
 
-\item{.where}{A vector of element names to be edited in special (e.g. 
+\item{.where}{A vector of element names to be edited in special (e.g.
 \code{.where = c('vpc_dat', 'aggr_obs')} with vpc).}
 
 \item{x}{Same as .data (used for consistency with dplyr functions).}

@@ -17,27 +17,26 @@ theme_readable(base_size = 11, base_family = "",
 
 \item{base_family}{Base font family.}
 
-\item{legend_position}{The position of legends defined as 'none', 'left', 
+\item{legend_position}{The position of legends defined as 'none', 'left',
 'right', 'bottom', 'top', or a two-element numeric vector.}
 }
 \description{
-An additional set of complete ggplot2 themes intended to make ggplot2 more readable 
-when used in presentation or publications. These themes also bring the \code{legend_position} option
-without having to call the ggplot2 theme() function to modify a complete theme.
+An additional set of complete ggplot2 themes intended to make
+  ggplot2 more readable when used in presentation or publications. These
+  themes also bring the \code{legend_position} option without having to call
+  the ggplot2 theme() function to modify a complete theme.
 
-\itemize{
-\item \code{theme_bw2}: Black and white theme inspired by a theme from Gunnar Yngman.
-\item \code{theme_readable}: Light grey theme, with dimmed background and grid lines 
-intended to bring the focus on the data.
-}
+  \itemize{ \item \code{theme_bw2}: Black and white theme inspired by a theme
+  from Gunnar Yngman. \item \code{theme_readable}: Light grey theme, with
+  dimmed background and grid lines intended to bring the focus on the data. }
 }
 \examples{
 # With the gg_theme theme_readable() (default)
 dv_vs_ipred(xpdb_ex_pk, facets = 'SEX')
 
 # With the gg_theme theme_bw2()
-xpdb_ex_pk \%>\% 
- update_themes(gg_theme = theme_bw2()) \%>\% 
+xpdb_ex_pk \%>\%
+ update_themes(gg_theme = theme_bw2()) \%>\%
  dv_vs_ipred(facets = 'SEX')
- 
+
 }

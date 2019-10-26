@@ -7,14 +7,16 @@
 list_nm_tables(nm_model = NULL)
 }
 \arguments{
-\item{nm_model}{An xpose nm_model object generated with \code{\link{read_nm_model}}.}
+\item{nm_model}{An xpose nm_model object generated with
+\code{\link{read_nm_model}}.}
 }
 \description{
-List NONMEM output tables file names from a \code{nm_model} object.
+List NONMEM output tables file names from a \code{nm_model}
+  object.
 }
 \examples{
 \dontrun{
-read_nm_model(file = 'run001.lst') \%>\% 
+read_nm_model(file = 'run001.lst') \%>\%
   list_nm_tables()
 }
 

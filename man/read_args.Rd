@@ -4,12 +4,16 @@
 \alias{read_args}
 \title{Define data import arguments}
 \usage{
-read_args(x, quiet, col_types = readr::cols(.default = "d"), na = "NA",
-  comment = "TABLE", skip = 1, ...)
+read_args(top, file, name, quiet, col_types = readr::cols(.default =
+  "d"), na = "NA", comment = "TABLE", skip = 1, ...)
 }
 \arguments{
-\item{x}{A list containing a the 3 first records of a 
-dataset under `[[1]]`.}
+\item{top}{A list containing a the 3 first records of a 
+dataset.}
+
+\item{file}{The full file name of a dataset.}
+
+\item{name}{The base name of the file.}
 
 \item{quiet}{Should messages be displayed to the console.}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{is.xpdb}
 \alias{is.xpdb}
-\title{Test for xpose_data class}
+\title{Test for xpdb class}
 \usage{
 is.xpdb(x)
 }
@@ -10,10 +10,10 @@ is.xpdb(x)
 \item{x}{An object to be tested.}
 }
 \value{
-Logical value, `TRUE` for `xpose_data` class 
+Logical value, `TRUE` for `xpdb` class 
 and `FALSE` otherwise.
 }
 \description{
-Reports whether x is an `xpose_data` object
+Reports whether x is an `xpdb` object
 }
 \keyword{internal}

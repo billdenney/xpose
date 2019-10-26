@@ -4,11 +4,12 @@
 \alias{index_table}
 \title{Index table columns}
 \usage{
-index_table(x)
+index_table(name, data)
 }
 \arguments{
-\item{x}{A list containing the tables (`x$data`) to be 
-combined along with their respective names (`x$name`).}
+\item{name}{the name of the dataset to be indexed}
+
+\item{data}{the data associated with the dataset specified in `name`.}
 }
 \value{
 A tibble of the index.
