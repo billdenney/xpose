@@ -60,7 +60,7 @@ vpc_opt <- function(bins                = 'jenks',
 get_psn_vpc_strat <- function(psn_cmd) {
   if (stringr::str_detect(psn_cmd, '-stratify_on')) {
     psn_cmd %>% 
-    {stringr::str_match(string = ., pattern = '-stratify_on=\\s*([^\\s]+)')[1, 2]} %>% 
+      {stringr::str_match(string = ., pattern = '-stratify_on=\\s*([^\\s]+)')[1, 2]} %>% 
       stringr::str_split(',') %>% 
       purrr::flatten_chr()
   }
@@ -97,7 +97,7 @@ psn_vpc_parser <- function(xpdb, psn_folder, psn_bins, opt, quiet) {
     # Get list of options from PsN
     psn_opt <- readr::read_lines(file = file_path(psn_folder, 'version_and_option_info.txt')) 
     psn_cmd <- psn_opt[which(stringr::str_detect(psn_opt, '^Command:')) + 1]
-    psn_opt <- dplyr::tibble(raw = psn_opt[stringr::str_detect(psn_opt,'^-')]) %>% 
+    psn_opt <- tibble::tibble(raw = psn_opt[stringr::str_detect(psn_opt,'^-')]) %>% 
       tidyr::separate(col = 'raw', into = c('arg', 'value'), sep = '=') %>% 
       dplyr::mutate(arg = stringr::str_replace(.$arg, '^-', ''))
     
@@ -140,7 +140,7 @@ psn_vpc_parser <- function(xpdb, psn_folder, psn_bins, opt, quiet) {
     if (!any(is.na(psn_bins[[1]]))) {
       opt$bins <- psn_bins[[1]] # vpc does not handle panel based binning yet so take the first one
       msg(c('Using PsN-defined binning', ifelse(length(unique(psn_bins)) == 1 , '',
-                                              '. Only a single bin_array (i.e. first) can be used by xpose.')), quiet)
+                                                '. Only a single bin_array (i.e. first) can be used by xpose.')), quiet)
     } else {
       warning('Failed to read PsN-defined binning.', call. = FALSE)
     }

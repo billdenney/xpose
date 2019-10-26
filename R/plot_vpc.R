@@ -271,7 +271,7 @@ vpc <- function(xpdb,
     scale_linetype_manual(values = line_linetype)
   
   # Add metadata to plots
-  xp$xpose <- dplyr::tibble(problem = vpc_prob, subprob = 0L, 
+  xp$xpose <- tibble::tibble(problem = vpc_prob, subprob = 0L, 
                             descr = c('VPC directory', 'Number of simulations for VPC', 
                                       'VPC confidence interval', 'VPC prediction interval', 
                                       'VPC lower limit of quantification', 'VPC upper limit of quantification'),

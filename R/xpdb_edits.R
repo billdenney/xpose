@@ -301,9 +301,9 @@ xpdb_index_update <- function(xpdb, .problem) {
                                         if (length(add_cols) > 0) {
                                           x$index[[1]] <- x$index[[1]] %>%   
                                             dplyr::bind_rows(
-                                              dplyr::tibble(table = 'na', col = add_cols, type = 'na', 
-                                                            label = NA_character_, 
-                                                            units = NA_character_))
+                                              tibble::tibble(table = 'na', col = add_cols, type = 'na', 
+                                                             label = NA_character_, 
+                                                             units = NA_character_))
                                         }
                                         x
                                       }))

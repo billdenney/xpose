@@ -21,9 +21,9 @@ list_nm_tables <- function(nm_model = NULL) {
   }
   
   # Prepare null object to be returned if no $table is found
-  null_object <- as.nm.table.list(dplyr::tibble(problem = -1, file = '', 
-                                                firstonly = NA, simtab = NA))
-    
+  null_object <- as.nm.table.list(tibble::tibble(problem = -1, file = '', 
+                                                 firstonly = NA, simtab = NA))
+  
   # Get the parsed NM code associated with the tables
   table_list <- nm_model %>% 
     purrr::pluck('data') %>% 

@@ -57,7 +57,7 @@ read_nm_files <- function(runno  = NULL,
   
   # Import and parse the raw data
   out <- full_path %>% 
-    dplyr::tibble(file = ., name = basename(.)) %>% 
+    tibble::tibble(file = ., name = basename(.)) %>% 
     dplyr::filter(file.exists(!!rlang::sym('file'))) %>% 
     dplyr::mutate(raw = purrr::map(.x = !!rlang::sym('file'), 
                                    .f = readr::read_lines)) %>% 

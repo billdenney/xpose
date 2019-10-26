@@ -77,10 +77,10 @@ list_nm_tables_manual <- function(runno = NULL, file = NULL, dir = NULL, tab_lis
   
   # Prepare the list table and check that files exist
   file_path(dir, stringr::str_c(tab_list$tab_names, runno)) %>% 
-    dplyr::tibble(problem   = 1, 
-                  file      = ., 
-                  firstonly = FALSE, 
-                  simtab    = NA) %>% 
+    tibble::tibble(problem   = 1, 
+                   file      = ., 
+                   firstonly = FALSE, 
+                   simtab    = NA) %>% 
     tidyr::expand(problem   = !!rlang::sym('problem'), 
                   file      = !!rlang::sym('file'), 
                   firstonly = !!rlang::sym('firstonly'), 

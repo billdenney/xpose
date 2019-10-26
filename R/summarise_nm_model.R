@@ -44,42 +44,42 @@ summarise_nm_model <- function(file, model, software, rounding) {
     dplyr::bind_rows(dplyr::filter(sum, sum$problem == 0)) %>%
     dplyr::arrange_at(.vars = c('problem', 'label', 'subprob')) %>%
     dplyr::mutate(descr = dplyr::case_when(
-      .$label == 'software' ~ 'Software',
-      .$label == 'version' ~ 'Software version',
-      .$label == 'file' ~ 'Run file',
-      .$label == 'run' ~ 'Run number',
-      .$label == 'dir' ~ 'Run directory',
-      .$label == 'ref' ~ 'Reference model',
-      .$label == 'probn' ~ 'Problem number',
-      .$label == 'timestart' ~ 'Run start time',
-      .$label == 'timestop' ~ 'Run stop time',
-      .$label == 'descr' ~ 'Run description',
-      .$label == 'label' ~ 'Run label',
-      .$label == 'data' ~ 'Input data',
-      .$label == 'nobs' ~ 'Number of observations',
-      .$label == 'nind' ~ 'Number of individuals',
-      .$label == 'nsim' ~ 'Number of simulations',
-      .$label == 'simseed' ~ 'Simulation seed',
-      .$label == 'subroutine' ~ 'ADVAN',
-      .$label == 'runtime' ~ 'Estimation runtime',
-      .$label == 'covtime' ~ 'Covariance step runtime',
-      .$label == 'term' ~ 'Termination message',
-      .$label == 'warnings' ~ 'Run warnings',
-      .$label == 'errors' ~ 'Run errors',
-      .$label == 'nsig' ~ 'Number of significant digits',
-      .$label == 'condn' ~ 'Condition number',
-      .$label == 'nesample' ~ 'Number of ESAMPLE',
+      .$label == 'software'    ~ 'Software',
+      .$label == 'version'     ~ 'Software version',
+      .$label == 'file'        ~ 'Run file',
+      .$label == 'run'         ~ 'Run number',
+      .$label == 'dir'         ~ 'Run directory',
+      .$label == 'ref'         ~ 'Reference model',
+      .$label == 'probn'       ~ 'Problem number',
+      .$label == 'timestart'   ~ 'Run start time',
+      .$label == 'timestop'    ~ 'Run stop time',
+      .$label == 'descr'       ~ 'Run description',
+      .$label == 'label'       ~ 'Run label',
+      .$label == 'data'        ~ 'Input data',
+      .$label == 'nobs'        ~ 'Number of observations',
+      .$label == 'nind'        ~ 'Number of individuals',
+      .$label == 'nsim'        ~ 'Number of simulations',
+      .$label == 'simseed'     ~ 'Simulation seed',
+      .$label == 'subroutine'  ~ 'ADVAN',
+      .$label == 'runtime'     ~ 'Estimation runtime',
+      .$label == 'covtime'     ~ 'Covariance step runtime',
+      .$label == 'term'        ~ 'Termination message',
+      .$label == 'warnings'    ~ 'Run warnings',
+      .$label == 'errors'      ~ 'Run errors',
+      .$label == 'nsig'        ~ 'Number of significant digits',
+      .$label == 'condn'       ~ 'Condition number',
+      .$label == 'nesample'    ~ 'Number of ESAMPLE',
       .$label == 'esampleseed' ~ 'ESAMPLE seed number',
-      .$label == 'ofv' ~ 'Objective function value',
-      .$label == 'method' ~ 'Estimation method',
-      .$label == 'epsshk' ~ 'Epsilon shrinkage',
-      .$label == 'etashk' ~ 'Eta shrinkage')) %>% 
+      .$label == 'ofv'         ~ 'Objective function value',
+      .$label == 'method'      ~ 'Estimation method',
+      .$label == 'epsshk'      ~ 'Epsilon shrinkage',
+      .$label == 'etashk'      ~ 'Eta shrinkage')) %>% 
     dplyr::select(dplyr::one_of('problem', 'subprob', 'descr', 'label', 'value'))
 }
 
 # Default template for function output
 sum_tpl <- function(label, value) {
-  dplyr::tibble(problem = 0,
+  tibble::tibble(problem = 0,
                 subprob = 0,
                 label   = label,
                 value   = value)
@@ -164,7 +164,7 @@ sum_probn <- function(model, software) {
     
     if (length(x) == 0) return(sum_tpl('probn', 'na'))
     
-    dplyr::tibble(
+    tibble::tibble(
       problem = x,
       subprob = 0,
       label   = 'probn',

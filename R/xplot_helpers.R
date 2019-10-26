@@ -131,10 +131,10 @@ parse_title <- function(string, xpdb, problem, quiet, extra_key = NULL,
   # If needed add extra values e.g. in xpose_save
   if (!is.null(extra_key) && any(extra_key %in% keyword)) {
     values <- dplyr::bind_rows(values,
-                               dplyr::tibble(problem = 0,
-                                             subp  = 0,
-                                             label = extra_key,
-                                             value = extra_value))
+                               tibble::tibble(problem = 0,
+                                              subp  = 0,
+                                              label = extra_key,
+                                              value = extra_value))
   }
   
   # Remove unmatched keywords from the list
@@ -337,7 +337,7 @@ drop_fixed_cols <- function(xpdb, .problem, cols, quiet) {
                  stringr::str_c(stringr::str_c(cols_rm[1:5], collapse = ', '), 
                                 '... and', length(cols_rm) - 5 , 'more', sep = ' '),
                  stringr::str_c(cols_rm , collapse = ', ')) %>%
-                 {msg(c('Dropped fixed variables ', .,'.'), quiet)}
+    {msg(c('Dropped fixed variables ', .,'.'), quiet)}
   
   cols
 }
