@@ -120,7 +120,7 @@ read_nm_tables <- function(file          = NULL,
   # Save the file information
   file <- tables %>% 
     dplyr::select_at(.vars = dplyr::vars('problem', 'name', 'file', 'md5')) %>% 
-    dplyr::mutate(type = 'table')
+    dplyr::mutate(type = 'data')
   
   # Collect options for table import
   tables <- tables %>% 
