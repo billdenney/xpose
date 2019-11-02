@@ -4,7 +4,8 @@
 * Fix bug in all general plot functions where a qualified package access (e.g. `xpose::dv_vs_ipred`) would result in an error when printing (@rfaelens, #95)
 * `list_vars` now invisbly returns a list (@billdenney #124)
 * Off-diagonal ETA names are better-detected (@billdenney #121)
-
+* Fixed issue when ETA values were not named as ETA(X) in NONMEM (@billdenney #144)
+* Added logLik method for xpose_data objects (@billdenney)
 ### Data import
 * Added raw NONMEM output file to the xpose database. Added a new `raw = TRUE/FALSE` argument to `get_code()` (@billdenney #103)
 * Improved on the data import code (i.e. performance gains on the data import overhead)
@@ -24,7 +25,6 @@
 * Improved documentation for `xpose_data` (@billdenney #99)
 * Fixed VPC error in the documentation (@callistosp #130)
 * Fixed bug leading to errors when plotting poorly formatted ETA name (@romainfrancois #127)
-* Added logLik method for xpose_data objects (@billdenney)
 * Compatibility improvements
 
 # xpose 0.4.3

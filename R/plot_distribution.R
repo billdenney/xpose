@@ -101,7 +101,9 @@ eta_distrib <- function(xpdb,
     stop('No eta column found in the xpdb data index.', call. = FALSE)
   }
   
-  if (software(xpdb) == 'nonmem') {
+  # eta reordering only occurs if all ETAs match the pattern ETA(X) where X is a
+  # number.
+  if (all(grepl(pattern="^ETA\\([0-9]+\\)$", x=eta_col))) {
     post_processing_eta <-  reorder_factors(prefix = 'ETA(', suffix = ')')
   } else {
     post_processing_eta <- NULL
