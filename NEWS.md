@@ -3,6 +3,7 @@
 * Improved the detection of modifications to the xpdb the tables through md5 check sum (@sebastianueckert)
 * Fix bug in all general plot functions where a qualified package access (e.g. `xpose::dv_vs_ipred`) would result in an error when printing (@rfaelens, #95)
 * `list_vars` now invisbly returns a list (@billdenney #124)
+* Off-diagonal ETA names are better-detected (@billdenney #121)
 
 ### Data import
 * Added raw NONMEM output file to the xpose database. Added a new `raw = TRUE/FALSE` argument to `get_code()` (@billdenney #103)
