@@ -2,32 +2,33 @@
 % Please edit documentation in R/xpdb_edits.R
 \name{modify_xpdb}
 \alias{modify_xpdb}
-\alias{mutate.xpose_data}
-\alias{select.xpose_data}
-\alias{rename.xpose_data}
+\alias{mutate.xpdb}
+\alias{select.xpdb}
+\alias{rename.xpdb}
 \title{Add, remove or rename variables in an xpdb}
 \usage{
-\method{mutate}{xpose_data}(.data, ..., .problem, .source, .where)
+\method{mutate}{xpdb}(.data, ..., .problem, .source, .where)
 
-\method{select}{xpose_data}(.data, ..., .problem, .source, .where)
+\method{select}{xpdb}(.data, ..., .problem, .source, .where)
 
-\method{rename}{xpose_data}(.data, ..., .problem, .source, .where)
+\method{rename}{xpdb}(.data, ..., .problem, .source, .where)
 }
 \arguments{
 \item{.data}{An xpose database object.}
 
-\item{...}{Name-value pairs of expressions. Use \code{NULL} to drop a variable.
+\item{...}{Name-value pairs of expressions. Use \code{NULL} to drop a
+  variable.
 
-These arguments are automatically quoted and evaluated in the 
-context of the data frame. They support unquoting and splicing. 
-See the dplyr vignette("programming") for an introduction to these concepts.}
+  These arguments are automatically quoted and evaluated in the context of
+  the data frame. They support unquoting and splicing. See the dplyr
+  vignette("programming") for an introduction to these concepts.}
 
 \item{.problem}{The problem from which the data will be modified}
 
-\item{.source}{The source of the data in the xpdb. Can either be 'data' or an output 
-file extension e.g. 'phi'.}
+\item{.source}{The source of the data in the xpdb. Can either be 'data' or an
+output file extension e.g. 'phi'.}
 
-\item{.where}{A vector of element names to be edited in special (e.g. 
+\item{.where}{A vector of element names to be edited in special (e.g.
 \code{.where = c('vpc_dat', 'aggr_obs')} with vpc).}
 }
 \description{

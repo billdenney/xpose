@@ -17,7 +17,7 @@
 ^ROADMAP\.md$
 ^temporary$
 ^vignettes/about.*$
-^vignettes/bestiarium.*$
+^vignettes/plot_list.*$
 ^vignettes/cheatsheet.pdf$
 ^vignettes/faq.*$
 ^vignettes/interactive_plots.*$

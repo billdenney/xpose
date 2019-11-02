@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{as.xpdb}
 \alias{as.xpdb}
-\title{Convert an object to `xpose_data` class}
+\title{Convert an object to `xpdb` class}
 \usage{
 as.xpdb(x)
 }
@@ -10,9 +10,9 @@ as.xpdb(x)
 \item{x}{An object to be modified.}
 }
 \value{
-x with `xpose_data` class.
+x with `xpdb` class.
 }
 \description{
-Adds `xpose_data` attribute to an object
+Adds `xpdb` attribute to an object
 }
 \keyword{internal}

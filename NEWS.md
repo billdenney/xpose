@@ -1,3 +1,22 @@
+# xpose 0.4.5.9000
+### General
+* Improved the detection of modifications to the xpdb the tables through md5 check sum (@sebastianueckert)
+* Fix bug in all general plot functions where a qualified package access (e.g. `xpose::dv_vs_ipred`) would result in an error when printing (@rfaelens, #95)
+
+### Data import
+* Added raw NONMEM output file to the xpose database. Added a new `raw = TRUE/FALSE` argument to `get_code()` (@billdenney #103)
+* Improved on the data import code (i.e. performance gains on the data import overhead)
+* `read_nm_model()` now accepts `.nmlog` and `.nmctl` extensions for NONMEM
+* All source files are now stored along with their md5 check sum. They can be accessed with `get_source_files()` (#140)
+* Fixed a bug that prevented the import of table in the format $TABLE FILE=<file> <col-names> 
+* The `ID` column is no longer required in the tables (#97)
+
+# xpose 0.4.5
+## General
+* The `gg_theme` argument in `xpose_data`, `update_themes` or plots now accepts a function returning a complete ggplot2 theme. In addition theme `gg_theme` can now accept theme elements in `update_themes` and plots. (#157)
+* Added compatibility with tidyr 1.0.0 (#166)
+* Small fixes to vignettes, documentations and website
+
 # xpose 0.4.4
 ### General
 * Improved documentation for `xpose_data` (@billdenney #99)

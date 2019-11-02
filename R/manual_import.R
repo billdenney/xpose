@@ -1,32 +1,34 @@
 #' Manually define nonmem tables to be imported
-#' 
-#' @description Manually provide names of the table files to be imported by \code{xpose_data}.
 #'
-#' @param tab_names Provide the name of the tables to import e.g. 'sdtab', 'patab', 'cotab', 
-#' 'catab' for NONMEM.
-#' @param tab_suffix Default is '', but can be changed to any character string to be used as 
-#' suffix in the table names.
-#' @param sim_suffix Default is 'sim', but can be changed to any character string to be used as 
-#' suffix in the simulation table names e.g. sdtab001sim.
+#' @description Manually provide names of the table files to be imported by
+#'   \code{xpose_data}.
 #'
-#' @details 
-#' In order to be imported manually, table names must follow the following convention: 
-#' \code{<tab_names><runno><tab/sim_suffix>} e.g. sdtab001sim. When the argument `file` is used in 
-#' \code{xpose_data}, the \code{<runno>} part is guessed by taking the portion of the string starting 
-#' by any digit and ending at the file extension e.g. \code{file = run001a.mod} will guess <runno> as
-#' `001a`. If no valid <runno> can be guessed, xpose will return an error. In this case it is advised 
-#' to use the \code{xpose_data} argument `runno` directly rather than `file` hence preventing xpose 
-#' from having to guess <runno>.
-#' 
-#' Note that with manual table import xpose still reads in the NONMEM model file in order to generate
-#' the run summary.
-#' 
+#' @param tab_names Provide the name of the tables to import e.g. 'sdtab',
+#'   'patab', 'cotab', 'catab' for NONMEM.
+#' @param tab_suffix Default is '', but can be changed to any character string
+#'   to be used as suffix in the table names.
+#' @param sim_suffix Default is 'sim', but can be changed to any character
+#'   string to be used as suffix in the simulation table names e.g. sdtab001sim.
+#'
+#' @details In order to be imported manually, table names must follow the
+#' following convention: \code{<tab_names><runno><tab/sim_suffix>} e.g.
+#' sdtab001sim. When the argument `file` is used in \code{xpose_data}, the
+#' \code{<runno>} part is guessed by taking the portion of the string starting
+#' by any digit and ending at the file extension e.g. \code{file = run001a.mod}
+#' will guess <runno> as `001a`. If no valid <runno> can be guessed, xpose will
+#' return an error. In this case it is advised to use the \code{xpose_data}
+#' argument `runno` directly rather than `file` hence preventing xpose from
+#' having to guess <runno>.
+#'
+#' Note that with manual table import xpose still reads in the NONMEM model file
+#' in order to generate the run summary.
+#'
 #' @seealso \code{\link{xpose_data}}
-#' @examples 
+#' @examples
 #' \dontrun{
 #' # Import all names specified by default as in xpose4
 #' xpose_data(runno = '001', manual_import = manual_nm_import())
-#' 
+#'
 #' # Import a specific table name
 #' xpose_data(runno = '001', manual_import = manual_nm_import(tab_names = 'mytab'))
 #' }
@@ -51,21 +53,42 @@ manual_nm_import <- function(tab_names = c('sdtab', 'mutab', 'patab', 'catab', '
 #' @keywords internal
 #' @export
 list_nm_tables_manual <- function(runno = NULL, file = NULL, dir = NULL, tab_list) {
+  # Check inputs
+  if (is.null(runno) && is.null(file)) {
+    stop('Argument `runno` or `file` required. Check ?manual_nm_import for help.', 
+         call. = FALSE)
+  }
+  
   if (is.null(runno)) {
     # Attempt to guess runno if file has been used
     runno <- stringr::str_match(string = update_extension(file, ''), 
                                 pattern = '\\d.+$')[1,]
+    
     if (is.na(runno)) {
       stop('Failed to guess `runno` from `file` argument. Check ?manual_nm_import for help.',
            call. = FALSE)
     }
+    
+    # Make sure to carry the dir as well
+    if (is.null(dir)) {
+      dir   <- dirname(file)
+    }
   }
+  
+  # Prepare the list table and check that files exist
   file_path(dir, stringr::str_c(tab_list$tab_names, runno)) %>% 
-    dplyr::tibble(problem = 1, file = ., firstonly = FALSE, simtab = NA) %>% 
-    tidyr::expand(problem = .$problem, file = .$file, firstonly = .$firstonly, simtab = c(FALSE, TRUE)) %>% 
-    dplyr::mutate(file = dplyr::if_else(.$simtab, stringr::str_c(.$file, tab_list$sim_suffix),
-                                        stringr::str_c(.$file, tab_list$tab_suffix))) %>% 
-    dplyr::filter(file.exists(.$file)) %>% 
+    tibble::tibble(problem   = 1, 
+                   file      = ., 
+                   firstonly = FALSE, 
+                   simtab    = NA) %>% 
+    tidyr::expand(problem   = !!rlang::sym('problem'), 
+                  file      = !!rlang::sym('file'), 
+                  firstonly = !!rlang::sym('firstonly'), 
+                  simtab    = c(FALSE, TRUE)) %>% 
+    dplyr::mutate(file = dplyr::if_else(!!rlang::sym('simtab'), 
+                                        true  = stringr::str_c(!!rlang::sym('file'), tab_list$sim_suffix),
+                                        false = stringr::str_c(!!rlang::sym('file'), tab_list$tab_suffix))) %>% 
+    dplyr::filter(file.exists(!!rlang::sym('file'))) %>% 
     as.nm.table.list()
 }
 

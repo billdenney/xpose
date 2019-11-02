@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Benjamin Guiastrennec" />
+
+
+<title>Access the xpdb data</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Access the xpdb data</h1>
+<h4 class="author">Benjamin Guiastrennec</h4>
+<h4 class="date">02 October, 2019</h4>
+
+
+
+<p>The xpose package was designed as a standardized interface between model outputs and R. Hence model output files can easily be imported in R and used to summarize data or create plots.</p>
+<div id="glimpse-at-the-xpdb" class="section level3">
+<h3>Glimpse at the xpdb</h3>
+<p>The files attached to an xpdb object can be displayed to the console simply by writing the xpdb name to the console or by using the <code>print()</code> function. Any of these files can be accessed from the xpdb using one of the functions listed below.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">xpdb <span class="co"># or print(xpdb)</span></a></code></pre></div>
+<pre><code>run001.lst overview: 
+ - Software: nonmem 7.3.0 
+ - Attached files (memory usage 1.3 Mb): 
+   + obs tabs: $prob no.1: catab001.csv, cotab001, patab001, sdtab001 
+   + sim tabs: $prob no.2: simtab001.zip 
+   + output files: run001.cor, run001.cov, run001.ext, run001.grd, run001.phi, run001.shk 
+   + special: &lt;none&gt; 
+ - gg_theme: theme_readable 
+ - xp_theme: theme_xp_default 
+ - Options: dir = analysis/models/pk/, quiet = FALSE, manual_import = NULL</code></pre>
+</div>
+<div id="access-the-model-code" class="section level3">
+<h3>Access the model code</h3>
+<p>The <code>get_code()</code> function can be used to access the parsed model code from the xpdb. This code was used to create the summary and find table names. The parsed code can be used to get additional information about the run. If the argument <code>.problem</code> is specified a subset of the code can be returned based on <code>$PROBLEM</code>.</p>
+<p><em>Note that general code warnings and PsN outputs appended are listed as problem 0.</em></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">code &lt;-<span class="st"> </span><span class="kw">get_code</span>(xpdb)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">code</a></code></pre></div>
+<pre><code># A tibble: 764 x 5
+   problem level subroutine code                                           comment                  
+ *   &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                                          &lt;chr&gt;                    
+ 1       0     0 oth        Mon Oct 16 13:34:28 CEST 2017                  &quot;&quot;                       
+ 2       0     0 oth        &quot;&quot;                                             ; 1. Based on: 000       
+ 3       0     0 oth        &quot;&quot;                                             &quot;; 2. Description: &quot;     
+ 4       0     0 oth        &quot;&quot;                                             ; NONMEM PK example for …
+ 5       1     1 pro        Parameter estimation                           &quot;&quot;                       
+ 6       1     2 inp        ID DOSE DV SCR AGE SEX CLASS WT ACE MED1 MED2… &quot;&quot;                       
+ 7       1     2 inp        &quot; CLCR AMT SS II EVID&quot;                         &quot;&quot;                       
+ 8       1     3 dat        ../../mx19_2.csv IGNORE=@                      &quot;&quot;                       
+ 9       1     4 abb        DERIV2=NO                                      &quot;&quot;                       
+10       1     5 sub        ADVAN2 TRANS1                                  &quot;&quot;                       
+# … with 754 more rows</code></pre>
+</div>
+<div id="access-the-output-data" class="section level3">
+<h3>Access the output data</h3>
+<p>The <code>get_data()</code> function can be used to access the imported table files. Tables can be accessed by <code>table</code> name or by <code>.problem</code>. In the latter a single dataset containing all aggregated tables is returned. If more than one <code>table</code> name or <code>.problem</code> number is provided a named list is returned.</p>
+<p><em>Note when providing a table name it is not guaranteed that the table will be identical to its file (i.e. the order of the columns may have been changed and tables with <code>FIRSTONLY</code> will no longer be deduplicated).</em></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw">get_data</span>(xpdb, <span class="dt">table =</span> <span class="st">'cotab001'</span>)</a></code></pre></div>
+<pre><code>Warning: `.key` is deprecated
+
+Warning: `.key` is deprecated</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">data</a></code></pre></div>
+<pre><code># A tibble: 550 x 4
+   ID     CLCR   AGE    WT
+   &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 110      66    68   105
+ 2 110      66    68   105
+ 3 110      66    68   105
+ 4 110      66    68   105
+ 5 110      66    68   105
+ 6 110      66    68   105
+ 7 110      66    68   105
+ 8 112      47    73    80
+ 9 112      47    73    80
+10 112      47    73    80
+# … with 540 more rows</code></pre>
+</div>
+<div id="access-the-run-files" class="section level3">
+<h3>Access the run files</h3>
+<p>The <code>get_file()</code> function can be used to access the imported output files. Files can be accessed by <code>file</code> name, by <code>.problem</code>, <code>.subprob</code> and/or <code>.method</code>. If more than one <code>file</code> name, <code>.problem</code>, <code>.subprob</code>, or <code>.method</code> is provided a named list is returned.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">file &lt;-<span class="st"> </span><span class="kw">get_file</span>(xpdb, <span class="dt">file =</span> <span class="st">'run001.ext'</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">file</a></code></pre></div>
+<pre><code># A tibble: 28 x 16
+   ITERATION THETA1 THETA2 THETA3 THETA4 THETA5  THETA6  THETA7 `SIGMA(1,1)` `OMEGA(1,1)`
+       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
+ 1         0   25.4   1.47   7.45  0.214  0.200 0.00983 0.00601            1       0.0740
+ 2         1   26.3   1.26   7.35  0.219  0.217 0.00989 0.00602            1       0.0744
+ 3         2   25.6   1.47   7.29  0.216  0.212 0.00987 0.00603            1       0.0741
+ 4         3   26.8   1.49   5.76  0.213  0.213 0.00979 0.00628            1       0.0730
+ 5         4   26.7   1.49   5.69  0.213  0.212 0.00979 0.00629            1       0.0730
+ 6         5   26.7   1.49   5.66  0.213  0.212 0.00979 0.00630            1       0.0730
+ 7         6   26.6   1.49   5.03  0.210  0.217 0.0100  0.00652            1       0.0724
+ 8         7   26.6   1.49   4.93  0.205  0.217 0.0100  0.00658            1       0.0717
+ 9         8   26.6   1.48   4.62  0.211  0.217 0.00951 0.00735            1       0.0633
+10         9   26.6   1.46   4.41  0.209  0.217 0.00903 0.00874            1       0.0766
+# … with 18 more rows, and 6 more variables: `OMEGA(2,1)` &lt;dbl&gt;, `OMEGA(2,2)` &lt;dbl&gt;,
+#   `OMEGA(3,1)` &lt;dbl&gt;, `OMEGA(3,2)` &lt;dbl&gt;, `OMEGA(3,3)` &lt;dbl&gt;, OBJ &lt;dbl&gt;</code></pre>
+</div>
+<div id="access-the-parameter-estimates" class="section level3">
+<h3>Access the parameter estimates</h3>
+<p>The <code>get_prm()</code> function can be used to access the parameter estimates. To get a nice parameter table printed to the console use the function <code>prm_table()</code> instead. The arguments <code>.problem</code>, <code>.subprob</code> and <code>.method</code> can be used to select the parameter estimates to output.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># Raw output for editing</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">prm &lt;-<span class="st"> </span><span class="kw">get_prm</span>(xpdb, <span class="dt">digits =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">prm</a></code></pre></div>
+<pre><code># A tibble: 11 x 10
+   type  name       label         value       se     rse fixed diagonal     m     n
+ * &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+ 1 the   THETA1     TVCL       26.3      0.892    0.0339 FALSE NA           1    NA
+ 2 the   THETA2     TVV         1.35     0.0438   0.0325 FALSE NA           2    NA
+ 3 the   THETA3     TVKA        4.20     0.809    0.192  FALSE NA           3    NA
+ 4 the   THETA4     LAG         0.208    0.0157   0.0755 FALSE NA           4    NA
+ 5 the   THETA5     Prop. Err   0.205    0.0224   0.110  FALSE NA           5    NA
+ 6 the   THETA6     Add. Err    0.0106   0.00366  0.347  FALSE NA           6    NA
+ 7 the   THETA7     CRCL on CL  0.00717  0.00170  0.237  FALSE NA           7    NA
+ 8 ome   OMEGA(1,1) IIV CL      0.270    0.0233   0.0862 FALSE TRUE         1     1
+ 9 ome   OMEGA(2,2) IIV V       0.195    0.0320   0.164  FALSE TRUE         2     2
+10 ome   OMEGA(3,3) IIV KA      1.38     0.202    0.146  FALSE TRUE         3     3
+11 sig   SIGMA(1,1) &quot;&quot;          1       NA       NA      TRUE  TRUE         1     1</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># Nicely formated table</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">prm_table</span>(xpdb, <span class="dt">digits =</span> <span class="dv">4</span>)</a></code></pre></div>
+<pre><code>
+Reporting transformed parameters:
+For the OMEGA and SIGMA matrices, values are reported as standard deviations for the diagonal elements and as correlations for the off-diagonal elements. The relative standard errors (RSE) for OMEGA and SIGMA are reported on the approximate standard deviation scale (SE/variance estimate)/2. Use `transform = FALSE` to report untransformed parameters.
+
+Estimates for $prob no.1, subprob no.0, method foce
+ Parameter  Label      Value        RSE
+ THETA1     TVCL       26.29        0.03391
+ THETA2     TVV        1.348        0.0325
+ THETA3     TVKA       4.204        0.1925
+ THETA4     LAG        0.208        0.07554
+ THETA5     Prop. Err  0.2046       0.1097
+ THETA6     Add. Err   0.01055      0.3466
+ THETA7     CRCL on CL 0.007172     0.2366
+ OMEGA(1,1) IIV CL     0.2701       0.08616
+ OMEGA(2,2) IIV V      0.195        0.1643
+ OMEGA(3,3) IIV KA     1.381        0.1463
+ SIGMA(1,1)            1        fix  - </code></pre>
+</div>
+<div id="access-the-run-summary" class="section level3">
+<h3>Access the run summary</h3>
+<p>The <code>get_summary()</code> function can be used to access the generated run summary from which the <code>template_titles</code>. If the argument <code>.problem</code> is specified a subset of the summary can be returned based on <code>$PROBLEM</code>.</p>
+<p><em>Note that general summary information are listed as problem 0.</em></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">run_sum &lt;-<span class="st"> </span><span class="kw">get_summary</span>(xpdb, <span class="dt">.problem =</span> <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">run_sum</a></code></pre></div>
+<pre><code># A tibble: 12 x 5
+   problem subprob descr               label       value                        
+     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;       &lt;chr&gt;                        
+ 1       0       0 Run description     descr       NONMEM PK example for xpose  
+ 2       0       0 Run directory       dir         analysis/models/pk/          
+ 3       0       0 Run errors          errors      na                           
+ 4       0       0 ESAMPLE seed number esampleseed na                           
+ 5       0       0 Run file            file        run001.lst                   
+ 6       0       0 Number of ESAMPLE   nesample    na                           
+ 7       0       0 Reference model     ref         000                          
+ 8       0       0 Run number          run         run001                       
+ 9       0       0 Software            software    nonmem                       
+10       0       0 Run start time      timestart   Mon Oct 16 13:34:28 CEST 2017
+11       0       0 Run stop time       timestop    Mon Oct 16 13:34:35 CEST 2017
+12       0       0 Software version    version     7.3.0                        </code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

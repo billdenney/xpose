@@ -4,11 +4,14 @@
 \alias{parse_nm_files}
 \title{Parse NONMEM output files}
 \usage{
-parse_nm_files(dat, quiet)
+parse_nm_files(file, name, raw, quiet)
 }
 \arguments{
-\item{dat}{A list containing the raw data as vector of strings (`dat$raw`)
-and their respective file names (`dat$name`).}
+\item{file}{The full file name (not used).}
+
+\item{name}{The file name.}
+
+\item{raw}{the raw data as a vector of strings.}
 
 \item{quiet}{Logical, if \code{FALSE} messages are printed to the console.}
 }
