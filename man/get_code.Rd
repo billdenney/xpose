@@ -4,21 +4,17 @@
 \alias{get_code}
 \title{Access model code}
 \usage{
-get_code(xpdb, .problem = NULL, .type = c("parsed", "raw"))
+get_code(xpdb, .problem = NULL)
 }
 \arguments{
-\item{xpdb}{An \code{xpose_data} object from which the model code will be
-extracted.}
+\item{xpdb}{An \code{xpose_data} object from which the model code will be extracted.}
 
-\item{.problem}{The problem to be used, in addition, problem 0 is attributed
-to general output (e.g. NM-TRAN warnings in NONMEM). By default returns the
+\item{.problem}{The problem to be used, in addition, problem 0 is attributed to 
+general output (e.g. NM-TRAN warnings in NONMEM). By default returns the 
 entire code.}
-
-\item{.type}{The type of output (see the return value for options).}
 }
 \value{
-A tibble of the parsed model (if \code{.type="parsed"}) or a
-  character vector of the model (if \code{.type="raw"}).
+A tibble of the parsed model.
 }
 \description{
 Access model code from an xpdb object.
@@ -26,7 +22,6 @@ Access model code from an xpdb object.
 \examples{
 parsed_model <- get_code(xpdb_ex_pk)
 parsed_model
-raw_model <- get_code(xpdb_ex_pk, .type="raw")
 
 }
 \seealso{

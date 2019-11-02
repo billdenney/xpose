@@ -48,7 +48,7 @@ nm_tables <- read_nm_tables(file = c('sdtab001', 'patab001'),
 nm_tables <- read_nm_tables(file = c('sdtab001', 'patab001'),
                             dir = 'models', combined = TRUE)
 
-# Import tables automatically (used internally by create_nm_xpdb())
+# Import tables automatically (used internally by xpose_data())
 nm_tables <- read_nm_model(file = 'run001.lst', dir = 'models') \%>\%
               list_nm_tables() \%>\%
               read_nm_tables()

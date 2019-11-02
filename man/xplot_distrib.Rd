@@ -10,10 +10,9 @@ xplot_distrib(xpdb, mapping = NULL, type = "hr", guide = FALSE,
   plot_name = "density_plot", gg_theme, xp_theme, opt, quiet, ...)
 }
 \arguments{
-\item{xpdb}{An \code{xpdb} object generated with
-\code{\link{create_nm_xpdb}}.}
+\item{xpdb}{An \code{xpose_data} object generated with \code{\link{xpose_data}}.}
 
-\item{mapping}{List of aesthetics mappings to be used for the xpose plot
+\item{mapping}{List of aesthetics mappings to be used for the xpose plot 
 (e.g. \code{point_color}).}
 
 \item{type}{String setting the type of plot to be used. Can be histogram 'h',
@@ -44,7 +43,7 @@ ggplot2 theme, or a change to the current \code{gg_theme}.}
 \code{xp_theme} (e.g. \code{list(point_color = 'red', line_linetype =
 'dashed')}).}
 
-\item{opt}{A list of options in order to create appropriate data input for
+\item{opt}{A list of options in order to create appropriate data input for 
 ggplot2. For more information see \code{\link{data_opt}}.}
 
 \item{quiet}{Logical, if \code{FALSE} messages are printed to the console.}
@@ -69,41 +68,35 @@ any option supported by this layer e.g. histogram_fill = 'blue', rug_sides = 'b'
 }
 
 \section{Faceting}{
- Every xpose plot function has built-in faceting
-  functionalities. Faceting arguments are passed to the functions
-  \code{\link[ggforce]{facet_wrap_paginate}} when the \code{facets} argument
-  is a character string (e.g. \code{facets = c('SEX', 'MED1')}) or
-  \code{\link[ggforce]{facet_grid_paginate}} when facets is a formula (e.g.
-  \code{facets = SEX~MED1}). All xpose plot functions accept all the
-  arguments for the \code{\link[ggforce]{facet_wrap_paginate}} and
-  \code{\link[ggforce]{facet_grid_paginate}} functions e.g.
-  \code{dv_vs_ipred(xpdb_ex_pk, facets = SEX~MED1, ncol = 3, nrow = 3, page =
-  1, margins = TRUE, labeller = 'label_both')}.
 
-  Faceting options can either be defined in plot functions (e.g.
-  \code{dv_vs_ipred(xpdb_ex_pk, facets = 'SEX')}) or assigned globally to an
-  xpdb object via the \code{xp_theme} (e.g. \code{xpdb <-
-  update_themes(xpdb_ex_pk, xp_theme = list(facets = 'SEX'))}). In the latter
-  example all plots generate from this xpdb will automatically be stratified
-  by `SEX`.
+Every xpose plot function has built-in faceting functionalities. Faceting arguments 
+are passed to the functions \code{\link[ggforce]{facet_wrap_paginate}} when the \code{facets} 
+argument is a character string (e.g. \code{facets = c('SEX', 'MED1')}) or 
+\code{\link[ggforce]{facet_grid_paginate}} when facets is a formula (e.g. \code{facets = SEX~MED1}).
+All xpose plot functions accept all the arguments for the \code{\link[ggforce]{facet_wrap_paginate}} 
+and \code{\link[ggforce]{facet_grid_paginate}} functions e.g. \code{dv_vs_ipred(xpdb_ex_pk, 
+facets = SEX~MED1, ncol = 3, nrow = 3, page = 1, margins = TRUE, labeller = 'label_both')}.
 
-  By default, some plot functions use a custom stratifying variable named
-  `variable`, e.g. \code{eta_distrib()}. When using the \code{facets}
-  argument, `variable` needs to be added manually e.g. \code{facets =
-  c('SEX', 'variable')} or \code{facets = c('SEX', 'variable')}, but is
-  optional, when using the \code{facets} argument in \code{xp_theme} variable
-  is automatically added whenever needed.
+Faceting options can either be defined in plot functions (e.g. \code{dv_vs_ipred(xpdb_ex_pk, 
+facets = 'SEX')}) or assigned globally to an xpdb object via the \code{xp_theme} (e.g. \code{xpdb 
+<- update_themes(xpdb_ex_pk, xp_theme = list(facets = 'SEX'))}). In the latter example all plots 
+generate from this xpdb will automatically be stratified by `SEX`.
+
+By default, some plot functions use a custom stratifying variable named `variable`, e.g. 
+\code{eta_distrib()}. When using the \code{facets} argument, `variable` needs to be added manually 
+e.g. \code{facets = c('SEX', 'variable')} or \code{facets = c('SEX', 'variable')}, but is optional, 
+when using the \code{facets} argument in \code{xp_theme} variable is automatically added whenever needed.
 }
 
 \section{Template titles}{
- Template titles can be used to create highly
-  informative diagnostics plots. They can be applied to any plot title,
-  subtitle, caption and tag. Template titles are defined via a single string
-  containing key variables staring with a `@` (e.g. `@ofv`) which will be
-  replaced by their actual value when rendering the plot. For example `'@run,
-  @nobs observations in @nind subjects'` would become `'run001, 1022
-  observations in 74 subjects'`. The available key variables are listed under
-  \code{\link{template_titles}}.
+
+Template titles can be used to create highly informative diagnostics plots. 
+They can be applied to any plot title, subtitle, caption and tag. Template titles 
+are defined via a single string containing key variables staring with a `@` (e.g. `@ofv`)
+which will be replaced by their actual value when rendering the plot.
+For example `'@run, @nobs observations in @nind subjects'` would become 
+`'run001, 1022 observations in 74 subjects'`. The available key variables 
+are listed under \code{\link{template_titles}}.
 }
 
 \examples{

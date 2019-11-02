@@ -10,7 +10,8 @@ is.xpose.theme(x)
 \item{x}{An object to be tested.}
 }
 \value{
-Logical value, `TRUE` for `xpose_theme` class and `FALSE` otherwise.
+Logical value, `TRUE` for `xpose_theme` class 
+and `FALSE` otherwise.
 }
 \description{
 Reports whether x is an `xpose_theme` object

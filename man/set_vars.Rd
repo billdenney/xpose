@@ -14,35 +14,45 @@ set_var_labels(xpdb, .problem = NULL, ..., quiet)
 set_var_units(xpdb, .problem = NULL, ..., quiet)
 }
 \arguments{
-\item{xpdb}{An \code{xpdb} object.}
+\item{xpdb}{An \code{xpose_data} object.}
 
 \item{.problem}{The problem number to which the edits will be applied.}
 
-\item{...}{Specifications of the edits to be made to the xpdb index. Edits
-are made as type and variable pairs e.g. idv = 'TAD' will assign TAD to the
-type idv (independent variable).}
+\item{...}{Specifications of the edits to be made to the xpdb index. Edits are made as 
+type and variable pairs e.g. idv = 'TAD' will assign TAD to the type idv (independent variable).}
 
-\item{auto_factor}{With \code{set_var_types} only. If \code{TRUE} new columns
-assigned to the type 'catcov' will be converted to factor.}
+\item{auto_factor}{With \code{set_var_types} only. If \code{TRUE} new columns assigned to the type 'catcov' will be converted to
+factor.}
 
 \item{quiet}{Logical, if \code{FALSE} messages are printed to the console.}
 }
 \value{
-An xpdb object
+An xpose_data object
 }
 \description{
-Function designed to change the type, label or unit associated
-  with variables.
+Function designed to change the type, label or unit associated with variables.
 }
 \section{Recognized variable types}{
- \itemize{ \item a: Compartments' amount
-  \item amt: Dose amount \item catcov: Categorical covariate \item contcov:
-  Continuous covariate \item dv: Dependent variable \item dvid: DV identifier
-  \item eta: Eta \item evid: Event identifier \item id: Subject identifier
-  \item idv: Independent variable \item ipred: Individual model predictions
-  \item mdv: Missing dependent variable \item na: Not attributed \item occ:
-  Occasion flag \item param: Model parameter \item pred: Typical model
-  predictions \item res: Residuals }
+
+\itemize{
+  \item a: Compartments' amount
+  \item amt: Dose amount
+  \item catcov: Categorical covariate
+  \item contcov: Continuous covariate
+  \item dv: Dependent variable
+  \item dvid: DV identifier
+  \item eta: Eta
+  \item evid: Event identifier
+  \item id: Subject identifier
+  \item idv: Independent variable
+  \item ipred: Individual model predictions
+  \item mdv: Missing dependent variable
+  \item na: Not attributed
+  \item occ: Occasion flag
+  \item param: Model parameter
+  \item pred: Typical model predictions
+  \item res: Residuals
+ }
 }
 
 \examples{

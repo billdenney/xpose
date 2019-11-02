@@ -48,53 +48,51 @@ the last estimation problem.}
 Plot of the change in compartment amounts over the independent variable
 }
 \section{Layers mapping}{
- Plots can be customized by mapping arguments to
-  specific layers. The naming convention is layer_option where layer is one
-  of the names defined in the list below and option is any option supported
-  by this layer e.g. point_color = 'blue', smooth_method = 'lm', etc.
-  \itemize{ \item point: options to \code{geom_point} \item line: options to
-  \code{geom_line} \item guide: options to \code{geom_abline} \item smooth:
-  options to \code{geom_smooth} \item text: options to \code{geom_text} \item
-  xscale: options to \code{scale_x_continuous} or \code{scale_x_log10} \item
-  yscale: options to \code{scale_y_continuous} or \code{scale_y_log10} }
+
+Plots can be customized by mapping arguments to specific layers. The naming convention is 
+layer_option where layer is one of the names defined in the list below and option is 
+any option supported by this layer e.g. point_color = 'blue', smooth_method = 'lm', etc.
+\itemize{
+  \item point: options to \code{geom_point}
+  \item line: options to \code{geom_line}
+  \item guide: options to \code{geom_abline}
+  \item smooth: options to \code{geom_smooth}
+  \item text: options to \code{geom_text}
+  \item xscale: options to \code{scale_x_continuous} or \code{scale_x_log10}
+  \item yscale: options to \code{scale_y_continuous} or \code{scale_y_log10}
+}
 }
 
 \section{Faceting}{
- Every xpose plot function has built-in faceting
-  functionalities. Faceting arguments are passed to the functions
-  \code{\link[ggforce]{facet_wrap_paginate}} when the \code{facets} argument
-  is a character string (e.g. \code{facets = c('SEX', 'MED1')}) or
-  \code{\link[ggforce]{facet_grid_paginate}} when facets is a formula (e.g.
-  \code{facets = SEX~MED1}). All xpose plot functions accept all the
-  arguments for the \code{\link[ggforce]{facet_wrap_paginate}} and
-  \code{\link[ggforce]{facet_grid_paginate}} functions e.g.
-  \code{dv_vs_ipred(xpdb_ex_pk, facets = SEX~MED1, ncol = 3, nrow = 3, page =
-  1, margins = TRUE, labeller = 'label_both')}.
 
-  Faceting options can either be defined in plot functions (e.g.
-  \code{dv_vs_ipred(xpdb_ex_pk, facets = 'SEX')}) or assigned globally to an
-  xpdb object via the \code{xp_theme} (e.g. \code{xpdb <-
-  update_themes(xpdb_ex_pk, xp_theme = list(facets = 'SEX'))}). In the latter
-  example all plots generate from this xpdb will automatically be stratified
-  by `SEX`.
+Every xpose plot function has built-in faceting functionalities. Faceting arguments 
+are passed to the functions \code{\link[ggforce]{facet_wrap_paginate}} when the \code{facets} 
+argument is a character string (e.g. \code{facets = c('SEX', 'MED1')}) or 
+\code{\link[ggforce]{facet_grid_paginate}} when facets is a formula (e.g. \code{facets = SEX~MED1}).
+All xpose plot functions accept all the arguments for the \code{\link[ggforce]{facet_wrap_paginate}} 
+and \code{\link[ggforce]{facet_grid_paginate}} functions e.g. \code{dv_vs_ipred(xpdb_ex_pk, 
+facets = SEX~MED1, ncol = 3, nrow = 3, page = 1, margins = TRUE, labeller = 'label_both')}.
 
-  By default, some plot functions use a custom stratifying variable named
-  `variable`, e.g. \code{eta_distrib()}. When using the \code{facets}
-  argument, `variable` needs to be added manually e.g. \code{facets =
-  c('SEX', 'variable')} or \code{facets = c('SEX', 'variable')}, but is
-  optional, when using the \code{facets} argument in \code{xp_theme} variable
-  is automatically added whenever needed.
+Faceting options can either be defined in plot functions (e.g. \code{dv_vs_ipred(xpdb_ex_pk, 
+facets = 'SEX')}) or assigned globally to an xpdb object via the \code{xp_theme} (e.g. \code{xpdb 
+<- update_themes(xpdb_ex_pk, xp_theme = list(facets = 'SEX'))}). In the latter example all plots 
+generate from this xpdb will automatically be stratified by `SEX`.
+
+By default, some plot functions use a custom stratifying variable named `variable`, e.g. 
+\code{eta_distrib()}. When using the \code{facets} argument, `variable` needs to be added manually 
+e.g. \code{facets = c('SEX', 'variable')} or \code{facets = c('SEX', 'variable')}, but is optional, 
+when using the \code{facets} argument in \code{xp_theme} variable is automatically added whenever needed.
 }
 
 \section{Template titles}{
- Template titles can be used to create highly
-  informative diagnostics plots. They can be applied to any plot title,
-  subtitle, caption and tag. Template titles are defined via a single string
-  containing key variables staring with a `@` (e.g. `@ofv`) which will be
-  replaced by their actual value when rendering the plot. For example `'@run,
-  @nobs observations in @nind subjects'` would become `'run001, 1022
-  observations in 74 subjects'`. The available key variables are listed under
-  \code{\link{template_titles}}.
+
+Template titles can be used to create highly informative diagnostics plots. 
+They can be applied to any plot title, subtitle, caption and tag. Template titles 
+are defined via a single string containing key variables staring with a `@` (e.g. `@ofv`)
+which will be replaced by their actual value when rendering the plot.
+For example `'@run, @nobs observations in @nind subjects'` would become 
+`'run001, 1022 observations in 74 subjects'`. The available key variables 
+are listed under \code{\link{template_titles}}.
 }
 
 \examples{

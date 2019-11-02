@@ -64,26 +64,30 @@ The residuals can be one of:
 }
 }
 \section{Layers mapping}{
- Plots can be customized by mapping arguments to
-  specific layers. The naming convention is layer_option where layer is one
-  of the names defined in the list below and option is any option supported
-  by this layer e.g. point_color = 'blue', smooth_method = 'lm', etc.
-  \itemize{ \item point: options to \code{geom_point} \item line: options to
-  \code{geom_line} \item guide: options to \code{geom_abline} \item smooth:
-  options to \code{geom_smooth} \item text: options to \code{geom_text} \item
-  xscale: options to \code{scale_x_continuous} or \code{scale_x_log10} \item
-  yscale: options to \code{scale_y_continuous} or \code{scale_y_log10} }
+
+Plots can be customized by mapping arguments to specific layers. The naming convention is 
+layer_option where layer is one of the names defined in the list below and option is 
+any option supported by this layer e.g. point_color = 'blue', smooth_method = 'lm', etc.
+\itemize{
+  \item point: options to \code{geom_point}
+  \item line: options to \code{geom_line}
+  \item guide: options to \code{geom_abline}
+  \item smooth: options to \code{geom_smooth}
+  \item text: options to \code{geom_text}
+  \item xscale: options to \code{scale_x_continuous} or \code{scale_x_log10}
+  \item yscale: options to \code{scale_y_continuous} or \code{scale_y_log10}
+}
 }
 
 \section{Template titles}{
- Template titles can be used to create highly
-  informative diagnostics plots. They can be applied to any plot title,
-  subtitle, caption and tag. Template titles are defined via a single string
-  containing key variables staring with a `@` (e.g. `@ofv`) which will be
-  replaced by their actual value when rendering the plot. For example `'@run,
-  @nobs observations in @nind subjects'` would become `'run001, 1022
-  observations in 74 subjects'`. The available key variables are listed under
-  \code{\link{template_titles}}.
+
+Template titles can be used to create highly informative diagnostics plots. 
+They can be applied to any plot title, subtitle, caption and tag. Template titles 
+are defined via a single string containing key variables staring with a `@` (e.g. `@ofv`)
+which will be replaced by their actual value when rendering the plot.
+For example `'@run, @nobs observations in @nind subjects'` would become 
+`'run001, 1022 observations in 74 subjects'`. The available key variables 
+are listed under \code{\link{template_titles}}.
 }
 
 \examples{
