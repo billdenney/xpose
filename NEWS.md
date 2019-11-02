@@ -24,6 +24,7 @@
 * Improved documentation for `xpose_data` (@billdenney #99)
 * Fixed VPC error in the documentation (@callistosp #130)
 * Fixed bug leading to errors when plotting poorly formatted ETA name (@romainfrancois #127)
+* Added logLik method for xpose_data objects (@billdenney)
 * Compatibility improvements
 
 # xpose 0.4.3
