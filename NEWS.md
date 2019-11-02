@@ -2,13 +2,14 @@
 ### General
 * Improved the detection of modifications to the xpdb the tables through md5 check sum (@sebastianueckert)
 * Fix bug in all general plot functions where a qualified package access (e.g. `xpose::dv_vs_ipred`) would result in an error when printing (@rfaelens, #95)
+* Off-diagonal ETA names are better-detected (@billdenney #121)
 
 ### Data import
 * Added raw NONMEM output file to the xpose database. Added a new `raw = TRUE/FALSE` argument to `get_code()` (@billdenney #103)
 * Improved on the data import code (i.e. performance gains on the data import overhead)
 * `read_nm_model()` now accepts `.nmlog` and `.nmctl` extensions for NONMEM
 * All source files are now stored along with their md5 check sum. They can be accessed with `get_source_files()` (#140)
-* Fixed a bug that prevented the import of table in the format $TABLE FILE=<file> <col-names> 
+* Fixed a bug that prevented the import of table in the format $TABLE FILE=<file> <col-names>
 * The `ID` column is no longer required in the tables (#97)
 
 # xpose 0.4.5
@@ -85,7 +86,7 @@
 
 ### Data import/edit
 * Improved `dir` and `file` arguments usage
-* Improved error robustness of `xpose_data()` 
+* Improved error robustness of `xpose_data()`
 * Added new dplyr verbs for xpdb editing: `slice()`, `select()`, `rename()`, `distinct()`, `summarize()`, `group_by()` and `ungroup()`
 * dplyr verbs can now also be used to edit vpc data
 * Added `irep()` function to add simulation counter to any dataset
@@ -107,7 +108,7 @@
 * New internal data structure using nested tibbles
 * Improvement of documentation, and testing
 
-### Data import 
+### Data import
 #### `read_nm_tables()`
 * Handles NONMEM tables in .csv, .zip format
 * Handles multiple $PROB and tables with FIRSTONLY option
