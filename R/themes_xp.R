@@ -1,27 +1,26 @@
 #' A set of xpose themes
 #'
-#' @description xpose themes are used to consistently apply a set of preference for the plot geoms 
-#' (e.g. color scales, point size, etc.) whereas ggplot2 theme focus on the plot background, axes, 
-#' titles etc.
-#' 
-#' \itemize{
-#' \item \code{theme_xp_default}: The default xp_theme in xpose
-#' \item \code{theme_xp_xpose4}: An xp_theme that makes xpose look like xpose4.
-#' }
+#' @description xpose themes are used to consistently apply a set of preference
+#'   for the plot geoms (e.g. color scales, point size, etc.) whereas ggplot2
+#'   theme focus on the plot background, axes, titles etc.
+#'
+#'   \itemize{ \item \code{theme_xp_default}: The default xp_theme in xpose
+#'   \item \code{theme_xp_xpose4}: An xp_theme that makes xpose look like
+#'   xpose4. }
 #'
 #' @examples
 #' # With the xp_theme theme_xp_default() (default)
 #' dv_vs_ipred(xpdb_ex_pk, facets = 'SEX')
-#' 
+#'
 #' # With the xp_theme theme_xp_xpose4()
 #' xpdb_ex_pk %>%
 #'   update_themes(xp_theme = theme_xp_xpose4()) %>%
 #'   dv_vs_ipred(facets = 'SEX')
-#'   
+#'
 #' @name xp_themes
 #' @export
 theme_xp_default <- function() {
-  tmp_theme <- list(
+  list(
     # General
     rounding        = 1,
     title_suffix    = '',
@@ -114,15 +113,14 @@ theme_xp_default <- function() {
     area_fill        = 'grey35',
     area_size        = 0.5,
     area_linetype    = 1
-  )
-  
-  as.xpose.theme(tmp_theme)
+  ) %>% 
+    as.xpose.theme()
 }
 
 #' @rdname xp_themes
 #' @export
 theme_xp_xpose4 <- function() {
-  tmp_theme <- list(
+  list(
     
     # General
     rounding        = 1,
@@ -216,7 +214,6 @@ theme_xp_xpose4 <- function() {
     area_fill        = 'grey35',
     area_size        = 0.5,
     area_linetype    = 1
-  )
-  
-  as.xpose.theme(tmp_theme)
+  ) %>% 
+    as.xpose.theme()
 }
